@@ -22,14 +22,11 @@ rec {
     inherit gmp;
   };
   mpc = callPackage base/mpc {
-    inherit gmp;
-    inherit mpfr;
+    inherit gmp mpfr;
   };
   gcc7 = wrapCC (if nativeTools
     then callPackage devel/gcc/7.2.0.nix {
-      inherit gmp;
-      inherit mpfr;
-      inherit mpc;
+      inherit gmp mpfr mpc;
     }
     else pkgs.gcc7.cc.override {
       langC = true;
@@ -41,7 +38,13 @@ rec {
       enableMultilib = false;
     });
 
-  gcc7env = overrideCC stdenv gcc7;
+  stdenv = overrideCC pkgs.stdenv gcc7;
 
+  infinipath-psm = callPackage base/infinipath-psm {
+    inherit stdenv;
+  };
+
+  openmpi = callPackage devel/openmpi/1.10.7.nix {
+    inherit stdenv infinipath-psm;
   };
 }
