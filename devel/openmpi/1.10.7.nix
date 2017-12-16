@@ -1,8 +1,13 @@
-{ stdenv
+{ stdenv, lib
 , fetchurl
 , perl
+, flex
+, java ? false, jdk ? null
 , numactl
 , infinipath-psm
+, libpsm2
+, slurm
+, rdma-core
 }:
 
 let majorVersion = "1.10"; in
@@ -14,13 +19,16 @@ stdenv.mkDerivation rec {
     sha256 = "142s1vny9gllkq336yafxayjgcirj2jv0ddabj879jgya7hyr2d0";
   };
 
-  nativeBuildInputs = [ perl ];
-  buildInputs = [ numactl ];
-  propagatedBuildInputs = [ infinipath-psm ];
+  nativeBuildInputs = [ perl flex ];
+  buildInputs = lib.optional java jdk
+    ++ [ numactl rdma-core ];
+  propagatedBuildInputs = [ infinipath-psm libpsm2 ];
 
   configureFlags = [
-    "--with-pmi=/cm/shared/apps/slurm/17.02.2"
-    #"--with-psm2=/usr"
+    "--with-psm=${infinipath-psm}"
+    "--with-psm2=${libpsm2}"
+    "--with-pmi=${slurm.dev}"
+    "--with-pmi-libdir=${slurm}"
   ];
 
   enableParallelBuilding = true;
