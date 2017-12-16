@@ -55,4 +55,8 @@ rec {
   openmpi = callPackage devel/openmpi/1.10.7.nix {
     inherit stdenv infinipath-psm libpsm2 rdma-core;
   };
+
+  openmpi2 = callPackage devel/openmpi/2.1.2.nix {
+    inherit stdenv infinipath-psm libpsm2 rdma-core;
+  };
 }
