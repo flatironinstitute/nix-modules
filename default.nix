@@ -26,6 +26,7 @@ pkgs // rec {
   mpc = callPackage base/mpc {
     inherit gmp mpfr;
   };
+
   gcc7 = wrapCC (if nativeTools
     then callPackage devel/gcc/7.2.0.nix {
       inherit gmp mpfr mpc;
@@ -78,5 +79,11 @@ pkgs // rec {
 
   openblas = callPackage base/openblas {
     inherit stdenv;
+  };
+
+  hdf5 = pkgs.hdf5.override {
+    inherit stdenv;
+    cpp = true;
+    gfortran = stdenv.cc;
   };
 }
