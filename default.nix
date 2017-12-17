@@ -1,21 +1,23 @@
 let
   nativeTools = false;
   lib = import <nixpkgs/lib>;
-  nativePlatform = (import <nixpkgs/lib/systems/platforms.nix> { inherit lib; }).selectBySystem builtins.currentSystem // {
-    gcc = { arch = "native"; };
-  };
+  nativePlatform = (import <nixpkgs/lib/systems/platforms.nix> { inherit lib; }).selectBySystem
+    builtins.currentSystem // {
+      gcc = { arch = "native"; };
+    };
   config = {
     platform = nativePlatform;
   };
+  overlays = [];
   pkgs = import <nixpkgs> {
-    inherit config;
+    inherit config overlays;
     stdenvStages = import (if nativeTools then <nixpkgs/pkgs/stdenv/native> else <nixpkgs/pkgs/stdenv>);
   };
 in
 
 with pkgs;
 
-rec {
+pkgs // rec {
   gmp = callPackage base/gmp {
   };
   mpfr = callPackage base/mpfr {
