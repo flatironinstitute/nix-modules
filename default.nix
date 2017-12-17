@@ -61,4 +61,18 @@ pkgs // rec {
   openmpi2 = callPackage devel/openmpi/2.1.2.nix {
     inherit stdenv infinipath-psm libpsm2 rdma-core;
   };
+
+  fftw = callPackage base/fftw/precs.nix {
+    inherit stdenv;
+  };
+
+  fftw-openmpi1 = callPackage base/fftw/precs.nix {
+    inherit stdenv;
+    mpi = openmpi;
+  };
+
+  fftw-openmpi2 = callPackage base/fftw/precs.nix {
+    inherit stdenv;
+    mpi = openmpi2;
+  };
 }
