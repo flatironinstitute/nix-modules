@@ -75,4 +75,8 @@ pkgs // rec {
     inherit stdenv;
     mpi = openmpi2;
   };
+
+  openblas = callPackage base/openblas {
+    inherit stdenv;
+  };
 }
