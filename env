@@ -1,0 +1,13 @@
+module load gcc/7.2.0
+
+root=/cm/shared/sw/pkg/base/nix/1.11.15
+nix=/mnt/home/sw/nix
+
+export NIX_STORE_DIR=$nix/store
+export NIX_STATE_DIR=$nix/state
+export NIX_LINK=$HOME/.nix-profile
+export PATH=$PATH:$root/bin:$NIX_LINK/bin:$NIX_LINK/sbin
+export MANPATH=$MANPATH:$root/share/man:$NIX_LINK/share/man
+export NIX_SSL_CERT_FILE=/etc/pki/tls/certs/ca-bundle.crt
+export NIX_PATH=nixpkgs=$HOME/nix/nixpkgs
+export TMPDIR=/dev/shm
