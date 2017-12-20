@@ -6,8 +6,9 @@ nix=/mnt/home/sw/nix
 export NIX_STORE_DIR=$nix/store
 export NIX_STATE_DIR=$nix/state
 export NIX_LINK=$HOME/.nix-profile
-export PATH=$PATH:$root/bin:$NIX_LINK/bin:$NIX_LINK/sbin
-export MANPATH=$MANPATH:$root/share/man:$NIX_LINK/share/man
+export PATH=$root/bin:$NIX_LINK/bin:$NIX_LINK/sbin:$PATH
+export MANPATH=$root/share/man:$NIX_LINK/share/man:$MANPATH
 export NIX_SSL_CERT_FILE=/etc/pki/tls/certs/ca-bundle.crt
 export NIX_PATH=nixpkgs=$HOME/nix/nixpkgs
+export PYTHONPATH=$NIX_LINK/lib/python2.7:$PYTHONPATH
 export TMPDIR=/dev/shm

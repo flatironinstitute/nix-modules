@@ -9,5 +9,8 @@ import <nixpkgs> {
     system = builtins.currentSystem;
     platform = lib.systems.platforms.selectBySystem system // { gcc = { arch = "native"; }; };
   };
+  config = {
+    allowUnfree = true;
+  };
   overlays = [overlay];
 }
