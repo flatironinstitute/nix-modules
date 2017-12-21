@@ -35,8 +35,9 @@ with pkgs;
   libpsm2 = callPackage base/libpsm2 { };
   rdma-core = callPackage base/rdma-core { };
 
-  openmpi = callPackage devel/openmpi/1.10.7.nix { };
-  openmpi2 = callPackage devel/openmpi/2.1.2.nix { };
+  openmpi1 = callPackage devel/openmpi/1.nix { };
+  openmpi2 = callPackage devel/openmpi/2.nix { };
+  openmpi = self.openmpi1;
 
   openblas = callPackage base/openblas { };
   blas = self.openblas;
@@ -46,10 +47,10 @@ with pkgs;
     mpi = null;
   };
   fftw-openmpi1 = callPackage base/fftw/precs.nix {
-    mpi = openmpi;
+    mpi = self.openmpi1;
   };
   fftw-openmpi2 = callPackage base/fftw/precs.nix {
-    mpi = openmpi2;
+    mpi = self.openmpi2;
   };
 
   fftwSinglePrec = self.fftw;
@@ -62,14 +63,14 @@ with pkgs;
   };
 
   python2 = callPackage <nixpkgs/pkgs/development/interpreters/python/cpython/2.7> {
-    self = python2;
+    self = self.python2;
     ucsEncoding = 4;
     CF = null;
     configd = null;
   };
   
   python3 = callPackage <nixpkgs/pkgs/development/interpreters/python/cpython/3.6> {
-    self = python3;
+    self = self.python3;
     CF = null;
     configd = null;
   };
@@ -178,6 +179,13 @@ with pkgs;
   python2-packages = python2.withPackages self.pythonPackageList;
   python3-packages = python3.withPackages self.pythonPackageList;
 
+  osu-micro-benchmarks-openmpi1 = callPackage test/osu-micro-benchmarks {
+    mpi = self.openmpi1;
+  };
+  osu-micro-benchmarks-openmpi2 = callPackage test/osu-micro-benchmarks {
+    mpi = self.openmpi2;
+  };
+
   modules = with self;
     let module = import ./module stdenv; in
     buildEnv {
@@ -185,9 +193,11 @@ with pkgs;
       paths = map module [
         gcc6
         gcc7
-        openmpi
+        openmpi1
         openmpi2
         fftw
+        fftw-openmpi1
+        fftw-openmpi2
         hdf5
         python2 #-packages
         python3 #-packages

@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   name = "module-${pkg.name}";
 
   buildInputs = [ pkg ];
-  parseName = parse.name;
+  parseName = builtins.replaceStrings ["-wrapper" "-all"] ["" ""] parse.name;
   parseVersion = parse.version;
 
   passthru = {
