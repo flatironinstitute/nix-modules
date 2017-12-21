@@ -1,5 +1,6 @@
 module load gcc/7.2.0
 
+dir=$(realpath $(dirname $0))
 root=/cm/shared/sw/pkg/base/nix/1.11.15
 nix=/mnt/home/sw/nix
 
@@ -9,6 +10,6 @@ export NIX_LINK=$HOME/.nix-profile
 export PATH=$root/bin:$NIX_LINK/bin:$NIX_LINK/sbin:$PATH
 export MANPATH=$root/share/man:$NIX_LINK/share/man:$MANPATH
 export NIX_SSL_CERT_FILE=/etc/pki/tls/certs/ca-bundle.crt
-export NIX_PATH=nixpkgs=$HOME/nix/nixpkgs
+export NIX_PATH=local=$dir:nixpkgs=$dir/nixpkgs
 export PYTHONPATH=$NIX_LINK/lib/python2.7:$PYTHONPATH
 export TMPDIR=/dev/shm

@@ -93,7 +93,7 @@ with pkgs;
     ipython
     #ipython[all]
     flask
-    cherrypy
+    #cherrypy -- broken, maybe :8080 conflict
     numexpr
     bottleneck
     pandas
@@ -130,7 +130,7 @@ with pkgs;
     heapdict
     pyyaml
     twisted
-    ws4py
+    #ws4py -- depends on cherrypy
     sympy
     #NucleoATAC    # python2 only
     olefile
@@ -178,4 +178,19 @@ with pkgs;
   python2-packages = python2.withPackages self.pythonPackageList;
   python3-packages = python3.withPackages self.pythonPackageList;
 
+  modules = with self;
+    let module = import ./module stdenv; in
+    buildEnv {
+      name = "modules";
+      paths = map module [
+        gcc6
+        gcc7
+        openmpi
+        openmpi2
+        fftw
+        hdf5
+        python2 #-packages
+        python3 #-packages
+      ];
+    };
 }
