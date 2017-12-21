@@ -186,6 +186,8 @@ with pkgs;
     mpi = self.openmpi2;
   };
 
+  nss_sss = callPackage base/sssd/nss-client.nix { };
+
   modules = with self;
     let module = import ./module stdenv; in
     buildEnv {
