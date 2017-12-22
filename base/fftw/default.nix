@@ -1,15 +1,14 @@
 { stdenv
-, lib
 , fetchurl
 , precision ? "double"
 , mpi ? null
 }:
 
-assert lib.elem precision [ "single" "double" "long-double" "quad-precision" ];
+assert stdenv.lib.elem precision [ "single" "double" "long-double" "quad-precision" ];
 
 let
   version = "3.3.7";
-  mpitag = lib.optionalString (mpi != null) "-${mpi.tag}";
+  mpitag = stdenv.lib.optionalString (mpi != null) "-${mpi.tag}";
 in
 
 stdenv.mkDerivation rec {
@@ -26,10 +25,10 @@ stdenv.mkDerivation rec {
     [ "--enable-shared"
       "--enable-threads"
     ]
-    ++ lib.optional (precision != "double") "--enable-${precision}"
-    ++ lib.optional (precision == "single") "--enable-sse"
-    ++ lib.optional (precision == "single" || precision == "double") "--enable-sse2 --enable-avx --enable-avx2 --enable-fma"
-    ++ lib.optional (mpi != null) "--enable-mpi";
+    ++ stdenv.lib.optional (precision != "double") "--enable-${precision}"
+    ++ stdenv.lib.optional (precision == "single") "--enable-sse"
+    ++ stdenv.lib.optional (precision == "single" || precision == "double") "--enable-sse2 --enable-avx --enable-avx2 --enable-fma"
+    ++ stdenv.lib.optional (mpi != null) "--enable-mpi";
 
   enableParallelBuilding = true;
 }

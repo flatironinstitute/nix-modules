@@ -188,11 +188,22 @@ with pkgs;
 
   nss_sss = callPackage base/sssd/nss-client.nix { };
 
-  modules = with self;
-    let module = import ./module stdenv; in
-    buildEnv {
+  modules =
+    let
+      base = map (pkg: callPackage ./module {
+        inherit pkg;
+        addLDLibraryPath = true;
+        addCCFlags = false;
+      }) (with self; [
+        nss_sss
+      ]);
+      module = pkg: callPackage ./module {
+        inherit pkg;
+        modLoad = map (m: m.modName) base;
+      };
+    in buildEnv {
       name = "modules";
-      paths = map module [
+      paths = base ++ map module (with self; [
         gcc6
         gcc7
         openmpi1
@@ -203,6 +214,6 @@ with pkgs;
         hdf5
         python2 #-packages
         python3 #-packages
-      ];
+      ]);
     };
 }

@@ -1,4 +1,4 @@
-{ stdenv, lib
+{ stdenv
 , fetchurl
 , perl
 , flex
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ perl flex ];
-  buildInputs = lib.optional java jdk ++ [ numactl rdma-core ];
+  buildInputs = stdenv.lib.optional java jdk ++ [ numactl rdma-core ];
   propagatedBuildInputs = [ infinipath-psm libpsm2 stdenv.cc ];
 
   configureFlags = [
