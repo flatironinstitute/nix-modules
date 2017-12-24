@@ -67,96 +67,18 @@ with pkgs;
     ucsEncoding = 4;
     CF = null;
     configd = null;
-    #packageOverrides = import ./python.nix;
+    packageOverrides = import ./python.nix;
   };
   
   python3 = callPackage <nixpkgs/pkgs/development/interpreters/python/cpython/3.6> {
     self = self.python3;
     CF = null;
     configd = null;
-    #packageOverrides = import ./python.nix;
+    packageOverrides = import ./python.nix;
   };
 
-  pythonPackageList = p: with p; let
-    husl = buildPythonPackage rec {
-      pname = "husl";
-      version = "4.0.3";
-      name = "${pname}-${version}";
-      src = fetchPypi {
-        inherit pname version;
-        sha256 = "1fahd35yrpvdqzdd1r6r416d0csg4jbxwlkzm19sa750cljn47ca";
-      };
-      doCheck = false;
-    };
-    brewer2mpl = buildPythonPackage rec {
-      pname = "brewer2mpl";
-      version = "1.4.1";
-      name = "${pname}-${version}";
-      src = fetchPypi {
-        inherit pname version;
-        sha256 = "070vbc4wclzlln3wq22y3n54bxlaf7641vg4fym8as3nx8dls29f";
-      };
-    };
-    # only 0.3.0 in nix:
-    patsy = buildPythonPackage rec {
-      pname = "patsy";
-      version = "0.4.1";
-      name = "${pname}-${version}";
-
-      src = fetchPypi {
-        inherit pname version;
-        extension = "zip";
-        sha256 = "1m6knyq8hbqlx242y4da02j0x86j4qggs1j7q186w3jv0j0c476w";
-      };
-
-      buildInputs = [ nose ];
-      propagatedBuildInputs = [six numpy];
-    };
-    # for updated patsy:
-    statsmodels = buildPythonPackage rec {
-      pname = "statsmodels";
-      version = "0.8.0";
-      name = "${pname}-${version}";
-      src = fetchPypi {
-        inherit pname version;
-        sha256 = "26431ab706fbae896db7870a0892743bfbb9f5c83231644692166a31d2d86048";
-      };
-      checkInputs = [ nose ];
-      propagatedBuildInputs = [numpy scipy pandas patsy cython matplotlib];
-      doCheck = false;
-    };
-    ggplot = buildPythonPackage rec {
-      pname = "ggplot";
-      version = "0.11.5";
-      name = "${pname}-${version}";
-      src = fetchPypi {
-        inherit pname version;
-        sha256 = "17s6aspq4i9jrqkg15pn7wazxnq66mbpcvc54nniby47b7mckfs8";
-      };
-      propagatedBuildInputs = [ six statsmodels brewer2mpl matplotlib scipy patsy pandas cycler numpy ];
-    };
-    fuzzysearch = buildPythonPackage rec {
-      pname = "fuzzysearch";
-      version = "0.5.0";
-      name = "${pname}-${version}";
-      src = fetchPypi {
-        inherit pname version;
-        sha256 = "0qh62w1fsww41x7f5jnl86a38kqzxp3mj3klkrmfpp0sij0h3nsj";
-      };
-      propagatedBuildInputs = [ six ];
-    };
-    fwrap = buildPythonPackage rec {
-      pname = "fwrap";
-      version = "0.1.1";
-      name = "${pname}-${version}";
-      src = fetchPypi {
-        inherit pname version;
-        sha256 = "0vc5nzsxmgjl88q71bwy1p35s9179685q507v1lbbhzwfsqxc8n1";
-      };
-      propagatedBuildInputs = [ numpy ];
-      checkInputs = [ nose ];
-    };
-  in [
+  # re-apply packageOverrides to make sure they're in scope
+  pythonPackageList = p: let pp = import ./python.nix pp p; in with p // pp; [
     six
     packaging
     pyparsing
@@ -183,7 +105,6 @@ with pkgs;
     ggplot
     scikitlearn
     ipdb
-    MySQL_python    # python2 only
     paho-mqtt
     (mpi4py.overridePythonAttrs {
       doCheck = false;
@@ -207,7 +128,6 @@ with pkgs;
     #scikit-cuda
     h5py
     astropy
-    fwrap
     #Flask-SocketIO
     flask_wtf
     heapdict
@@ -215,7 +135,6 @@ with pkgs;
     twisted
     #ws4py -- depends on cherrypy
     sympy
-    #NucleoATAC    # python2 only
     olefile
     jupyter
     gevent
@@ -253,12 +172,18 @@ with pkgs;
     #nbodykit#[extras]
     #gobject-introspection
     pygobject2
-    pygtk
     #gobject-introspection-devel
     pycairo
+  ] ++ lib.optionals (!isPy3k) [
+    MySQL_python
+    fwrap
+    #NucleoATAC    # python2 only
+    pygtk
   ];
 
-  python2-all = python2.withPackages self.pythonPackageList;
+  python2-all = (python2.withPackages self.pythonPackageList).override {
+    ignoreCollisions = true; # see #31080
+  };
   python3-all = python3.withPackages self.pythonPackageList;
 
   osu-micro-benchmarks-openmpi1 = callPackage test/osu-micro-benchmarks {
@@ -290,10 +215,10 @@ with pkgs;
         gcc6
         gcc7
         cmake
-        cudnn6_cudtoolkit8
-        cudnn_cudtoolkit75
-        cudnn_cudtoolkit8
-        cudnn_cudtoolkit9
+        cudnn6_cudatoolkit8
+        cudnn_cudatoolkit75
+        cudnn_cudatoolkit8
+        cudnn_cudatoolkit9
         cudatoolkit75
         cudatoolkit8
         cudatoolkit9
@@ -304,8 +229,8 @@ with pkgs;
         fftw-openmpi2
         hdf5
         netcdf
-        python2 #-all
-        python3 #-all
+        python2-all
+        python3-all
       ]);
     };
 }
