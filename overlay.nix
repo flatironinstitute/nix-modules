@@ -96,7 +96,7 @@ with pkgs;
     matplotlib
     ipython #[all]
     flask
-    #cherrypy -- broken, maybe :8080 conflict
+    cherrypy
     numexpr
     bottleneck
     pandas
@@ -133,7 +133,7 @@ with pkgs;
     heapdict
     pyyaml
     twisted
-    #ws4py -- depends on cherrypy
+    ws4py
     sympy
     olefile
     jupyter
@@ -143,14 +143,13 @@ with pkgs;
     s3transfer
     s3fs
     scikitimage
-    #statistics
     dask
     #deepTools
     #PIMS
-    #primefac
+    primefac
     leveldb
     distributed
-    #bearcart
+    bearcart
     bokeh
     seaborn
     locket
@@ -174,12 +173,14 @@ with pkgs;
     pygobject2
     #gobject-introspection-devel
     pycairo
-  ] ++ lib.optionals (!isPy3k) [
+  ] ++ (if isPy3k then [
+  ] else [
     MySQL_python
     fwrap
+    statistics
     #NucleoATAC    # python2 only
     pygtk
-  ];
+  ]);
 
   python2-all = (python2.withPackages self.pythonPackageList).override {
     ignoreCollisions = true; # see #31080
@@ -217,8 +218,8 @@ with pkgs;
         cmake
         cudnn6_cudatoolkit8
         cudnn_cudatoolkit75
-        cudnn_cudatoolkit8
-        cudnn_cudatoolkit9
+        #cudnn_cudatoolkit8 -- need to download
+        #cudnn_cudatoolkit9 -- need to download
         cudatoolkit75
         cudatoolkit8
         cudatoolkit9

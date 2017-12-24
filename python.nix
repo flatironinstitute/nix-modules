@@ -45,17 +45,8 @@ with pkgs;
   };
 
   # for updated patsy:
-  statsmodels = buildPythonPackage rec {
-    pname = "statsmodels";
-    version = "0.8.0";
-    name = "${pname}-${version}";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "26431ab706fbae896db7870a0892743bfbb9f5c83231644692166a31d2d86048";
-    };
-    checkInputs = [ nose ];
+  statsmodels = statsmodels.overridePythonAttrs {
     propagatedBuildInputs = [numpy scipy pandas self.patsy cython matplotlib];
-    doCheck = false;
   };
 
   ggplot = buildPythonPackage rec {
@@ -67,6 +58,7 @@ with pkgs;
       sha256 = "17s6aspq4i9jrqkg15pn7wazxnq66mbpcvc54nniby47b7mckfs8";
     };
     propagatedBuildInputs = [ six self.statsmodels self.brewer2mpl matplotlib scipy self.patsy pandas cycler numpy ];
+    doCheck = false; # broken package
   };
 
   fuzzysearch = buildPythonPackage rec {
@@ -90,6 +82,47 @@ with pkgs;
     };
     propagatedBuildInputs = [ numpy ];
     checkInputs = [ nose ];
+  };
+
+  cherrypy = cherrypy.overridePythonAttrs {
+    doCheck = false; # needs network :8080?
+  };
+
+  ws4py = ws4py.overridePythonAttrs {
+    propagatedBuildInputs = [ asyncio self.cherrypy gevent tornado ];
+  };
+
+  statistics = buildPythonPackage rec {
+    pname = "statistics";
+    version = "3.4.0b3";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1ifhv9x5rjzjnpl2w62nvxpbj62vdz0pd5s3g45q0138cvcqad6j";
+    };
+    propagatedBuildInputs = [docutils];
+    doCheck = false;
+  };
+
+  primefac = buildPythonPackage rec {
+    pname = "primefac";
+    version = "1.1";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0l5g4wfmf47amal4qzvhpcymlw1rnjhkzbvd2j4k21x8pimi0a2j";
+    };
+  };
+
+  bearcart = buildPythonPackage rec {
+    pname = "bearcart";
+    version = "0.1.3";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0krk7ir21jd2awq0sdrfnpwag5hvxyry17m6kxsrrj81jw43pnza";
+    };
+    doCheck = false; # broken imports
   };
 
 }
