@@ -7,11 +7,8 @@
 , modLoad ? []
 , modPrereq ? []
 , modConflict ? [pkgName] ++ stdenv.lib.optional (modPrefix != "") (modPrefix + pkgName)
-, addPath ? true
 , addLDLibraryPath ? false
-, addPkgConfigPath ? true
-, addManPath ? true
-, addCCFlags ? true
+, addCFlags ? true
 }:
 
 stdenv.mkDerivation {
@@ -21,7 +18,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ pkg ];
 
-  inherit pkgName pkgVersion modPrefix modName modLoad modPrereq modConflict addPath addLDLibraryPath addPkgConfigPath addManPath addCCFlags;
+  inherit pkgName pkgVersion modPrefix modName modLoad modPrereq modConflict addLDLibraryPath addCFlags;
 
   # sort of hacky, duplicating cc-wrapper:
   nixInfix = stdenv.lib.replaceStrings ["-"] ["_"] stdenv.targetPlatform.config;

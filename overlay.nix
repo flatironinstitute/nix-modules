@@ -2,6 +2,8 @@ self: pkgs:
 with pkgs;
 
 {
+  nss_sss = callPackage base/sssd/nss-client.nix { };
+
   gcc6 = wrapCC (gcc6.cc.override {
     langC = true;
     langCC = true;
@@ -69,7 +71,7 @@ with pkgs;
     configd = null;
     packageOverrides = import ./python.nix;
   };
-  
+
   python3 = callPackage <nixpkgs/pkgs/development/interpreters/python/cpython/3.6> {
     self = self.python3;
     CF = null;
@@ -194,14 +196,30 @@ with pkgs;
     mpi = self.openmpi2;
   };
 
-  nss_sss = callPackage base/sssd/nss-client.nix { };
+  perlPackageList = p: with p; [
+    TermReadLineGnu
+    HTMLParser
+    HTTPDaemon
+    #Git?
+    TimeDuration
+    TimeHiRes
+    XMLParser
+    XMLSAX
+    Socket
+    GetoptLong
+  ];
+
+  perl-all = buildEnv {
+    inherit (perl) name;
+    paths = [perl] ++ self.perlPackageList perlPackages;
+  };
 
   modules =
     let
       base = map (pkg: callPackage ./module {
         inherit pkg;
         addLDLibraryPath = true;
-        addCCFlags = false;
+        addCFlags = false;
       }) (with self; [
         nss_sss
       ]);
@@ -232,6 +250,7 @@ with pkgs;
         netcdf
         python2-all
         python3-all
+        perl-all
       ]);
     };
 }
