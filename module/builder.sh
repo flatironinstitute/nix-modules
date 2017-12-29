@@ -1,5 +1,7 @@
 source $stdenv/setup
 
+shopt -s nullglob
+
 modfile="$out/modules/$modName"
 mkdir -p `dirname "$modfile"`
 
@@ -59,10 +61,11 @@ addPaths () {
 	if [[ -d $1/lib/perl5/site_perl ]] ; then
 		echo "prepend-path PERL5LIB $1/lib/perl5/site_perl" >> $modfile
 	fi
-	if [[ $addLDLibraryPath && -d $1/lib ]] ; then
+	libs=($1/lib/lib*.so)
+	if [[ $addLDLibraryPath && -n $libs ]] ; then
 		echo "prepend-path LD_LIBRARY_PATH $1/lib" >> $modfile
 	fi
-	if [[ $addCFlags && ( -d $1/include || -d $1/lib ) ]] ; then
+	if [[ $addCFlags && ( -d $1/include || -n $libs ) ]] ; then
 		if [[ -z $gccPrereq ]] ; then
 			echo "prereq ${modPrefix}gcc" >> $modfile
 			gccPrereq=1
@@ -71,7 +74,7 @@ addPaths () {
 			# nix uses -isystem but we'll just use -I
 			echo "prepend-path -d \" \" NIX_${nixInfix}_CFLAGS_COMPILE -I$1/include" >> $modfile
 		fi
-		if [[ -d $root/lib ]] ; then
+		if [[ -n $libs ]] ; then
 			echo "prepend-path -d \" \" NIX_${nixInfix}_LDFLAGS -L$1/lib" >> $modfile
 		fi
 	fi

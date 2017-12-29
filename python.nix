@@ -125,4 +125,8 @@ with pkgs;
     doCheck = false; # broken imports
   };
 
+  bokeh = bokeh.overridePythonAttrs {
+    doCheck = false; # needs network :8080?
+  };
+
 }

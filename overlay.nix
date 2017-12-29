@@ -214,6 +214,26 @@ with pkgs;
     paths = [perl] ++ self.perlPackageList perlPackages;
   };
 
+  rPackageList = p: with p; [
+    AnnotationDbi
+    BH
+    BiocInstaller
+    bit64
+    blob
+    getopt
+    ggplot2
+    lazyeval
+    memoise
+    pkgconfig
+    plogr
+  ];
+
+  R-all = rWrapper.override {
+    packages = self.rPackageList rPackages;
+  };
+
+  disBatch = callPackage flatiron/disBatch { };
+
   modules =
     let
       base = map (pkg: callPackage ./module {
@@ -233,24 +253,28 @@ with pkgs;
         gcc5
         gcc6
         gcc7
+        R-all
         cmake
-        cudnn6_cudatoolkit8
-        cudnn_cudatoolkit75
-        #cudnn_cudatoolkit8 -- need to download
-        #cudnn_cudatoolkit9 -- need to download
         cudatoolkit75
         cudatoolkit8
         cudatoolkit9
-        openmpi1
-        openmpi2
+        cudnn6_cudatoolkit8
+        cudnn_cudatoolkit75
+        #cudnn_cudatoolkit8 #-- need to download
+        #cudnn_cudatoolkit9 #-- need to download
+        disBatch
         fftw
         fftw-openmpi1
         fftw-openmpi2
+        gitFull
         hdf5
+        jdk
         netcdf
+        openmpi1
+        openmpi2
+        perl-all
         python2-all
         python3-all
-        perl-all
       ]);
     };
 }
