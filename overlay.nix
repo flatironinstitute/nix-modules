@@ -263,12 +263,15 @@ with pkgs;
         #cudnn_cudatoolkit8 #-- need to download
         #cudnn_cudatoolkit9 #-- need to download
         disBatch
+        ffmpeg
         fftw
         fftw-openmpi1
         fftw-openmpi2
         gitFull
         hdf5
+        hwloc
         jdk
+        mplayer
         netcdf
         openmpi1
         openmpi2
