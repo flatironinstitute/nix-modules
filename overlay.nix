@@ -167,7 +167,7 @@ with pkgs;
     llfuse
     #yt
     hglib
-    #glueviz
+    glueviz
     #matlab_wrapper
     #einsum2
     #nbodykit#[extras]

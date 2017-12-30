@@ -44,9 +44,33 @@ with pkgs;
     propagatedBuildInputs = [six numpy];
   };
 
+  # only 0.9 in nix:
+  xlrd = buildPythonPackage rec {
+    pname = "xlrd";
+    version = "1.1.0";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1qnp51lf6bp6d4m3x8av81hknhvmlvgmzvm86gz1bng62daqh8ca";
+    };
+    buildInputs = [ nose ];
+    checkPhase = ''
+      nosetests -v
+    '';
+  };
+
+  pandas = pandas.override {
+    inherit (self) xlrd;
+  };
+
+  partd = partd.override {
+    propagatedBuildInputs = [ locket numpy self.pandas pyzmq toolz ];
+  };
+
   # for updated patsy:
-  statsmodels = statsmodels.overridePythonAttrs {
-    propagatedBuildInputs = [numpy scipy pandas self.patsy cython matplotlib];
+  statsmodels = statsmodels.override {
+    inherit (self) patsy pandas;
+    #propagatedBuildInputs = [numpy scipy pandas self.patsy cython matplotlib];
   };
 
   ggplot = buildPythonPackage rec {
@@ -57,7 +81,7 @@ with pkgs;
       inherit pname version;
       sha256 = "17s6aspq4i9jrqkg15pn7wazxnq66mbpcvc54nniby47b7mckfs8";
     };
-    propagatedBuildInputs = [ six self.statsmodels self.brewer2mpl matplotlib scipy self.patsy pandas cycler numpy ];
+    propagatedBuildInputs = [ six self.statsmodels self.brewer2mpl matplotlib scipy self.patsy self.pandas cycler numpy ];
     doCheck = false; # broken package
   };
 
@@ -88,8 +112,8 @@ with pkgs;
     doCheck = false; # needs network :8080?
   };
 
-  ws4py = ws4py.overridePythonAttrs {
-    propagatedBuildInputs = [ asyncio self.cherrypy gevent tornado ];
+  ws4py = ws4py.override {
+    inherit (self) cherrypy;
   };
 
   statistics = buildPythonPackage rec {
@@ -125,8 +149,68 @@ with pkgs;
     doCheck = false; # broken imports
   };
 
-  bokeh = bokeh.overridePythonAttrs {
+  bkcharts =  bkcharts.override {
+    inherit (self) pandas;
+  };
+
+  bokeh = (bokeh.override {
+    inherit (self) pandas bkcharts;
+  }).overridePythonAttrs {
     doCheck = false; # needs network :8080?
+  };
+
+  dask = dask.override {
+    inherit (self) pandas partd;
+  };
+
+  distributed = distributed.overridePythonAttrs {
+    propagatedBuildInputs = [
+      self.dask six boto3 s3fs tblib locket msgpack click cloudpickle tornado
+      psutil botocore zict lz4 sortedcollections sortedcontainers
+    ] ++ (if !isPy3k then [ singledispatch ] else []);
+  };
+
+  xarray = xarray.override {
+    inherit (self) pandas;
+  };
+
+  seaborn = seaborn.override {
+    inherit (self) pandas;
+  };
+
+  glue-core = buildPythonPackage rec {
+    pname = "glue-core";
+    version = "0.12.3";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1fppsalszd7hb18wk0apq5g9bq4bgik79ffk624xxq5w48yqsj5m";
+    };
+    propagatedBuildInputs = [ numpy self.pandas astropy matplotlib qtpy setuptools ipython ipykernel qtconsole dill self.xlrd h5py ];
+    doCheck = false;
+  };
+
+  glue-vispy-viewers = buildPythonPackage rec {
+    pname = "glue-vispy-viewers";
+    version = "0.9";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1lwiqlhvkmhvh8bl7waydkfr1hdri3xszr2v3x147vf29wc1xy4a";
+    };
+    propagatedBuildInputs = [ numpy pyopengl self.glue-core qtpy scipy astropy ];
+    doCheck = false;
+  };
+
+  glueviz = buildPythonPackage rec {
+    pname = "glueviz";
+    version = "0.12.2";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "18xxhkbl56h19cys8li1qcqd3ymhigwjhc700yxbgj75vw51g8hg";
+    };
+    propagatedBuildInputs = [ self.glue-core self.glue-vispy-viewers ];
   };
 
 }
