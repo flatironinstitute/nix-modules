@@ -296,4 +296,29 @@ with pkgs;
     doCheck = false; # broken imports
   };
 
+  weave = buildPythonPackage rec {
+    pname = "weave";
+    version = "0.16.0";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0jnm3584mfichgwgrd1gk5i42ll9c08nkw9716n947n4338f6ghs";
+    };
+    propagatedBuildInputs = [ numpy ];
+    checkInputs = [ nose ];
+    doCheck = false; # known failures? need user?
+  };
+
+  yt = buildPythonPackage rec {
+    pname = "yt";
+    version = "3.4.0";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0k3d15sqld35ki3ab939xhhk3bmym4ci32hxjs1klivp2ryhalny";
+    };
+    propagatedBuildInputs = [ cython matplotlib setuptools sympy numpy ipython ];
+    doCheck = false; # unknown failure
+  };
+
 }

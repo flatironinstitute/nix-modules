@@ -92,7 +92,6 @@ with pkgs;
     #tensorflow-gpu
     numpy
     scipy
-    #weave -- part of scipy
     pyzmq
     cython
     matplotlib
@@ -163,7 +162,7 @@ with pkgs;
     backports_ssl_match_hostname
     fusepy
     llfuse
-    #yt
+    yt
     hglib
     glueviz
     matlab_wrapper
@@ -173,6 +172,7 @@ with pkgs;
     pycairo
   ] ++ (if isPy3k then [
   ] else [
+    weave
     MySQL_python
     fwrap
     statistics
