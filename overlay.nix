@@ -108,9 +108,7 @@ with pkgs;
     scikitlearn
     ipdb
     paho-mqtt
-    (mpi4py.overridePythonAttrs {
-      doCheck = false;
-    })
+    mpi4py
     wheel
     protobuf
     #Theano -- clblas
@@ -130,7 +128,7 @@ with pkgs;
     #scikit-cuda
     h5py
     astropy
-    #Flask-SocketIO
+    flask-socketio
     flask_wtf
     heapdict
     pyyaml
@@ -147,7 +145,7 @@ with pkgs;
     scikitimage
     dask
     #deepTools
-    #PIMS
+    PIMS
     primefac
     leveldb
     distributed
@@ -160,7 +158,7 @@ with pkgs;
     netcdf4
     partd
     #pymultinest
-    #pystan
+    pystan
     gflags
     backports_ssl_match_hostname
     fusepy
@@ -168,12 +166,10 @@ with pkgs;
     #yt
     hglib
     glueviz
-    #matlab_wrapper
+    matlab_wrapper
     #einsum2
     #nbodykit#[extras]
-    #gobject-introspection
     pygobject2
-    #gobject-introspection-devel
     pycairo
   ] ++ (if isPy3k then [
   ] else [

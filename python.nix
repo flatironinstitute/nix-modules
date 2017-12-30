@@ -3,7 +3,7 @@ self: pkgs:
 with pkgs;
 
 {
-  mpi4pi = mpi4pi.overridePythonAttrs {
+  mpi4py = mpi4py.overridePythonAttrs {
     doCheck = false;
   };
 
@@ -211,6 +211,89 @@ with pkgs;
       sha256 = "18xxhkbl56h19cys8li1qcqd3ymhigwjhc700yxbgj75vw51g8hg";
     };
     propagatedBuildInputs = [ self.glue-core self.glue-vispy-viewers ];
+  };
+
+  pystan = buildPythonPackage rec {
+    pname = "pystan";
+    version = "2.17.0.0";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0jayb6xkxmyl984vyfdhp0zl6qbia95xjgzys8ki875b1rf9sa17";
+    };
+    propagatedBuildInputs = [ cython numpy matplotlib ];
+    doCheck = false; # long, slow tests
+  };
+
+  slicerator = buildPythonPackage rec {
+    pname = "slicerator";
+    version = "0.9.8";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0rsn1x59wwgwhd4nkm2kj0sp9q9gjbqzpmnbhlhqgn2z85mdf7dr";
+    };
+    propagatedBuildInputs = [ six ];
+  };
+
+  PIMS = buildPythonPackage rec {
+    pname = "PIMS";
+    version = "0.4.1";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1pf96krhafn281y4jlib7kn7xvdspz61y7ks29qlxd00x5as2lva";
+    };
+    propagatedBuildInputs = [ self.slicerator six numpy ];
+    checkInputs = [ nose ];
+    doCheck = false; # missing files?
+  };
+
+  matlab_wrapper = buildPythonPackage rec {
+    pname = "matlab_wrapper";
+    version = "0.9.8";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0zcx78y61cpk08akniz9wpdc09s5bchis736h31l5kvss8s8qg50";
+    };
+    propagatedBuildInputs = [ numpy ];
+  };
+
+  engineio = buildPythonPackage rec {
+    pname = "python-engineio";
+    version = "2.0.1";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0c1ccz6fp783ppwwbsgm20i9885fqzyhdvsq6j3nqmyl9q6clvr6";
+    };
+    propagatedBuildInputs = [ six ];
+    doCheck = false; # tox
+  };
+
+  socketio = buildPythonPackage rec {
+    pname = "python-socketio";
+    version = "1.8.4";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1k12l4xdbvx3acrj7z5m3sx0s75c3wxs958jncaisdw5gvhpr00k";
+    };
+    propagatedBuildInputs = [ six self.engineio ];
+    doCheck = false; # tox
+  };
+
+  flask-socketio = buildPythonPackage rec {
+    pname = "Flask-SocketIO";
+    version = "2.9.3";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0nbdljbr2x8fcl2zd8d4amlwyhn32m91cm0bpm1waac5vf8gf8yz";
+    };
+    propagatedBuildInputs = [ flask self.engineio self.socketio ];
+    doCheck = false; # broken imports
   };
 
 }
