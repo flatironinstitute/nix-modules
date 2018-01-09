@@ -66,6 +66,10 @@ with pkgs;
   fftwFloat = self.fftw;
   fftwLongDouble = self.fftw;
 
+  nfft = callPackage devel/nfft {
+    fftw = self.fftw;
+  };
+
   hdf5 = callPackage <nixpkgs/pkgs/tools/misc/hdf5> {
     szip = null;
     mpi = null;
@@ -269,6 +273,7 @@ with pkgs;
         jdk
         mplayer
         netcdf
+        nfft
         openmpi1
         openmpi2
         perl-all
