@@ -41,6 +41,13 @@ with pkgs;
   openmpi2 = callPackage devel/openmpi/2.nix { };
   openmpi = self.openmpi1;
 
+  osu-micro-benchmarks-openmpi1 = callPackage test/osu-micro-benchmarks {
+    mpi = self.openmpi1;
+  };
+  osu-micro-benchmarks-openmpi2 = callPackage test/osu-micro-benchmarks {
+    mpi = self.openmpi2;
+  };
+
   openblas = callPackage base/openblas { };
   openblasCompat = self.openblas;
   blas = self.openblas;
@@ -184,13 +191,6 @@ with pkgs;
     ignoreCollisions = true; # see #31080
   };
   python3-all = python3.withPackages self.pythonPackageList;
-
-  osu-micro-benchmarks-openmpi1 = callPackage test/osu-micro-benchmarks {
-    mpi = self.openmpi1;
-  };
-  osu-micro-benchmarks-openmpi2 = callPackage test/osu-micro-benchmarks {
-    mpi = self.openmpi2;
-  };
 
   perlPackageList = p: with p; [
     TermReadLineGnu
