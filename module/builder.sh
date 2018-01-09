@@ -36,6 +36,14 @@ if [[ $modConflict ]] ; then
 	echo "conflict $modConflict" >> $modfile
 fi
 
+addList () {
+	if [[ -e $1 ]] ; then
+		for p in `< $1` ; do
+			addPaths $p
+		done
+	fi
+}
+
 declare -A done
 addPaths () {
 	if [[ ${done[$1]} ]] ; then
@@ -43,11 +51,8 @@ addPaths () {
 	fi
 	done[$1]=1
 
-	if [[ -e $1/nix-support/propagated-user-env-packages ]] ; then
-		for p in `< $1/nix-support/propagated-user-env-packages` ; do
-			addPaths $p
-		done
-	fi
+	addList $1/nix-support/propagated-user-env-packages
+	addList $1/nix-support/propagated-build-inputs
 
 	if [[ -d $1/bin ]] ; then
 		echo "prepend-path PATH $1/bin" >> $modfile
