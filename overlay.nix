@@ -70,9 +70,15 @@ with pkgs;
     fftw = self.fftw;
   };
 
-  hdf5 = callPackage <nixpkgs/pkgs/tools/misc/hdf5> {
-    szip = null;
+  hdf5 = import devel/hdf5/mpi.pp {
+    inherit callPackage;
     mpi = null;
+  };
+  hdf5-openmpi1 = callPackage devel/hdf5/mpi.pp {
+    mpi = self.openmpi1;
+  };
+  hdf5-openmpi2 = callPackage devel/hdf5/mpi.pp {
+    mpi = self.openmpi2;
   };
 
   python2 = callPackage <nixpkgs/pkgs/development/interpreters/python/cpython/2.7> {
@@ -269,6 +275,8 @@ with pkgs;
         fftw-openmpi2
         gitFull
         hdf5
+        hdf5-openmpi1
+        hdf5-openmpi2
         hwloc
         jdk
         mplayer
