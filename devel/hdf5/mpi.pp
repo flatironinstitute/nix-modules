@@ -1,8 +1,9 @@
 { callPackage
+, hdf5 ? <nixpkg/pkgs/tools/misc/hdf5>
 , mpi ? null
 }:
 
-(callPackage <nixpkgs/pkgs/tools/misc/hdf5> {
+(callPackage hdf5 {
   szip = null;
   inherit mpi;
 }).overrideDerivation (old: {

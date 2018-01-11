@@ -71,13 +71,30 @@ with pkgs;
   };
 
   hdf5 = import devel/hdf5/mpi.pp {
+    hdf5 = <nixpkgs/pkgs/tools/misc/hdf5>;
     inherit callPackage;
     mpi = null;
   };
   hdf5-openmpi1 = callPackage devel/hdf5/mpi.pp {
+    hdf5 = <nixpkgs/pkgs/tools/misc/hdf5>;
     mpi = self.openmpi1;
   };
   hdf5-openmpi2 = callPackage devel/hdf5/mpi.pp {
+    hdf5 = <nixpkgs/pkgs/tools/misc/hdf5>;
+    mpi = self.openmpi2;
+  };
+
+  hdf5_18 = import devel/hdf5/mpi.pp {
+    hdf5 = <nixpkgs/pkgs/tools/misc/hdf5/1_8.nix>;
+    inherit callPackage;
+    mpi = null;
+  };
+  hdf5_18-openmpi1 = callPackage devel/hdf5/mpi.pp {
+    hdf5 = <nixpkgs/pkgs/tools/misc/hdf5/1_8.nix>;
+    mpi = self.openmpi1;
+  };
+  hdf5_18-openmpi2 = callPackage devel/hdf5/mpi.pp {
+    hdf5 = <nixpkgs/pkgs/tools/misc/hdf5/1_8.nix>;
     mpi = self.openmpi2;
   };
 
@@ -277,6 +294,9 @@ with pkgs;
         hdf5
         hdf5-openmpi1
         hdf5-openmpi2
+        hdf5_18
+        hdf5_18-openmpi1
+        hdf5_18-openmpi2
         hwloc
         jdk
         mplayer
