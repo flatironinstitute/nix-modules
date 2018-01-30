@@ -4,7 +4,16 @@ with pkgs;
 {
   nss_sss = callPackage base/sssd/nss-client.nix { };
 
-  gcc6 = wrapCC (gcc6.cc.override {
+  wrapCC = cc: wrapCCWith {
+    inherit cc;
+    bintools = self.binutils;
+    libc = stdenv.cc.libc;
+    #extraBuildCommands = ''
+    #  echo "-L${self.nss_sss}/lib" >> $out/nix-support/cc-ldflags
+    #'';
+  };
+
+  gcc6 = self.wrapCC (gcc6.cc.override {
     langC = true;
     langCC = true;
     langFortran = true;
@@ -15,7 +24,7 @@ with pkgs;
   });
   gfortran6 = self.gcc6;
 
-  gcc7 = wrapCC (gcc7.cc.override {
+  gcc7 = self.wrapCC (gcc7.cc.override {
     langC = true;
     langCC = true;
     langFortran = true;
@@ -31,6 +40,12 @@ with pkgs;
     shell = bash + "/bin/bash";
   };
   stdenv = stdenv.override { allowedRequisites = null; };
+
+  libuv = libuv.overrideAttrs (old: {
+    preCheck = ''
+      export LD_LIBRARY_PATH=${self.nss_sss}/lib
+    '';
+  });
 
   # intel infiniband/psm stuff
   infinipath-psm = callPackage base/infinipath-psm { };
@@ -98,7 +113,7 @@ with pkgs;
     mpi = self.openmpi2;
   };
 
-  python2 = callPackage <nixpkgs/pkgs/development/interpreters/python/cpython/2.7> {
+  python2 = python2.override {
     self = self.python2;
     ucsEncoding = 4;
     CF = null;
@@ -106,15 +121,19 @@ with pkgs;
     packageOverrides = import ./python.nix;
   };
 
-  python3 = callPackage <nixpkgs/pkgs/development/interpreters/python/cpython/3.6> {
+  python3 = python3.override {
     self = self.python3;
     CF = null;
     configd = null;
     packageOverrides = import ./python.nix;
   };
 
-  # re-apply packageOverrides to make sure they're in scope
-  pythonPackageList = p: let pp = import ./python.nix pp p; in with p // pp; [
+  python = self.python2;
+  pythonPackages = self.python.pkgs;
+  python2Packages = self.python2.pkgs;
+  python3Packages = self.python3.pkgs;
+
+  pythonPackageList = p: with p; [
     six
     packaging
     pyparsing
@@ -183,7 +202,7 @@ with pkgs;
     leveldb
     distributed
     bearcart
-    bokeh
+    #bokeh #-- selenium, rustc
     seaborn
     locket
     intervaltree
@@ -210,14 +229,16 @@ with pkgs;
     MySQL_python
     fwrap
     statistics
-    #NucleoATAC    # python2 only
+    #NucleoATAC
     pygtk
   ]);
 
-  python2-all = (python2.withPackages self.pythonPackageList).override {
+  python2-all = (self.python2.withPackages self.pythonPackageList).override {
     ignoreCollisions = true; # see #31080
   };
-  python3-all = python3.withPackages self.pythonPackageList;
+  python3-all = (self.python3.withPackages self.pythonPackageList).override {
+    ignoreCollisions = true; # see #31080
+  };
 
   perlPackageList = p: with p; [
     TermReadLineGnu
@@ -297,6 +318,7 @@ with pkgs;
         hdf5_18
         hdf5_18-openmpi1
         hdf5_18-openmpi2
+        hdfview
         hwloc
         jdk
         mplayer

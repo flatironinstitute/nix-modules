@@ -54,4 +54,5 @@ stdenv.mkDerivation rec {
 
   buildFlags = [ "libnss_sss.la" ];
   installTargets = [ "install-nsslibLTLIBRARIES" ];
+
 }
