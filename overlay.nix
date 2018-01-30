@@ -304,6 +304,8 @@ with pkgs;
         gcc6
         gcc7
         R-all
+        clang_4
+        clang_5
         cmake
         cudatoolkit75
         cudatoolkit8
