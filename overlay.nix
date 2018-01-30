@@ -276,6 +276,12 @@ with pkgs;
     packages = self.rPackageList rPackages;
   };
 
+  singularity = singularity.overrideAttrs (old: {
+    postPatch = ''
+      export LD_LIBRARY_PATH=${self.nss_sss}/lib
+    '';
+  });
+
   disBatch = callPackage flatiron/disBatch { };
 
   modules =
@@ -329,6 +335,7 @@ with pkgs;
         perl-all
         python2-all
         python3-all
+        singularity
       ]);
     };
 }
