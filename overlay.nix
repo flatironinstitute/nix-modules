@@ -223,6 +223,7 @@ with pkgs;
     #nbodykit#[extras]
     pygobject2
     pycairo
+    sphinx
   ] ++ (if isPy3k then [
   ] else [
     weave
