@@ -304,7 +304,7 @@ with pkgs;
         gcc5
         gcc6
         gcc7
-        R-all
+        boost
         clang_4
         clang_5
         cmake
@@ -316,6 +316,7 @@ with pkgs;
         #cudnn_cudatoolkit8 #-- need to download
         #cudnn_cudatoolkit9 #-- need to download
         disBatch
+        eigen3_3
         ffmpeg
         fftw
         fftw-openmpi1
@@ -338,6 +339,7 @@ with pkgs;
         perl-all
         python2-all
         python3-all
+        R-all
         singularity
       ]);
     };
