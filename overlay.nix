@@ -313,8 +313,8 @@ with pkgs;
         cudatoolkit9
         cudnn6_cudatoolkit8
         cudnn_cudatoolkit75
-        #cudnn_cudatoolkit8 #-- need to download
-        #cudnn_cudatoolkit9 #-- need to download
+        cudnn_cudatoolkit8
+        cudnn_cudatoolkit9
         disBatch
         eigen3_3
         ffmpeg
