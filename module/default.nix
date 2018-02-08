@@ -1,7 +1,7 @@
 { stdenv
 , pkg
 , pkgName ? builtins.replaceStrings ["-wrapper" "-all"] ["" ""] (builtins.parseDrvName pkg.name).name
-, pkgVersion ? (builtins.parseDrvName pkg.name).version
+, pkgVersion ? builtins.replaceStrings ["_"] ["."] (builtins.parseDrvName pkg.name).version
 , modPrefix ? "nix/"
 , modName ? "${modPrefix}${pkgName}/${pkgVersion}"
 , modLoad ? []
