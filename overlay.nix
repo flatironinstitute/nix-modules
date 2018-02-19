@@ -4,16 +4,18 @@ with pkgs;
 {
   nss_sss = callPackage base/sssd/nss-client.nix { };
 
-  wrapCC = cc: wrapCCWith {
-    inherit cc;
-    bintools = self.binutils;
-    libc = stdenv.cc.libc;
-    #extraBuildCommands = ''
-    #  echo "-L${self.nss_sss}/lib" >> $out/nix-support/cc-ldflags
-    #'';
-  };
+  gcc5 = wrapCC (gcc5.cc.override {
+    langC = true;
+    langCC = true;
+    langFortran = true;
+    langObjC = true;
+    langObjCpp = true;
+    enableShared = true;
+    enableMultilib = false;
+  });
+  gfortran5 = self.gcc5;
 
-  gcc6 = self.wrapCC (gcc6.cc.override {
+  gcc6 = wrapCC (gcc6.cc.override {
     langC = true;
     langCC = true;
     langFortran = true;
@@ -24,7 +26,7 @@ with pkgs;
   });
   gfortran6 = self.gcc6;
 
-  gcc7 = self.wrapCC (gcc7.cc.override {
+  gcc7 = wrapCC (gcc7.cc.override {
     langC = true;
     langCC = true;
     langFortran = true;
@@ -36,16 +38,7 @@ with pkgs;
   gfortran7 = self.gcc7;
 
   # Make gcc6 default world compiler
-  gcc = self.gcc6.override {
-    shell = bash + "/bin/bash";
-  };
-  stdenv = stdenv.override { allowedRequisites = null; };
-
-  libuv = libuv.overrideAttrs (old: {
-    preCheck = ''
-      export LD_LIBRARY_PATH=${self.nss_sss}/lib
-    '';
-  });
+  gcc = self.gcc6;
 
   # intel infiniband/psm stuff
   infinipath-psm = callPackage base/infinipath-psm { };
@@ -277,30 +270,16 @@ with pkgs;
     packages = self.rPackageList rPackages;
   };
 
-  singularity = singularity.overrideAttrs (old: {
-    postPatch = ''
-      export LD_LIBRARY_PATH=${self.nss_sss}/lib
-    '';
-  });
-
   disBatch = callPackage flatiron/disBatch { };
 
   modules =
     let
-      base = map (pkg: callPackage ./module {
-        inherit pkg;
-        addLDLibraryPath = true;
-        addCFlags = false;
-      }) (with self; [
-        nss_sss
-      ]);
       module = pkg: callPackage ./module {
         inherit pkg;
-        modLoad = map (m: m.modName) base;
       };
     in buildEnv {
       name = "modules";
-      paths = base ++ map module (with self; [
+      paths = map module (with self; [
         gcc5
         gcc6
         gcc7

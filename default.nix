@@ -1,6 +1,5 @@
 let
   lib = import <nixpkgs/lib>;
-  overlay = import ./overlay.nix;
 in
 
 import <nixpkgs> {
@@ -11,6 +10,7 @@ import <nixpkgs> {
   };
   config = {
     allowUnfree = true;
+    replaceStdenv = import ./stdenv.nix;
   };
-  overlays = [overlay];
+  overlays = [(import ./overlay.nix)];
 }
