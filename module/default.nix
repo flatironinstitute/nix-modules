@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   name = "module-${pkg.name}";
 
-  buildInputs = [ pkg ];
+  buildInputs = map (out: pkg.${out}) (pkg.outputs or ["out"]);
 
   inherit pkgName pkgVersion modPrefix modName modLoad modPrereq modConflict addLDLibraryPath addCFlags;
 
