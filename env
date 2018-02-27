@@ -1,5 +1,5 @@
 dir=$PWD
-root=/cm/shared/sw/pkg/base/nix/1.11.16
+root=/cm/shared/sw/pkg/base/nix/2.0
 nix=/mnt/home/sw/nix
 
 export NIX_STORE_DIR=$nix/store
