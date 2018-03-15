@@ -127,104 +127,111 @@ with pkgs;
   python3Packages = self.python3.pkgs;
 
   pythonPackageList = p: with p; [
-    six
-    packaging
-    pyparsing
     appdirs
-    setuptools
-    pip
-    sip
-    pyqt5
-    #tensorflow-gpu
-    numpy
-    scipy
-    pyzmq
-    cython
-    matplotlib
-    ipython #[all]
-    flask
-    cherrypy
-    numexpr
-    bottleneck
-    pandas
-    statsmodels
-    husl
-    ggplot
-    scikitlearn
-    ipdb
-    paho-mqtt
-    mpi4py
-    wheel
-    protobuf
-    #Theano -- clblas
-    urllib3
+    #astropy #-- Exception: Error retrieving astropy-helpers from PyPI: ImportError('No module named builtins',)
+    backports_ssl_match_hostname
+    bearcart
     biopython
-    fuzzysearch
-    virtualenv
-    sqlalchemy
-    psycopg2
-    pyfftw
-    psutil
-    py
-    pytest
-    pytools
-    Mako
-    pycuda
-    #scikit-cuda
-    h5py
-    astropy
+    #bokeh #-- selenium, rustc
+    bottleneck
+    cherrypy
+    cython
+    dask
+    #DataSpyre
+    #deepTools
+    distributed
+    #einsum2
+    emcee
+    flask
     flask-socketio
     flask_wtf
-    heapdict
-    pyyaml
-    twisted
-    ws4py
-    sympy
-    olefile
-    jupyter
-    gevent
-    #metaseq
-    #DataSpyre
-    s3transfer
-    s3fs
-    scikitimage
-    dask
-    #deepTools
-    PIMS
-    primefac
-    leveldb
-    distributed
-    bearcart
-    #bokeh #-- selenium, rustc
-    seaborn
-    locket
-    intervaltree
-    emcee
-    netcdf4
-    partd
-    #pymultinest
-    pystan
-    gflags
-    backports_ssl_match_hostname
     fusepy
-    llfuse
-    yt
+    fuzzysearch
+    gevent
+    gflags
+    ggplot
+    #glueviz #-- qt
+    h5py
+    heapdict
     hglib
-    glueviz
+    husl
+    intervaltree
+    ipdb
+    ipython #[all]
+    #jupyter #-- qt5 broken
+      notebook
+      jupyter_console
+      nbconvert
+      ipykernel
+      ipywidgets
+    leveldb
+    llfuse
+    locket
+    Mako
     matlab_wrapper
-    #einsum2
+    matplotlib
+    #metaseq
+    mpi4py
     #nbodykit#[extras]
-    pygobject2
+    netcdf4
+    numexpr
+    numpy
+    olefile
+    packaging
+    paho-mqtt
+    pandas
+    partd
+    PIMS
+    pip
+    primefac
+    protobuf
+    psutil
+    psycopg2
+    py
     pycairo
+    pycuda
+    pyfftw
+    pygobject2
+    #pymultinest
+    pyparsing
+    #pyqt5 #-- qt5 broken
+    pystan
+    pytest
+    pytools
+    pyyaml
+    pyzmq
+    s3fs
+    s3transfer
+    #scikit-cuda
+    scikitimage
+    #scikitlearn #-- whitespace test failures
+    scipy
+    seaborn
+    setuptools
+    sip
+    six
     sphinx
+    sqlalchemy
+    statsmodels
+    sympy
+    #tensorflow-gpu
+    #Theano -- clblas
+    twisted
+    urllib3
+    virtualenv
+    wheel
+    ws4py
+    yt
   ] ++ (if isPy3k then [
+    jupyterhub
+    jupyterlab
   ] else [
-    weave
-    MySQL_python
     fwrap
-    statistics
+    MySQL_python
     #NucleoATAC
     pygtk
+    statistics
+    weave
   ]);
 
   python2-all = (self.python2.withPackages self.pythonPackageList).override {
