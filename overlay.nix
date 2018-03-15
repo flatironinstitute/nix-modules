@@ -106,6 +106,17 @@ with pkgs;
     mpi = self.openmpi2;
   };
 
+  # Patch qt5.10 to remove minimum linux kernel version linker checks (which are wrong on centos7 "3.10")
+  # But this still doesn't work because other qt modules still use the old qtbase (nested scopes??)
+  qt510 = qt510.overrideScope (super: self: {
+    qtbase = super.qtbase.overrideAttrs (old: {
+      postPatch = old.postPatch + ''
+        sed -i '/global\/minimum-linux/d' src/corelib/global/global.pri
+        rm src/corelib/global/minimum-linux.S
+      '';
+    });
+  });
+
   python2 = python2.override {
     self = self.python2;
     ucsEncoding = 4;
@@ -329,4 +340,9 @@ with pkgs;
         singularity
       ]);
     };
+
+  python-all = buildEnv {
+    name = "python-all";
+    paths = with self; [python2-all python3-all];
+  };
 }
