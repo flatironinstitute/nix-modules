@@ -138,8 +138,29 @@ with pkgs;
     doCheck = false;
   };
 
-  jupyter_core = jupyter_core.overridePythonAttrs {
-    doCheck = false; # needs user
+  jupyterlab_launcher = buildPythonPackage rec {
+    pname = "jupyterlab_launcher";
+    version = "0.10.5";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1v1ir182zm2dl14lqvqjhx2x40wnp0i32n6rldxnm1allfpld1n7";
+    };
+    propagatedBuildInputs = [ notebook ];
+    doCheck = false; # no attribute 'token'?
+  };
+
+  jupyterlab = buildPythonPackage rec {
+    pname = "jupyterlab";
+    version = "0.31.12";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1hp6p9bsr863glildgs2iy1a4l99m7rxj2sy9fmkxp5zhyhqvsrz";
+    };
+    propagatedBuildInputs = [ notebook self.jupyterlab_launcher ];
+    # No tests in archive
+    doCheck = false;
   };
 
   matlab_wrapper = buildPythonPackage rec {
