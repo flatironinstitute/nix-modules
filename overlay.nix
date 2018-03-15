@@ -117,6 +117,9 @@ with pkgs;
     });
   });
 
+  qt5 = qt59;
+  libsForQt5 = libsForQt59;
+
   python2 = python2.override {
     self = self.python2;
     ucsEncoding = 4;
@@ -161,7 +164,7 @@ with pkgs;
     gevent
     gflags
     ggplot
-    #glueviz #-- qt
+    glueviz #-- qt
     h5py
     heapdict
     hglib
@@ -169,12 +172,7 @@ with pkgs;
     intervaltree
     ipdb
     ipython #[all]
-    #jupyter #-- qt5 broken
-      notebook
-      jupyter_console
-      nbconvert
-      ipykernel
-      ipywidgets
+    jupyter #-- qt5
     leveldb
     llfuse
     locket
@@ -205,7 +203,7 @@ with pkgs;
     pygobject2
     #pymultinest
     pyparsing
-    #pyqt5 #-- qt5 broken
+    pyqt5 #-- qt5
     pystan
     pytest
     pytools
