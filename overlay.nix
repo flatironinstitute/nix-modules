@@ -125,14 +125,14 @@ with pkgs;
     ucsEncoding = 4;
     CF = null;
     configd = null;
-    packageOverrides = import ./python.nix;
+    packageOverrides = import ./python.nix self;
   };
 
   python3 = python3.override {
     self = self.python3;
     CF = null;
     configd = null;
-    packageOverrides = import ./python.nix;
+    packageOverrides = import ./python.nix self;
   };
 
   python = self.python2;

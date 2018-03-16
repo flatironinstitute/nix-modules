@@ -1,3 +1,4 @@
+world:
 # python package overrides
 self: pkgs:
 with pkgs;
@@ -155,8 +156,15 @@ with pkgs;
       sha256 = "1hp6p9bsr863glildgs2iy1a4l99m7rxj2sy9fmkxp5zhyhqvsrz";
     };
     propagatedBuildInputs = [ notebook self.jupyterlab_launcher ];
+    # some jupyterlab commands need node:
+    buildInputs = [world.nodejs];
     # No tests in archive
     doCheck = false;
+    # really ugly and messy and lazy:
+    postFixup = ''
+      echo $out
+      PATH=$out/bin:$PATH JUPYTERLAB_DIR=$out/share/jupyter/lab HOME=$PWD jupyter-labextension install @jupyterlab/hub-extension
+    '';
   };
 
   matlab_wrapper = buildPythonPackage rec {
