@@ -142,7 +142,6 @@ with pkgs;
 
   pythonPackageList = p: with p; [
     appdirs
-    #astropy #-- Exception: Error retrieving astropy-helpers from PyPI: ImportError('No module named builtins',)
     backports_ssl_match_hostname
     bearcart
     biopython
@@ -164,7 +163,6 @@ with pkgs;
     gevent
     gflags
     ggplot
-    glueviz #-- qt
     h5py
     heapdict
     hglib
@@ -213,7 +211,7 @@ with pkgs;
     s3transfer
     #scikit-cuda
     scikitimage
-    #scikitlearn #-- whitespace test failures
+    scikitlearn
     scipy
     seaborn
     setuptools
@@ -232,6 +230,8 @@ with pkgs;
     ws4py
     yt
   ] ++ (if isPy3k then [
+    astropy
+    glueviz #-- qt
     jupyterhub
     jupyterlab
   ] else [
@@ -248,6 +248,11 @@ with pkgs;
   };
   python3-all = (self.python3.withPackages self.pythonPackageList).override {
     ignoreCollisions = true; # see #31080
+  };
+
+  python-all = buildEnv {
+    name = "python-all";
+    paths = with self; [python2-all python3-all];
   };
 
   perlPackageList = p: with p; [
@@ -286,6 +291,10 @@ with pkgs;
     packages = self.rPackageList rPackages;
   };
 
+  texlive-all = texlive.combined.scheme-full // {
+    name = builtins.replaceStrings ["-combined-full"] [""] texlive.combined.scheme-full.name;
+  };
+
   disBatch = callPackage flatiron/disBatch { };
 
   modules =
@@ -311,12 +320,15 @@ with pkgs;
         cudnn_cudatoolkit8
         cudnn_cudatoolkit9
         disBatch
+        dstat
         eigen3_3
+        elinks
         ffmpeg
         fftw
         fftw-openmpi1
         fftw-openmpi2
         gitFull
+        gdb
         hdf5
         hdf5-openmpi1
         hdf5-openmpi2
@@ -326,21 +338,24 @@ with pkgs;
         hdfview
         hwloc
         jdk
+        mercurial
         mplayer
         netcdf
+        nodejs
         nfft
         openmpi1
         openmpi2
         perl-all
         python2-all
         python3-all
+        (qt5.full // { name = builtins.replaceStrings ["-full"] [""] qt5.full.name; })
         R-all
         singularity
+        subversion
+        texlive-all
+        valgrind
+        vim
       ]);
     };
 
-  python-all = buildEnv {
-    name = "python-all";
-    paths = with self; [python2-all python3-all];
-  };
 }

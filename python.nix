@@ -15,10 +15,6 @@ with pkgs;
     doCheck = false; # broken imports
   };
 
-  boto = boto.overridePythonAttrs {
-    doCheck = false; # needs user
-  };
-
   cherrypy = cherrypy.overridePythonAttrs {
     doCheck = false; # needs network :8080?
   };
@@ -178,10 +174,6 @@ with pkgs;
     doCheck = false;
   };
 
-  pathlib2 = pathlib2.overridePythonAttrs {
-    doCheck = false; # needs user
-  };
-
   # only 0.3.0 in nix:
   patsy = buildPythonPackage rec {
     pname = "patsy";
@@ -231,6 +223,10 @@ with pkgs;
     };
     propagatedBuildInputs = [ cython numpy matplotlib ];
     doCheck = false; # long, slow tests
+  };
+
+  scikitlearn = scikitlearn.overridePythonAttrs {
+    doCheck = false; # whitespace doctest failures and others
   };
 
   slicerator = buildPythonPackage rec {
