@@ -54,6 +54,10 @@ with pkgs;
     doCheck = false; # broken imports
   };
 
+  flit = flit.overridePythonAttrs {
+    doCheck = false; # uses $HOME
+  };
+
   fuzzysearch = buildPythonPackage rec {
     pname = "fuzzysearch";
     version = "0.5.0";
@@ -97,7 +101,7 @@ with pkgs;
       inherit pname version;
       sha256 = "1fppsalszd7hb18wk0apq5g9bq4bgik79ffk624xxq5w48yqsj5m";
     };
-    propagatedBuildInputs = [ numpy self.pandas astropy matplotlib qtpy setuptools ipython self.ipykernel qtconsole dill self.xlrd h5py ];
+    propagatedBuildInputs = [ numpy self.pandas astropy matplotlib qtpy setuptools ipython ipykernel qtconsole dill self.xlrd h5py ];
     doCheck = false;
   };
 
@@ -135,12 +139,13 @@ with pkgs;
     doCheck = false;
   };
 
-  ipykernel = ipykernel.overridePythonAttrs {
-    # make sure it uses the correct python version (not just "python"):
-    postFixup = ''
-      sed -i '/"argv":/,+1s!"python",!"${world.lib.last (world.lib.splitString "/" python.interpreter)}",!' $out/share/jupyter/kernels/*/*.json
-    '';
-  };
+  # superseded by jupyter/kernel:
+  #ipykernel = ipykernel.overridePythonAttrs {
+  #  # make sure it uses the correct python version (not just "python"):
+  #  postFixup = ''
+  #    sed -i '/"argv":/,+1s!"python",!"${world.lib.last (world.lib.splitString "/" python.interpreter)}",!' $out/share/jupyter/kernels/*/*.json
+  #  '';
+  #};
 
   jupyterlab_launcher = buildPythonPackage rec {
     pname = "jupyterlab_launcher";

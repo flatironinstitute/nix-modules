@@ -56,8 +56,8 @@ with pkgs;
     mpi = self.openmpi2;
   };
 
-  openblas = callPackage base/openblas { };
-  openblasCompat = self.openblas;
+  #openblas = callPackage base/openblas { };
+  #openblasCompat = self.openblas;
   blas = self.openblas;
 
   fftw = callPackage base/fftw/precs.nix {
@@ -117,6 +117,7 @@ with pkgs;
     });
   });
 
+  # Switch to qt59 until above is solved
   qt5 = qt59;
   libsForQt5 = libsForQt59;
 
@@ -231,6 +232,7 @@ with pkgs;
     yt
   ] ++ (if isPy3k then [
     astropy
+    bash_kernel
     glueviz #-- qt
     jupyterhub
     jupyterlab
@@ -248,11 +250,6 @@ with pkgs;
   };
   python3-all = (self.python3.withPackages self.pythonPackageList).override {
     ignoreCollisions = true; # see #31080
-  };
-
-  python-all = buildEnv {
-    name = "python-all";
-    paths = with self; [python2-all python3-all];
   };
 
   perlPackageList = p: with p; [
@@ -273,29 +270,35 @@ with pkgs;
     paths = [perl] ++ self.perlPackageList perlPackages;
   };
 
-  rPackageList = p: with p; [
-    AnnotationDbi
-    BH
-    BiocInstaller
-    bit64
-    blob
-    getopt
-    ggplot2
-    lazyeval
-    memoise
-    pkgconfig
-    plogr
-  ];
-
   R-all = rWrapper.override {
-    packages = self.rPackageList rPackages;
+    packages = with rPackages; [
+      AnnotationDbi
+      BH
+      BiocInstaller
+      bit64
+      blob
+      getopt
+      ggplot2
+      JuniperKernel
+      lazyeval
+      memoise
+      pkgconfig
+      plogr
+    ];
   };
+
+  haskell-all = haskellPackages.ghcWithPackages (hp: with hp; [
+    cabal-install
+    stack
+  ]);
 
   texlive-all = texlive.combined.scheme-full // {
     name = builtins.replaceStrings ["-combined-full"] [""] texlive.combined.scheme-full.name;
   };
 
   disBatch = callPackage flatiron/disBatch { };
+
+  module-wrap = callPackage module/wrap { };
 
   modules =
     let
@@ -329,6 +332,7 @@ with pkgs;
         fftw-openmpi2
         gitFull
         gdb
+        haskell-all
         hdf5
         hdf5-openmpi1
         hdf5-openmpi2
@@ -338,6 +342,7 @@ with pkgs;
         hdfview
         hwloc
         jdk
+        #julia
         mercurial
         mplayer
         netcdf
@@ -358,4 +363,19 @@ with pkgs;
       ]);
     };
 
+  jupyter-env = buildEnv {
+    name = "jupyter-env";
+    paths = [
+      (self.python3.withPackages (p: with p; [jupyterhub jupyterlab]))
+    ] ++ map (callPackage jupyter/kernel) [
+      { src = self.python2-all; }
+      { src = self.python3-all; }
+      { src = "/cm/shared/sw/pkg-old/devel/python2/2.7.13"; prefix = "module-python2-2.7.13"; note = " (python2/2.7.13)"; }
+      { src = "/cm/shared/sw/pkg-old/devel/python3/3.6.2";  prefix = "module-python3-3.6.2";  note = " (python3/3.6.2)"; }
+      # TODO:
+      #nodejs 
+      #R-all 
+      #ihaskell
+    ];
+  };
 }
