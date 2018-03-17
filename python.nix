@@ -97,7 +97,7 @@ with pkgs;
       inherit pname version;
       sha256 = "1fppsalszd7hb18wk0apq5g9bq4bgik79ffk624xxq5w48yqsj5m";
     };
-    propagatedBuildInputs = [ numpy self.pandas astropy matplotlib qtpy setuptools ipython ipykernel qtconsole dill self.xlrd h5py ];
+    propagatedBuildInputs = [ numpy self.pandas astropy matplotlib qtpy setuptools ipython self.ipykernel qtconsole dill self.xlrd h5py ];
     doCheck = false;
   };
 
@@ -133,6 +133,13 @@ with pkgs;
       sha256 = "1fahd35yrpvdqzdd1r6r416d0csg4jbxwlkzm19sa750cljn47ca";
     };
     doCheck = false;
+  };
+
+  ipykernel = ipykernel.overridePythonAttrs {
+    # make sure it uses the correct python version (not just "python"):
+    postFixup = ''
+      sed -i '/"argv":/,+1s!"python",!"${world.lib.last (world.lib.splitString "/" python.interpreter)}",!' $out/share/jupyter/kernels/*/*.json
+    '';
   };
 
   jupyterlab_launcher = buildPythonPackage rec {
