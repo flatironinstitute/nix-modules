@@ -203,6 +203,7 @@ with pkgs;
     #pymultinest
     pyparsing
     pyqt5 #-- qt5
+    pyslurm
     pystan
     pytest
     pytools
@@ -290,6 +291,7 @@ with pkgs;
   haskell-all = haskellPackages.ghcWithPackages (hp: with hp; [
     cabal-install
     stack
+    ihaskell
   ]);
 
   texlive-all = texlive.combined.scheme-full // {
@@ -373,12 +375,11 @@ with pkgs;
       { env = self.python2-all; }
       { env = self.python3-all; }
       { env = self.R-all; kernelSrc = (callPackage jupyter/kernel/juniper { env = self.R-all; }); }
+      { env = self.haskell-all; kernelSrc = (callPackage jupyter/kernel/ihaskell { env = self.haskell-all; }); }
       { env = "/cm/shared/sw/pkg-old/devel/python2/2.7.13"; prefix = "module-python2-2.7.13"; note = " (python2/2.7.13)"; }
       { env = "/cm/shared/sw/pkg-old/devel/python3/3.6.2";  prefix = "module-python3-3.6.2";  note = " (python3/3.6.2)"; }
       # TODO:
       #nodejs 
-      #R-all 
-      #ihaskell
     ];
   };
 }
