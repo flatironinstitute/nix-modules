@@ -363,15 +363,18 @@ with pkgs;
       ]);
     };
 
+  jupyter = self.python3.withPackages (p: with p; [jupyterhub jupyterlab]);
+
   jupyter-env = buildEnv {
     name = "jupyter-env";
     paths = [
-      (self.python3.withPackages (p: with p; [jupyterhub jupyterlab]))
+      self.jupyter
     ] ++ map (callPackage jupyter/kernel) [
-      { src = self.python2-all; }
-      { src = self.python3-all; }
-      { src = "/cm/shared/sw/pkg-old/devel/python2/2.7.13"; prefix = "module-python2-2.7.13"; note = " (python2/2.7.13)"; }
-      { src = "/cm/shared/sw/pkg-old/devel/python3/3.6.2";  prefix = "module-python3-3.6.2";  note = " (python3/3.6.2)"; }
+      { env = self.python2-all; }
+      { env = self.python3-all; }
+      { env = self.R-all; kernelSrc = (callPackage jupyter/kernel/juniper { env = self.R-all; }); }
+      { env = "/cm/shared/sw/pkg-old/devel/python2/2.7.13"; prefix = "module-python2-2.7.13"; note = " (python2/2.7.13)"; }
+      { env = "/cm/shared/sw/pkg-old/devel/python3/3.6.2";  prefix = "module-python3-3.6.2";  note = " (python3/3.6.2)"; }
       # TODO:
       #nodejs 
       #R-all 
