@@ -344,7 +344,7 @@ with pkgs;
         hdfview
         hwloc
         jdk
-        #julia
+        julia
         mercurial
         mplayer
         netcdf
@@ -380,6 +380,7 @@ with pkgs;
       { env = "/cm/shared/sw/pkg-old/devel/python3/3.6.2";  prefix = "module-python3-3.6.2";  note = " (python3/3.6.2)"; }
       # TODO:
       #nodejs 
+      #julia
     ];
   };
 }
