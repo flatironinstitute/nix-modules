@@ -352,6 +352,8 @@ with pkgs;
         nfft
         openmpi1
         openmpi2
+	osu-micro-benchmarks-openmpi1
+	osu-micro-benchmarks-openmpi2
         perl-all
         python2-all
         python3-all
