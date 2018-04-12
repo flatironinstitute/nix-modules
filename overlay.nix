@@ -106,6 +106,10 @@ with pkgs;
     mpi = self.openmpi2;
   };
 
+  libuv = libuv.overrideAttrs (old: {
+    doCheck = false;
+  });
+
   # Patch qt5.10 to remove minimum linux kernel version linker checks (which are wrong on centos7 "3.10")
   # But this still doesn't work because other qt modules still use the old qtbase (nested scopes??)
   qt510 = qt510.overrideScope (super: self: {
@@ -293,6 +297,10 @@ with pkgs;
     stack
     ihaskell
   ]);
+
+  julia = julia.overrideAttrs (old: {
+    doCheck = false;
+  });
 
   texlive-all = texlive.combined.scheme-full // {
     name = builtins.replaceStrings ["-combined-full"] [""] texlive.combined.scheme-full.name;
