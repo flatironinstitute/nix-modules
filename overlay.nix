@@ -316,6 +316,7 @@ with pkgs;
         boost
         clang_4
         clang_5
+        clang_6
         cmake
         cudatoolkit75
         cudatoolkit8
