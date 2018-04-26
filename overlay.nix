@@ -149,7 +149,6 @@ with pkgs;
     appdirs
     backports_ssl_match_hostname
     bearcart
-    biopython
     #bokeh #-- selenium, rustc
     bottleneck
     cherrypy
@@ -207,7 +206,7 @@ with pkgs;
     #pymultinest
     pyparsing
     pyqt5 #-- qt5
-    pyslurm
+    #pyslurm -- need matching version
     pystan
     pytest
     pytools
@@ -233,7 +232,6 @@ with pkgs;
     urllib3
     virtualenv
     wheel
-    ws4py
     yt
   ] ++ (if isPy3k then [
     astropy
@@ -241,7 +239,9 @@ with pkgs;
     glueviz #-- qt
     jupyterhub
     jupyterlab
+    ws4py
   ] else [
+    biopython #-- build failure on python3
     fwrap
     MySQL_python
     #NucleoATAC
