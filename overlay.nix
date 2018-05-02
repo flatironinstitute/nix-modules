@@ -37,8 +37,8 @@ with pkgs;
   });
   gfortran7 = self.gcc7;
 
-  # Make gcc6 default world compiler
-  gcc = self.gcc6;
+  # Make gcc7 default world compiler
+  gcc = self.gcc7;
 
   # intel infiniband/psm stuff
   infinipath-psm = callPackage base/infinipath-psm { };

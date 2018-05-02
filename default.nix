@@ -11,6 +11,10 @@ import <nixpkgs> {
   config = {
     allowUnfree = true;
     replaceStdenv = import ./stdenv.nix;
+    nix = {
+      storeDir = "/mnt/home/sw/nix/store";
+      stateDir = "/mnt/home/sw/nix/state";
+    };
   };
   overlays = [(import ./overlay.nix)];
 }
