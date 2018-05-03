@@ -11,6 +11,7 @@ for kernel in $kernelSrc/share/jupyter/kernels/* ; do
 	jq '      .argv[0]|=env.env+"/bin/"+split("/")[-1]
 		| .env.PATH=env.env+"/bin:/usr/bin"
 		| .env.PYTHONHOME=env.env
+		| .env.LD_LIBRARY_PATH=env.ld_library_path
 		| .display_name+=env.note' \
 		$kernel/kernel.json > $dst/kernel.json
 done
