@@ -343,6 +343,7 @@ with pkgs;
         fftw-openmpi2
         gitFull
         gdb
+        go
         haskell-all
         hdf5
         hdf5-openmpi1
@@ -368,6 +369,7 @@ with pkgs;
         python3-all
         (qt5.full // { name = builtins.replaceStrings ["-full"] [""] qt5.full.name; })
         R-all
+        rclone
         singularity
         subversion
         texlive-all
