@@ -30,6 +30,7 @@ let gccOpts = {
   gcc = self.gcc7;
 
   nix = nix.overrideAttrs (old: {
+    patches = [./nix.patch];
     doInstallCheck = false;
   });
 
