@@ -311,7 +311,6 @@ let gccOpts = {
     in buildEnv {
       name = "modules";
       paths = map module (with self; [
-        nix
         gcc5
         gcc6
         gcc7
@@ -370,7 +369,13 @@ let gccOpts = {
         texlive-all
         valgrind
         vim
-      ]);
+      ]) ++ [
+        (callPackage ./module {
+          pkg = self.nix;
+          modConflict = ["nix/nix"];
+          addCFlags = false;
+        })
+      ];
     };
 
   jupyter = self.python3.withPackages (p: with p; [jupyterhub jupyterlab]);
