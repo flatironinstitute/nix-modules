@@ -1,44 +1,37 @@
 self: pkgs:
 with pkgs;
 
+let gccOpts = {
+  langC = true;
+  langCC = true;
+  langFortran = true;
+  langObjC = true;
+  langObjCpp = true;
+  enableShared = true;
+  enableMultilib = false;
+}; in
+
 {
   nss_sss = callPackage base/sssd/nss-client.nix { };
 
-  gcc5 = wrapCC (gcc5.cc.override {
-    langC = true;
-    langCC = true;
-    langFortran = true;
-    langObjC = true;
-    langObjCpp = true;
-    enableShared = true;
-    enableMultilib = false;
-  });
+  gcc5 = wrapCC (gcc5.cc.override gccOpts);
   gfortran5 = self.gcc5;
 
-  gcc6 = wrapCC (gcc6.cc.override {
-    langC = true;
-    langCC = true;
-    langFortran = true;
-    langObjC = true;
-    langObjCpp = true;
-    enableShared = true;
-    enableMultilib = false;
-  });
+  gcc6 = wrapCC (gcc6.cc.override gccOpts);
   gfortran6 = self.gcc6;
 
-  gcc7 = wrapCC (gcc7.cc.override {
-    langC = true;
-    langCC = true;
-    langFortran = true;
-    langObjC = true;
-    langObjCpp = true;
-    enableShared = true;
-    enableMultilib = false;
-  });
+  gcc7 = wrapCC (gcc7.cc.override gccOpts);
   gfortran7 = self.gcc7;
+
+  gcc8 = wrapCC (gcc8.cc.override gccOpts);
+  gfortran8 = self.gcc8;
 
   # Make gcc7 default world compiler
   gcc = self.gcc7;
+
+  nix = nix.overrideAttrs (old: {
+    doInstallCheck = false;
+  });
 
   # intel infiniband/psm stuff
   infinipath-psm = callPackage base/infinipath-psm { };
@@ -318,9 +311,11 @@ with pkgs;
     in buildEnv {
       name = "modules";
       paths = map module (with self; [
+        nix
         gcc5
         gcc6
         gcc7
+        gcc8
         boost
         clang_4
         clang_5
