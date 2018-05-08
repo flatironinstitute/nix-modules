@@ -216,6 +216,10 @@ with pkgs;
     doCheck = false; # strange test error
   };
 
+  pytorch = pytorch.overridePythonAttrs {
+    doCheck = false; # needs cuda
+  };
+
   scikitlearn = scikitlearn.overridePythonAttrs {
     doCheck = false; # whitespace doctest failures and others
   };

@@ -15,6 +15,7 @@ import <nixpkgs> {
       storeDir = "/mnt/home/sw/nix/store";
       stateDir = "/mnt/home/sw/nix/state";
     };
+    cudaSupport = true;
   };
   overlays = [(import ./overlay.nix)];
 }
