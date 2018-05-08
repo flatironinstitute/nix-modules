@@ -200,7 +200,7 @@ let gccOpts = {
     #pymultinest
     pyparsing
     pyqt5 #-- qt5
-    #pyslurm -- need matching version
+    pyslurm
     pystan
     pytest
     pytools
