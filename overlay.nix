@@ -204,6 +204,7 @@ let gccOpts = {
     pystan
     pytest
     pytools
+    pytorch
     pyyaml
     pyzmq
     s3fs
