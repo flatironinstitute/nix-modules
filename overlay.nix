@@ -317,6 +317,7 @@ let gccOpts = {
         gcc6
         gcc7
         gcc8
+        arpack
         boost
         clang_4
         clang_5
