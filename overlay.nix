@@ -340,6 +340,7 @@ let gccOpts = {
         fftw-openmpi2
         gitFull
         gdb
+        gmp
         go
         haskell-all
         hdf5
