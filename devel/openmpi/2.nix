@@ -33,4 +33,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   doCheck = true;
+
+  postInstall = ''
+    echo 'oob_tcp_if_exclude = idrac,lo' >> $out/etc/openmpi-mca-params.conf
+    echo 'btl_tcp_if_exclude = idrac,lo' >> $out/etc/openmpi-mca-params.conf
+  '';
 }
