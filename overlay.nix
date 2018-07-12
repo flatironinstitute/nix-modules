@@ -41,7 +41,9 @@ let gccOpts = {
 
   openmpi1 = callPackage devel/openmpi/1.nix { };
   openmpi2 = callPackage devel/openmpi/2.nix { };
-  openmpi = self.openmpi1;
+  openmpi = self.openmpi2;
+
+  mvapich2 = callPackage devel/mvapich { };
 
   osu-micro-benchmarks-openmpi1 = callPackage test/osu-micro-benchmarks {
     mpi = self.openmpi1;
@@ -104,20 +106,13 @@ let gccOpts = {
     doCheck = false;
   });
 
-  # Patch qt5.10 to remove minimum linux kernel version linker checks (which are wrong on centos7 "3.10")
-  # But this still doesn't work because other qt modules still use the old qtbase (nested scopes??)
-  qt510 = qt510.overrideScope (super: self: {
-    qtbase = super.qtbase.overrideAttrs (old: {
-      postPatch = old.postPatch + ''
-        sed -i '/global\/minimum-linux/d' src/corelib/global/global.pri
-        rm src/corelib/global/minimum-linux.S
-      '';
-    });
-  });
-
-  # Switch to qt59 until above is solved
+  # Switch to qt59 due to 5.11 issues
   qt5 = qt59;
   libsForQt5 = libsForQt59;
+
+  poppler_min = poppler_min.overrideAttrs (old: {
+    cmakeFlags = old.cmakeFlags ++ ["-DENABLE_QT4=off"];
+  });
 
   python2 = python2.override {
     self = self.python2;
@@ -170,7 +165,6 @@ let gccOpts = {
     ipython #[all]
     jupyter #-- qt5
     leveldb
-    llfuse
     locket
     Mako
     matlab_wrapper
@@ -194,7 +188,7 @@ let gccOpts = {
     psycopg2
     py
     pycairo
-    pycuda
+    #pycuda
     pyfftw
     pygobject2
     #pymultinest
@@ -234,6 +228,7 @@ let gccOpts = {
     glueviz #-- qt
     jupyterhub
     jupyterlab
+    llfuse #-- unicode problems on python2
     ws4py
   ] else [
     biopython #-- build failure on python3
@@ -305,6 +300,21 @@ let gccOpts = {
 
   module-wrap = callPackage module/wrap { };
 
+  git = git.overrideAttrs (old: {
+    # gettext UTF-8 failures?
+    doInstallCheck = false;
+  });
+
+  gitFull = gitFull.overrideAttrs (old: {
+    # gettext UTF-8 failures?
+    doInstallCheck = false;
+  });
+
+  rcs = rcs.overrideAttrs (old: {
+    # unknown t999 failure
+    doCheck = false;
+  });
+
   modules =
     let
       module = pkg: callPackage ./module {
@@ -323,13 +333,13 @@ let gccOpts = {
         clang_5
         clang_6
         cmake
-        cudatoolkit75
-        cudatoolkit8
-        cudatoolkit9
-        cudnn6_cudatoolkit8
-        cudnn_cudatoolkit75
-        cudnn_cudatoolkit8
-        cudnn_cudatoolkit9
+        cudatoolkit_7_5
+        cudatoolkit_8
+        cudatoolkit_9
+        cudnn6_cudatoolkit_8
+        cudnn_cudatoolkit_7_5
+        cudnn_cudatoolkit_8
+        cudnn_cudatoolkit_9
         disBatch
         dstat
         eigen3_3
@@ -356,12 +366,14 @@ let gccOpts = {
         mercurial
         mplayer
         netcdf
-        nodejs
+        nodejs-6_x
+        nodejs-8_x
+        nodejs-10_x
         nfft
         openmpi1
         openmpi2
-	osu-micro-benchmarks-openmpi1
-	osu-micro-benchmarks-openmpi2
+        osu-micro-benchmarks-openmpi1
+        osu-micro-benchmarks-openmpi2
         perl-all
         python2-all
         python3-all
@@ -373,6 +385,7 @@ let gccOpts = {
         texlive-all
         valgrind
         vim
+        vtk
       ]) ++ [
         (callPackage ./module {
           pkg = self.nix;

@@ -5,6 +5,26 @@ with pkgs;
 
 {
 
+  # not defined on python > 3.3 (but needed by cheroot)
+  backports_functools_lru_cache = buildPythonPackage rec {
+    pname = "backports.functools_lru_cache";
+    version = "1.5";
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "9d98697f088eb1b0fa451391f91afb5e3ebde16bbdb272819fd091151fda4f1a";
+    };
+
+    buildInputs = [ setuptools_scm ];
+    doCheck = false; # No proper test
+
+    meta = {
+      description = "Backport of functools.lru_cache";
+      homepage = https://github.com/jaraco/backports.functools_lru_cache;
+      license = lib.licenses.mit;
+    };
+  };
+
   bearcart = buildPythonPackage rec {
     pname = "bearcart";
     version = "0.1.3";
@@ -16,8 +36,15 @@ with pkgs;
     doCheck = false; # broken imports
   };
 
+  cheroot = cheroot.overridePythonAttrs {
+    # missing functools_lru_cache:
+    propagatedBuildInputs = [ more-itertools six self.backports_functools_lru_cache ];
+  };
+
   cherrypy = cherrypy.overridePythonAttrs {
     doCheck = false; # needs network :8080?
+    # missing functools_lru_cache:
+    propagatedBuildInputs = [ self.cheroot portend routes six self.backports_functools_lru_cache ];
   };
 
   brewer2mpl = buildPythonPackage rec {
@@ -40,6 +67,18 @@ with pkgs;
     };
     propagatedBuildInputs = [ six ];
     doCheck = false; # tox
+  };
+
+  fast-histogram = buildPythonPackage rec {
+    pname = "fast-histogram";
+    version = "0.4";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "068l53nway4778aavjf4hdg4ha216z2lajihrrsdx7hcjdbymz4a";
+    };
+    propagatedBuildInputs = [ numpy ];
+    checkInputs = [ hypothesis ];
   };
 
   flask-socketio = buildPythonPackage rec {
@@ -95,23 +134,23 @@ with pkgs;
 
   glue-core = buildPythonPackage rec {
     pname = "glue-core";
-    version = "0.12.3";
+    version = "0.13.3";
     name = "${pname}-${version}";
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1fppsalszd7hb18wk0apq5g9bq4bgik79ffk624xxq5w48yqsj5m";
+      sha256 = "1sbpcqamsk8g1yn4f75hmkl9jj5azn0y5jrpzgpq2v1n32f3wkns";
     };
-    propagatedBuildInputs = [ numpy self.pandas astropy matplotlib qtpy setuptools ipython ipykernel qtconsole dill self.xlrd h5py ];
+    propagatedBuildInputs = [ numpy self.pandas astropy matplotlib qtpy setuptools ipython ipykernel qtconsole dill self.xlrd h5py self.mpl-scatter-density ];
     doCheck = false;
   };
 
   glue-vispy-viewers = buildPythonPackage rec {
     pname = "glue-vispy-viewers";
-    version = "0.9";
+    version = "0.10";
     name = "${pname}-${version}";
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1lwiqlhvkmhvh8bl7waydkfr1hdri3xszr2v3x147vf29wc1xy4a";
+      sha256 = "0jia4yf100khqz41r4v8nf0z2a7icyrkgrjljynglziz1x3qnvp7";
     };
     propagatedBuildInputs = [ numpy pyopengl self.glue-core qtpy scipy astropy ];
     doCheck = false;
@@ -119,11 +158,11 @@ with pkgs;
 
   glueviz = buildPythonPackage rec {
     pname = "glueviz";
-    version = "0.12.2";
+    version = "0.13.3";
     name = "${pname}-${version}";
     src = fetchPypi {
       inherit pname version;
-      sha256 = "18xxhkbl56h19cys8li1qcqd3ymhigwjhc700yxbgj75vw51g8hg";
+      sha256 = "0avmdpbzfcwp5ilv7wdz9n1fiviqyf2m5sgzhyd40dsrirh1grl0";
     };
     propagatedBuildInputs = [ self.glue-core self.glue-vispy-viewers ];
   };
@@ -142,7 +181,7 @@ with pkgs;
   jupyterlab = jupyterlab.overridePythonAttrs {
     buildInputs = [world.nodejs];
     postFixup = ''
-      PATH=$out/bin:$PATH JUPYTERLAB_DIR=$out/share/jupyter/lab HOME=$PWD jupyter-labextension install @jupyterlab/hub-extension@0.8.1
+      PATH=$out/bin:$PATH JUPYTERLAB_DIR=$out/share/jupyter/lab HOME=$PWD jupyter-labextension install @jupyterlab/hub-extension@0.9.0
     '';
   };
 
@@ -161,20 +200,16 @@ with pkgs;
     doCheck = false;
   };
 
-  # only 0.3.0 in nix:
-  patsy = buildPythonPackage rec {
-    pname = "patsy";
-    version = "0.4.1";
+  mpl-scatter-density = buildPythonPackage rec {
+    pname = "mpl-scatter-density";
+    version = "0.3";
     name = "${pname}-${version}";
-
     src = fetchPypi {
       inherit pname version;
-      extension = "zip";
-      sha256 = "1m6knyq8hbqlx242y4da02j0x86j4qggs1j7q186w3jv0j0c476w";
+      sha256 = "0lc6cl5q33n0g534sng9dagbdbr0rny3hqnc1mbm5im8mrr335cq";
     };
-
-    buildInputs = [ nose ];
-    propagatedBuildInputs = [six numpy];
+    propagatedBuildInputs = [ numpy matplotlib self.fast-histogram ];
+    checkInputs = [ pytest ];
   };
 
   PIMS = buildPythonPackage rec {
@@ -202,11 +237,11 @@ with pkgs;
 
   pystan = buildPythonPackage rec {
     pname = "pystan";
-    version = "2.17.0.0";
+    version = "2.17.1.0";
     name = "${pname}-${version}";
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0jayb6xkxmyl984vyfdhp0zl6qbia95xjgzys8ki875b1rf9sa17";
+      sha256 = "0y4vaa1yybgxpnfjpdsgxpzrz4jg4q3bias1866480n0019ipyfl";
     };
     propagatedBuildInputs = [ cython numpy matplotlib ];
     doCheck = false; # long, slow tests
@@ -293,11 +328,11 @@ with pkgs;
 
   yt = buildPythonPackage rec {
     pname = "yt";
-    version = "3.4.0";
+    version = "3.4.1";
     name = "${pname}-${version}";
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0k3d15sqld35ki3ab939xhhk3bmym4ci32hxjs1klivp2ryhalny";
+      sha256 = "15aq0rjbzramayikjfbfvbzp9dszlbi5zh40nsiyg0qnw9zw9kx4";
     };
     propagatedBuildInputs = [ cython matplotlib setuptools sympy numpy ipython ];
     doCheck = false; # unknown failure
