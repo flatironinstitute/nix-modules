@@ -194,11 +194,11 @@ let gccOpts = {
     #pymultinest
     pyparsing
     pyqt5 #-- qt5
-    pyslurm
+    #pyslurm
     pystan
     pytest
     pytools
-    pytorch
+    #pytorch
     pyyaml
     pyzmq
     s3fs
@@ -333,12 +333,14 @@ let gccOpts = {
         clang_5
         clang_6
         cmake
-        cudatoolkit_7_5
-        cudatoolkit_8
+        #cudatoolkit_7_5
+        #cudatoolkit_8
+        cudatoolkit_9_0
         cudatoolkit_9
-        cudnn6_cudatoolkit_8
-        cudnn_cudatoolkit_7_5
-        cudnn_cudatoolkit_8
+        #cudnn6_cudatoolkit_8
+        #cudnn_cudatoolkit_7_5
+        #cudnn_cudatoolkit_8
+        cudnn_cudatoolkit_9_0
         cudnn_cudatoolkit_9
         disBatch
         dstat

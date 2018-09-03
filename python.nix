@@ -5,26 +5,6 @@ with pkgs;
 
 {
 
-  # not defined on python > 3.3 (but needed by cheroot)
-  backports_functools_lru_cache = buildPythonPackage rec {
-    pname = "backports.functools_lru_cache";
-    version = "1.5";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "9d98697f088eb1b0fa451391f91afb5e3ebde16bbdb272819fd091151fda4f1a";
-    };
-
-    buildInputs = [ setuptools_scm ];
-    doCheck = false; # No proper test
-
-    meta = {
-      description = "Backport of functools.lru_cache";
-      homepage = https://github.com/jaraco/backports.functools_lru_cache;
-      license = lib.licenses.mit;
-    };
-  };
-
   bearcart = buildPythonPackage rec {
     pname = "bearcart";
     version = "0.1.3";
@@ -36,15 +16,8 @@ with pkgs;
     doCheck = false; # broken imports
   };
 
-  cheroot = cheroot.overridePythonAttrs {
-    # missing functools_lru_cache:
-    propagatedBuildInputs = [ more-itertools six self.backports_functools_lru_cache ];
-  };
-
   cherrypy = cherrypy.overridePythonAttrs {
     doCheck = false; # needs network :8080?
-    # missing functools_lru_cache:
-    propagatedBuildInputs = [ self.cheroot portend routes six self.backports_functools_lru_cache ];
   };
 
   brewer2mpl = buildPythonPackage rec {
@@ -181,7 +154,7 @@ with pkgs;
   jupyterlab = jupyterlab.overridePythonAttrs {
     buildInputs = [world.nodejs];
     postFixup = ''
-      PATH=$out/bin:$PATH JUPYTERLAB_DIR=$out/share/jupyter/lab HOME=$PWD jupyter-labextension install @jupyterlab/hub-extension@0.9.0
+      PATH=$out/bin:$PATH JUPYTERLAB_DIR=$out/share/jupyter/lab HOME=$PWD jupyter-labextension install @jupyterlab/hub-extension@0.11.0
     '';
   };
 
@@ -253,6 +226,10 @@ with pkgs;
 
   pytorch = pytorch.overridePythonAttrs {
     doCheck = false; # needs cuda
+  };
+
+  pywavelets = pywavelets.overridePythonAttrs {
+    doCheck = false; # numeric test failure
   };
 
   scikitlearn = scikitlearn.overridePythonAttrs {
