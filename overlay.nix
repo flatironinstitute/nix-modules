@@ -372,6 +372,7 @@ let gccOpts = {
         nodejs-8_x
         nodejs-10_x
         nfft
+        octave
         openmpi1
         openmpi2
         osu-micro-benchmarks-openmpi1
