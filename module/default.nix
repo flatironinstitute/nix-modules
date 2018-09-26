@@ -1,4 +1,5 @@
 { stdenv
+, buildEnv
 , pkg
 , pkgName ? builtins.replaceStrings ["-wrapper" "-all"] ["" ""] (builtins.parseDrvName pkg.name).name
 , pkgVersion ? builtins.replaceStrings ["_"] ["."] (builtins.parseDrvName pkg.name).version
@@ -7,18 +8,26 @@
 , modLoad ? []
 , modPrereq ? []
 , modConflict ? [pkgName] ++ stdenv.lib.optional (modPrefix != "") (modPrefix + pkgName)
+, modEnv ? builtins.replaceStrings ["-"] ["_"] (stdenv.lib.toUpper pkgName)
 , addLDLibraryPath ? false
 , addCFlags ? true
 }:
+
+let monopkg = if builtins.length pkg.outputs > 1
+  then buildEnv {
+    name = pkg.name;
+    paths = map (out: pkg.${out}) pkg.outputs;
+  } else pkg;
+in
 
 stdenv.mkDerivation {
   builder = ./builder.sh;
 
   name = "module-${pkg.name}";
 
-  buildInputs = map (out: pkg.${out}) (pkg.outputs or ["out"]);
+  buildInputs = [monopkg];
 
-  inherit pkgName pkgVersion modPrefix modName modLoad modPrereq modConflict addLDLibraryPath addCFlags;
+  inherit pkgName pkgVersion modPrefix modName modLoad modPrereq modConflict modEnv addLDLibraryPath addCFlags;
 
   # sort of hacky, duplicating cc-wrapper:
   nixInfix = stdenv.lib.replaceStrings ["-"] ["_"] stdenv.targetPlatform.config;

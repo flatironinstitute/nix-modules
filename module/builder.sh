@@ -73,7 +73,7 @@ addPaths () {
 	fi
 	if [[ $addCFlags && ( -d $1/include || -n $libs ) ]] ; then
 		if [[ -z $gccPrereq ]] ; then
-			echo "prereq ${modPrefix}gcc" >> $modfile
+			#echo "prereq ${modPrefix}gcc" >> $modfile
 			gccPrereq=1
 		fi
 		if [[ -d $1/include ]] ; then
@@ -86,6 +86,8 @@ addPaths () {
 	fi
 }
 
+echo "setenv ${modEnv}_BASE $buildInputs" >> $modfile
+echo "setenv ${modEnv}_VERSION $pkgVersion" >> $modfile
 for root in $buildInputs ; do
 	addPaths $root
 done
