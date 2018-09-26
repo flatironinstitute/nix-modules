@@ -3,10 +3,10 @@ let
 in
 
 import <nixpkgs> {
-  # Use current platform, setting gcc.arch = "native":
+  # Use current platform, setting gcc.arch = "broadwell":
   localSystem = rec {
     system = builtins.currentSystem;
-    platform = lib.systems.platforms.selectBySystem system // { gcc = { arch = "native"; }; };
+    platform = lib.systems.platforms.selectBySystem system // { gcc = { arch = "broadwell"; }; };
   };
   config = {
     allowUnfree = true;

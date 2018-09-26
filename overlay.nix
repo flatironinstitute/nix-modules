@@ -39,8 +39,13 @@ let gccOpts = {
   libpsm2 = callPackage base/libpsm2 { };
   rdma-core = callPackage base/rdma-core { };
 
+  slurm = callPackage base/slurm { };
+
   openmpi1 = callPackage devel/openmpi/1.nix { };
   openmpi2 = callPackage devel/openmpi/2.nix { };
+  openmpi3 = openmpi // {
+    tag = "openmpi3";
+  };
   openmpi = self.openmpi2;
 
   mvapich2 = callPackage devel/mvapich { };
@@ -50,6 +55,9 @@ let gccOpts = {
   };
   osu-micro-benchmarks-openmpi2 = callPackage test/osu-micro-benchmarks {
     mpi = self.openmpi2;
+  };
+  osu-micro-benchmarks-openmpi3 = callPackage test/osu-micro-benchmarks {
+    mpi = self.openmpi3;
   };
 
   #openblas = callPackage base/openblas { };
@@ -209,18 +217,21 @@ let gccOpts = {
     scipy
     seaborn
     setuptools
+    shapely
     sip
     six
     sphinx
     sqlalchemy
     statsmodels
     sympy
-    #tensorflow-gpu
+    tensorflow
+    #tess
     #Theano -- clblas
     twisted
     urllib3
     virtualenv
     wheel
+    #yep
     yt
   ] ++ (if isPy3k then [
     astropy
@@ -267,9 +278,9 @@ let gccOpts = {
 
   R-all = rWrapper.override {
     packages = with rPackages; [
-      AnnotationDbi
+      #AnnotationDbi
       BH
-      BiocInstaller
+      #BiocInstaller
       bit64
       blob
       getopt
@@ -367,6 +378,7 @@ let gccOpts = {
         julia
         mercurial
         mplayer
+        mpv
         netcdf
         nodejs-6_x
         nodejs-8_x
@@ -389,6 +401,7 @@ let gccOpts = {
         valgrind
         vim
         vtk
+        xscreensaver
       ]) ++ [
         (callPackage ./module {
           pkg = self.nix;

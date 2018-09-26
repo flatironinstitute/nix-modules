@@ -1,6 +1,5 @@
 { stdenv
 , fetchFromGitHub
-, targetPlatform
 , libuuid
 }:
 
@@ -21,7 +20,7 @@ stdenv.mkDerivation rec {
       --replace /usr/include/psm '\$(LOCAL_PREFIX)/include/psm'
   '';
   makeFlags = [
-    "arch=${targetPlatform.parsed.cpu.name}"
+    "arch=${stdenv.targetPlatform.parsed.cpu.name}"
     "WERROR="
     "DESTDIR=$(out)"
     "LOCAL_PREFIX=/"
