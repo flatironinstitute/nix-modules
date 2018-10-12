@@ -303,6 +303,10 @@ let gccOpts = {
     doCheck = false;
   });
 
+  julia_10 = julia_10.overrideAttrs (old: {
+    doCheck = false;
+  });
+
   texlive-all = texlive.combined.scheme-full // {
     name = builtins.replaceStrings ["-combined-full"] [""] texlive.combined.scheme-full.name;
   };
@@ -376,6 +380,7 @@ let gccOpts = {
         hwloc
         jdk
         julia
+        julia_10
         mercurial
         mplayer
         mpv
@@ -390,6 +395,7 @@ let gccOpts = {
         osu-micro-benchmarks-openmpi1
         osu-micro-benchmarks-openmpi2
         perl-all
+	#petsc
         python2-all
         python3-all
         (qt5.full // { name = builtins.replaceStrings ["-full"] [""] qt5.full.name; })
