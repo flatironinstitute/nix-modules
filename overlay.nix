@@ -402,6 +402,7 @@ let gccOpts = {
         R-all
         rclone
         singularity
+	smartmontools
         subversion
         texlive-all
         valgrind
