@@ -357,6 +357,7 @@ let gccOpts = {
         #cudnn_cudatoolkit_8
         cudnn_cudatoolkit_9_0
         cudnn_cudatoolkit_9
+        dep
         disBatch
         dstat
         eigen3_3
@@ -392,6 +393,7 @@ let gccOpts = {
         octave
         openmpi1
         openmpi2
+        openssl
         osu-micro-benchmarks-openmpi1
         osu-micro-benchmarks-openmpi2
         perl-all
