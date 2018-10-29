@@ -9,12 +9,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "rdma-core-16";
+  name = "rdma-core-16.6";
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "rdma-core";
-    rev = "v16";
-    sha256 = "131gckfnb0flcyy27nc6kjpk17cmadjwv7rpsg1g0lbrx83b7irl";
+    rev = "v16.6";
+    sha256 = "07w6b42j4qmikdpw2cmz6n4bm7ffwzq1h75ls664c2241q1lx92j";
   };
 
   nativeBuildInputs = [ cmake ninja pkgconfig python ];

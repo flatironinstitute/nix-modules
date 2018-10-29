@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     "--with-psm=${infinipath-psm}"
     "--with-psm2=${libpsm2}"
     "--with-pmi=${slurm.dev}"
-    "--with-pmi-libdir=${slurm}"
+    "--with-pmi-libdir=${slurm}/lib"
   ];
 
   enableParallelBuilding = true;

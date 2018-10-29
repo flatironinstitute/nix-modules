@@ -39,13 +39,12 @@ let gccOpts = {
   libpsm2 = callPackage base/libpsm2 { };
   rdma-core = callPackage base/rdma-core { };
 
+  hwloc = callPackage base/hwloc { };
   slurm = callPackage base/slurm { };
 
   openmpi1 = callPackage devel/openmpi/1.nix { };
   openmpi2 = callPackage devel/openmpi/2.nix { };
-  openmpi3 = openmpi // {
-    tag = "openmpi3";
-  };
+  openmpi3 = callPackage devel/openmpi/3.nix { };
   openmpi = self.openmpi2;
 
   mvapich2 = callPackage devel/mvapich { };
@@ -73,6 +72,9 @@ let gccOpts = {
   fftw-openmpi2 = callPackage base/fftw/precs.nix {
     mpi = self.openmpi2;
   };
+  fftw-openmpi3 = callPackage base/fftw/precs.nix {
+    mpi = self.openmpi3;
+  };
 
   fftwSinglePrec = self.fftw;
   fftwFloat = self.fftw;
@@ -95,6 +97,10 @@ let gccOpts = {
     hdf5 = <nixpkgs/pkgs/tools/misc/hdf5>;
     mpi = self.openmpi2;
   };
+  hdf5-openmpi3 = callPackage devel/hdf5/mpi.pp {
+    hdf5 = <nixpkgs/pkgs/tools/misc/hdf5>;
+    mpi = self.openmpi3;
+  };
 
   hdf5_18 = import devel/hdf5/mpi.pp {
     hdf5 = <nixpkgs/pkgs/tools/misc/hdf5/1_8.nix>;
@@ -108,6 +114,10 @@ let gccOpts = {
   hdf5_18-openmpi2 = callPackage devel/hdf5/mpi.pp {
     hdf5 = <nixpkgs/pkgs/tools/misc/hdf5/1_8.nix>;
     mpi = self.openmpi2;
+  };
+  hdf5_18-openmpi3 = callPackage devel/hdf5/mpi.pp {
+    hdf5 = <nixpkgs/pkgs/tools/misc/hdf5/1_8.nix>;
+    mpi = self.openmpi3;
   };
 
   libuv = libuv.overrideAttrs (old: {
@@ -366,6 +376,7 @@ let gccOpts = {
         fftw
         fftw-openmpi1
         fftw-openmpi2
+        fftw-openmpi3
         gitFull
         gdb
         gmp
@@ -374,9 +385,11 @@ let gccOpts = {
         hdf5
         hdf5-openmpi1
         hdf5-openmpi2
+        hdf5-openmpi3
         hdf5_18
         hdf5_18-openmpi1
         hdf5_18-openmpi2
+        hdf5_18-openmpi3
         hdfview
         hwloc
         jdk
@@ -393,9 +406,11 @@ let gccOpts = {
         octave
         openmpi1
         openmpi2
+        openmpi3
         openssl
         osu-micro-benchmarks-openmpi1
         osu-micro-benchmarks-openmpi2
+        osu-micro-benchmarks-openmpi3
         perl-all
 	#petsc
         python2-all

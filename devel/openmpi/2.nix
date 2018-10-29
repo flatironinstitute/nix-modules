@@ -13,11 +13,11 @@
 let majorVersion = "2.1"; in
 
 stdenv.mkDerivation rec {
-  name = "openmpi-${majorVersion}.2";
+  name = "openmpi-${majorVersion}.5";
   passthru.tag = "openmpi2";
   src = fetchurl {
     url = "http://www.open-mpi.org/software/ompi/v${majorVersion}/downloads/${name}.tar.bz2";
-    sha256 = "0dfnilbh5nnyp08h0vi5kfi49lhyjzr49z7gi3grncn5hi4q1i9w";
+    sha256 = "153pgsc8xr6fqkwik2b4j8viscyk3h2jkpsyk8aw69qzh2mwq1xq";
   };
 
   nativeBuildInputs = [ perl flex ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     "--with-psm=${infinipath-psm}"
     "--with-psm2=${libpsm2}"
     "--with-pmi=${slurm.dev}"
-    "--with-pmi-libdir=${slurm}"
+    "--with-pmi-libdir=${slurm}/lib"
   ];
 
   enableParallelBuilding = true;
