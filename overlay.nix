@@ -207,7 +207,7 @@ let gccOpts = {
     py
     pycairo
     #pycuda
-    pyfftw
+    #pyfftw #-- pending 0.11 upgrade
     pygobject2
     #pymultinest
     pyparsing
@@ -234,7 +234,6 @@ let gccOpts = {
     sqlalchemy
     statsmodels
     sympy
-    tensorflow
     #tess
     #Theano -- clblas
     twisted
@@ -258,6 +257,7 @@ let gccOpts = {
     #NucleoATAC
     pygtk
     statistics
+    tensorflow
     weave
   ]);
 
@@ -357,6 +357,7 @@ let gccOpts = {
         clang_4
         clang_5
         clang_6
+        clang_7
         cmake
         #cudatoolkit_7_5
         #cudatoolkit_8
@@ -370,7 +371,7 @@ let gccOpts = {
         dep
         disBatch
         dstat
-        eigen3_3
+        eigen
         elinks
         ffmpeg
         fftw
@@ -424,6 +425,7 @@ let gccOpts = {
         texlive-all
         valgrind
         vim
+        vscode
         vtk
         xscreensaver
       ]) ++ [

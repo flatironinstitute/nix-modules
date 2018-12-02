@@ -5,6 +5,8 @@ with pkgs;
 
 {
 
+  asyncio = null;
+
   bearcart = buildPythonPackage rec {
     pname = "bearcart";
     version = "0.1.3";
@@ -154,7 +156,7 @@ with pkgs;
   jupyterlab = jupyterlab.overridePythonAttrs {
     buildInputs = [world.nodejs];
     postFixup = ''
-      PATH=$out/bin:$PATH JUPYTERLAB_DIR=$out/share/jupyter/lab HOME=$PWD jupyter-labextension install @jupyterlab/hub-extension@0.11.0
+      PATH=$out/bin:$PATH JUPYTERLAB_DIR=$out/share/jupyter/lab HOME=$PWD jupyter-labextension install @jupyterlab/hub-extension@0.12.0
     '';
   };
 
@@ -228,23 +230,29 @@ with pkgs;
     doCheck = false; # needs cuda
   };
 
-  pywavelets = pywavelets.overridePythonAttrs {
-    doCheck = false; # numeric test failure
+  pywavelets = buildPythonPackage rec {
+    pname = "PyWavelets";
+    version = "1.0.1";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1p3qv2v66ghnqrb1f98wyyhp9dz71jwcd6kfpsax65sfdpiyqp1w";
+    };
+    checkInputs = [ nose pytest ];
+    buildInputs = [ cython ];
+    propagatedBuildInputs = [ numpy ];
+    # Somehow nosetests doesn't run the tests, so let's use pytest instead
+    checkPhase = ''
+      py.test pywt/tests
+    '';
+    #doCheck = false; # numeric test failure
+  };
+
+  rednose = rednose.overridePythonAttrs {
+    doCheck = false; # hang
   };
 
   scikitlearn = scikitlearn.overridePythonAttrs {
     doCheck = false; # whitespace doctest failures and others
-  };
-
-  slicerator = buildPythonPackage rec {
-    pname = "slicerator";
-    version = "0.9.8";
-    name = "${pname}-${version}";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0rsn1x59wwgwhd4nkm2kj0sp9q9gjbqzpmnbhlhqgn2z85mdf7dr";
-    };
-    propagatedBuildInputs = [ six ];
   };
 
   socketio = buildPythonPackage rec {
@@ -257,18 +265,6 @@ with pkgs;
     };
     propagatedBuildInputs = [ six self.engineio ];
     doCheck = false; # tox
-  };
-
-  statistics = buildPythonPackage rec {
-    pname = "statistics";
-    version = "3.4.0b3";
-    name = "${pname}-${version}";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "1ifhv9x5rjzjnpl2w62nvxpbj62vdz0pd5s3g45q0138cvcqad6j";
-    };
-    propagatedBuildInputs = [docutils];
-    doCheck = false;
   };
 
   subprocess32 = subprocess32.overridePythonAttrs {
