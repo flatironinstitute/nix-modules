@@ -18,10 +18,6 @@ with pkgs;
     doCheck = false; # broken imports
   };
 
-  cherrypy = cherrypy.overridePythonAttrs {
-    doCheck = false; # needs network :8080?
-  };
-
   brewer2mpl = buildPythonPackage rec {
     pname = "brewer2mpl";
     version = "1.4.1";
@@ -32,16 +28,12 @@ with pkgs;
     };
   };
 
-  engineio = buildPythonPackage rec {
-    pname = "python-engineio";
-    version = "2.0.1";
-    name = "${pname}-${version}";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0c1ccz6fp783ppwwbsgm20i9885fqzyhdvsq6j3nqmyl9q6clvr6";
-    };
-    propagatedBuildInputs = [ six ];
-    doCheck = false; # tox
+  cherrypy = cherrypy.overridePythonAttrs {
+    doCheck = false; # needs network :8080?
+  };
+
+  cvxopt = cvxopt.overridePythonAttrs {
+    doCheck = false;
   };
 
   fast-histogram = buildPythonPackage rec {
@@ -54,18 +46,6 @@ with pkgs;
     };
     propagatedBuildInputs = [ numpy ];
     checkInputs = [ hypothesis ];
-  };
-
-  flask-socketio = buildPythonPackage rec {
-    pname = "Flask-SocketIO";
-    version = "2.9.3";
-    name = "${pname}-${version}";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0nbdljbr2x8fcl2zd8d4amlwyhn32m91cm0bpm1waac5vf8gf8yz";
-    };
-    propagatedBuildInputs = [ flask self.engineio self.socketio ];
-    doCheck = false; # broken imports
   };
 
   flit = flit.overridePythonAttrs {
@@ -187,19 +167,6 @@ with pkgs;
     checkInputs = [ pytest ];
   };
 
-  PIMS = buildPythonPackage rec {
-    pname = "PIMS";
-    version = "0.4.1";
-    name = "${pname}-${version}";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "1pf96krhafn281y4jlib7kn7xvdspz61y7ks29qlxd00x5as2lva";
-    };
-    propagatedBuildInputs = [ self.slicerator six numpy ];
-    checkInputs = [ nose ];
-    doCheck = false; # missing files?
-  };
-
   primefac = buildPythonPackage rec {
     pname = "primefac";
     version = "1.1";
@@ -230,41 +197,12 @@ with pkgs;
     doCheck = false; # needs cuda
   };
 
-  pywavelets = buildPythonPackage rec {
-    pname = "PyWavelets";
-    version = "1.0.1";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "1p3qv2v66ghnqrb1f98wyyhp9dz71jwcd6kfpsax65sfdpiyqp1w";
-    };
-    checkInputs = [ nose pytest ];
-    buildInputs = [ cython ];
-    propagatedBuildInputs = [ numpy ];
-    # Somehow nosetests doesn't run the tests, so let's use pytest instead
-    checkPhase = ''
-      py.test pywt/tests
-    '';
-    #doCheck = false; # numeric test failure
-  };
-
   rednose = rednose.overridePythonAttrs {
     doCheck = false; # hang
   };
 
   scikitlearn = scikitlearn.overridePythonAttrs {
     doCheck = false; # whitespace doctest failures and others
-  };
-
-  socketio = buildPythonPackage rec {
-    pname = "python-socketio";
-    version = "1.8.4";
-    name = "${pname}-${version}";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "1k12l4xdbvx3acrj7z5m3sx0s75c3wxs958jncaisdw5gvhpr00k";
-    };
-    propagatedBuildInputs = [ six self.engineio ];
-    doCheck = false; # tox
   };
 
   subprocess32 = subprocess32.overridePythonAttrs {
@@ -282,21 +220,6 @@ with pkgs;
     propagatedBuildInputs = [ numpy ];
     checkInputs = [ nose ];
     doCheck = false; # known failures? need user?
-  };
-
-  # only 0.9 in nix:
-  xlrd = buildPythonPackage rec {
-    pname = "xlrd";
-    version = "1.1.0";
-    name = "${pname}-${version}";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "1qnp51lf6bp6d4m3x8av81hknhvmlvgmzvm86gz1bng62daqh8ca";
-    };
-    buildInputs = [ nose ];
-    checkPhase = ''
-      nosetests -v
-    '';
   };
 
   yt = buildPythonPackage rec {

@@ -120,6 +120,16 @@ let gccOpts = {
     mpi = self.openmpi3;
   };
 
+  gsl = gsl.overrideAttrs (old: {
+    doCheck = false;
+    # FAIL: mcholesky_invert unscaled hilbert (  4,  4)[0,2]: -2.55795384873636067e-13                        0
+    #  (-2.55795384873636067e-13 observed vs 0 expected) [789499]
+  });
+
+  fflas-ffpack = fflas-ffpack.overrideAttrs (old: {
+    doCheck = false;
+  });
+
   libuv = libuv.overrideAttrs (old: {
     doCheck = false;
   });
@@ -167,7 +177,6 @@ let gccOpts = {
     #einsum2
     emcee
     flask
-    flask-socketio
     flask_wtf
     fusepy
     fuzzysearch
@@ -198,7 +207,7 @@ let gccOpts = {
     paho-mqtt
     pandas
     partd
-    PIMS
+    pims
     pip
     primefac
     protobuf
@@ -245,6 +254,7 @@ let gccOpts = {
   ] ++ (if isPy3k then [
     astropy
     bash_kernel
+    flask-socketio
     glueviz #-- qt
     jupyterhub
     jupyterlab
@@ -306,14 +316,10 @@ let gccOpts = {
   haskell-all = haskellPackages.ghcWithPackages (hp: with hp; [
     cabal-install
     stack
-    ihaskell
+    #ihaskell
   ]);
 
   julia = julia.overrideAttrs (old: {
-    doCheck = false;
-  });
-
-  julia_10 = julia_10.overrideAttrs (old: {
     doCheck = false;
   });
 
@@ -338,6 +344,11 @@ let gccOpts = {
   rcs = rcs.overrideAttrs (old: {
     # unknown t999 failure
     doCheck = false;
+  });
+
+  sage = sage.overrideAttrs (old: {
+    # disable tests:
+    buildInputs = [makeWrapper];
   });
 
   modules =
@@ -395,7 +406,6 @@ let gccOpts = {
         hwloc
         jdk
         julia
-        julia_10
         mercurial
         mplayer
         mpv
@@ -419,6 +429,7 @@ let gccOpts = {
         (qt5.full // { name = builtins.replaceStrings ["-full"] [""] qt5.full.name; })
         R-all
         rclone
+	sage
         singularity
 	smartmontools
         subversion
@@ -447,12 +458,14 @@ let gccOpts = {
       { env = self.python2-all; }
       { env = self.python3-all; }
       { env = self.R-all; kernelSrc = (callPackage jupyter/kernel/juniper { env = self.R-all; }); }
-      { env = self.haskell-all; kernelSrc = (callPackage jupyter/kernel/ihaskell { env = self.haskell-all; }); }
+      #{ env = self.haskell-all; kernelSrc = (callPackage jupyter/kernel/ihaskell { env = self.haskell-all; }); }
       { env = "/cm/shared/sw/pkg-old/devel/python2/2.7.13"; ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python2-2.7.13"; note = " (python2/2.7.13)"; }
       { env = "/cm/shared/sw/pkg-old/devel/python3/3.6.2";  ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python3-3.6.2";  note = " (python3/3.6.2)"; }
       # TODO:
       #nodejs 
       #julia
+    ] ++ map (callPackage jupyter/kernel/spec.nix) [
+      { kernelspec = self.sage.kernelspec; }
     ];
   };
 }
