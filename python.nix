@@ -177,6 +177,23 @@ with pkgs;
     };
   };
 
+  pyslurm = buildPythonPackage rec {
+    pname = "pyslurm";
+    version = "17-11-12";
+
+    src = world.fetchFromGitHub {
+      repo = "pyslurm";
+      owner = "PySlurm";
+      rev = version;
+      sha256 = "01xdx2v3w8i3bilyfkk50f786fq60938ikqp2ls2kf3j218xyxmz";
+    };
+
+    buildInputs = [ cython world.slurm ];
+    setupPyBuildFlags = [ "--slurm-lib=${world.slurm}/lib" "--slurm-inc=${world.slurm.dev}/include" ];
+
+    doCheck = false;
+  };
+
   pystan = buildPythonPackage rec {
     pname = "pystan";
     version = "2.17.1.0";
