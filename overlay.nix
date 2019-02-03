@@ -63,6 +63,17 @@ let gccOpts = {
   #openblasCompat = self.openblas;
   blas = self.openblas;
 
+  linuxPackages = linuxPackages.extend (self: super: {
+    nvidia_x11 = callPackage (import nixpkgs/pkgs/os-specific/linux/nvidia-x11/generic.nix {
+      version = "410.78";
+      sha256_64bit = "1ciabnmvh95gsfiaakq158x2yws3m9zxvnxws3p32lz9riblpdjx";
+      settingsSha256 = "1677g7rcjbcs5fja1s4p0syhhz46g9x2qqzyn3wwwrjsj7rwaz77";
+      persistencedSha256 = "01kvd3zp056i4n8vazj7gx1xw0h4yjdlpazmspnsmwg24ijb82x4";
+    }) {
+      libsOnly = true;
+    };
+  });
+
   fftw = callPackage base/fftw/precs.nix {
     mpi = null;
   };
