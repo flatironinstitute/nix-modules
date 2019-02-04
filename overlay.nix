@@ -63,7 +63,7 @@ let gccOpts = {
   #openblasCompat = self.openblas;
   blas = self.openblas;
 
-  linuxPackages = linuxPackages.extend (self: super: {
+  linuxPackages = linuxPackages_4_4.extend (self: super: {
     nvidia_x11 = callPackage (import nixpkgs/pkgs/os-specific/linux/nvidia-x11/generic.nix {
       version = "410.78";
       sha256_64bit = "1ciabnmvh95gsfiaakq158x2yws3m9zxvnxws3p32lz9riblpdjx";
