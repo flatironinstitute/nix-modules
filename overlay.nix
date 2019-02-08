@@ -362,6 +362,8 @@ let gccOpts = {
     buildInputs = [makeWrapper];
   });
 
+  wecall = callPackage util/wecall { };
+
   modules =
     let
       module = pkg: callPackage ./module {
@@ -403,6 +405,7 @@ let gccOpts = {
         dstat
         eigen
         elinks
+        feh
         ffmpeg
         fftw
         fftw-openmpi1
@@ -457,6 +460,7 @@ let gccOpts = {
         vim
         vscode
         vtk
+	wecall
         xscreensaver
       ]) ++ [
         (callPackage ./module {
