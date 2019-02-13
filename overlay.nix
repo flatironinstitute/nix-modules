@@ -362,7 +362,9 @@ let gccOpts = {
     buildInputs = [makeWrapper];
   });
 
-  wecall = callPackage util/wecall { };
+  wecall = callPackage util/wecall {
+    texlive = self.texlive-all;
+  };
 
   modules =
     let
