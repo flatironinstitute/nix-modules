@@ -1,5 +1,5 @@
 dir=$PWD
-nix=/mnt/home/sw/nix
+nix=/simons/scratch/dylan/nix
 
 export NIX_STORE_DIR=$nix/store
 export NIX_STATE_DIR=$nix/state
@@ -11,7 +11,7 @@ export NIX_PATH=local=$dir:nixpkgs=$dir/nixpkgs
 export PYTHONPATH=$NIX_LINK/lib/python2.7:$PYTHONPATH
 export TMPDIR=/dev/shm
 
-module add modules-nix
+module use $HOME/modules-nix
 if ! module add nix/nix ; then
   root=/cm/shared/sw/pkg/base/nix/2.0
   export PATH=$root/bin:$PATH

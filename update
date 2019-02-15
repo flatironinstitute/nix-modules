@@ -1,4 +1,4 @@
 #!/bin/sh
 # This builds a full set of modules and updates the system modules profile with the result.
 nix-env -p $NIX_STATE_DIR/profiles/system/modules -i -f `dirname $0` -A modules
-nix-env -p $NIX_STATE_DIR/profiles/system/jupyter -i -f `dirname $0` -A jupyter-env
+#nix-env -p $NIX_STATE_DIR/profiles/system/jupyter -i -f `dirname $0` -A jupyter-env

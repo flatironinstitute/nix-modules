@@ -6,14 +6,14 @@ import <nixpkgs> {
   # Use current platform, setting gcc.arch = "broadwell":
   localSystem = rec {
     system = builtins.currentSystem;
-    platform = lib.systems.platforms.selectBySystem system // { gcc = { arch = "broadwell"; }; };
+    platform = lib.systems.platforms.selectBySystem system // { gcc = { arch = "sandybridge"; }; };
   };
   config = {
     allowUnfree = true;
     replaceStdenv = import ./stdenv.nix;
     nix = {
-      storeDir = "/mnt/home/sw/nix/store";
-      stateDir = "/mnt/home/sw/nix/state";
+      storeDir = "/simons/scratch/dylan/nix/store";
+      stateDir = "/simons/scratch/dylan/nix/state";
     };
     cudaSupport = true;
     haskellPackageOverrides = import ./haskell.nix;

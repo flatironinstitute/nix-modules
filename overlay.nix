@@ -153,6 +153,10 @@ let gccOpts = {
     cmakeFlags = old.cmakeFlags ++ ["-DENABLE_QT4=off"];
   });
 
+  libjpeg_turbo = libjpeg_turbo.overrideAttrs (old: {
+    doCheck = false;
+  });
+
   python2 = python2.override {
     self = self.python2;
     ucsEncoding = 4;
