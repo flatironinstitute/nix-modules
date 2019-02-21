@@ -433,6 +433,7 @@ let gccOpts = {
         mercurial
         mplayer
         mpv
+        mupdf
         netcdf
         nodejs-6_x
         nodejs-8_x
