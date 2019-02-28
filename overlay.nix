@@ -290,16 +290,20 @@ let gccOpts = {
   };
 
   perlPackageList = p: with p; [
-    TermReadLineGnu
-    HTMLParser
-    HTTPDaemon
+    locallib
+    FileWhich
+    GetoptLong
     #Git?
+    HTMLParser
+    HTMLTemplate
+    HTMLTree
+    HTTPDaemon
+    Socket
+    TermReadLineGnu
     TimeDuration
     TimeHiRes
     XMLParser
     XMLSAX
-    Socket
-    GetoptLong
   ];
 
   perl-all = buildEnv {
@@ -413,6 +417,7 @@ let gccOpts = {
         fftw-openmpi1
         fftw-openmpi2
         fftw-openmpi3
+        ghostscript
         gitFull
         gdb
         gmp
@@ -428,6 +433,7 @@ let gccOpts = {
         hdf5_18-openmpi3
         hdfview
         hwloc
+        imagemagick
         jdk
         julia
         mercurial
