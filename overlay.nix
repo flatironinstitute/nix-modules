@@ -302,6 +302,7 @@ let gccOpts = {
     TermReadLineGnu
     TimeDuration
     TimeHiRes
+    XMLLibXML
     XMLParser
     XMLSAX
   ];
@@ -436,6 +437,7 @@ let gccOpts = {
         imagemagick
         jdk
         julia
+        libxml2
         mercurial
         mplayer
         mpv
