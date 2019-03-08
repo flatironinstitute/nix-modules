@@ -11,6 +11,7 @@
 , modEnv ? builtins.replaceStrings ["-"] ["_"] (stdenv.lib.toUpper pkgName)
 , addLDLibraryPath ? false
 , addCFlags ? true
+, addLocales ? null
 }:
 
 let monopkg = if builtins.length pkg.outputs > 1
@@ -27,7 +28,7 @@ stdenv.mkDerivation {
 
   buildInputs = [monopkg];
 
-  inherit pkgName pkgVersion modPrefix modName modLoad modPrereq modConflict modEnv addLDLibraryPath addCFlags;
+  inherit pkgName pkgVersion modPrefix modName modLoad modPrereq modConflict modEnv addLDLibraryPath addCFlags addLocales;
 
   # sort of hacky, duplicating cc-wrapper:
   nixInfix = stdenv.lib.replaceStrings ["-"] ["_"] stdenv.targetPlatform.config;

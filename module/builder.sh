@@ -86,6 +86,10 @@ addPaths () {
 	fi
 }
 
+if [[ -n $addLocales ]] ; then
+	echo "setenv LOCALE_ARCHIVE $addLocales/lib/locale/locale-archive" >> $modfile
+fi
+
 echo "setenv ${modEnv}_BASE $buildInputs" >> $modfile
 echo "setenv ${modEnv}_VERSION $pkgVersion" >> $modfile
 for root in $buildInputs ; do

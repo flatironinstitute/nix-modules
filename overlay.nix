@@ -455,25 +455,28 @@ let gccOpts = {
         osu-micro-benchmarks-openmpi1
         osu-micro-benchmarks-openmpi2
         osu-micro-benchmarks-openmpi3
-        perl-all
-	#petsc
+        #petsc
         python2-all
         python3-all
         (qt5.full // { name = builtins.replaceStrings ["-full"] [""] qt5.full.name; })
         R-all
         rclone
-	sage
+        sage
         singularity
-	smartmontools
+        smartmontools
         subversion
         texlive-all
         valgrind
         vim
         vscode
         vtk
-	wecall
+        wecall
         xscreensaver
       ]) ++ [
+        (callPackage ./module {
+          pkg = self.perl-all;
+          addLocales = glibcLocales;
+        })
         (callPackage ./module {
           pkg = self.nix;
           modConflict = ["nix/nix"];
