@@ -10,14 +10,14 @@
 , rdma-core
 }:
 
-let majorVersion = "3.1"; in
+let majorVersion = "4.0"; in
 
 stdenv.mkDerivation rec {
-  name = "openmpi-${majorVersion}.3";
-  passthru.tag = "openmpi3";
+  name = "openmpi-${majorVersion}.1";
+  passthru.tag = "openmpi4";
   src = fetchurl {
     url = "http://www.open-mpi.org/software/ompi/v${majorVersion}/downloads/${name}.tar.bz2";
-    sha256 = "1dks11scivgaskjs5955y9wprsl12wr3gn5r7wfl0l8gq03l7q4b";
+    sha256 = "02cpzcp113gj5hb0j2xc0cqma2fn04i2i0bzf80r71120p9bdryc";
   };
 
   nativeBuildInputs = [ perl flex ];

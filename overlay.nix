@@ -34,6 +34,12 @@ let gccOpts = {
     doInstallCheck = false;
   });
 
+  openssl = openssl.overrideAttrs (old: {
+    postPatch = old.postPatch + ''
+      sed -i 's:define\s\+X509_CERT_FILE\s\+.*$:define X509_CERT_FILE "/etc/pki/tls/certs/ca-bundle.crt":' crypto/cryptlib.h
+    '';
+  });
+
   # intel infiniband/psm stuff
   infinipath-psm = callPackage base/infinipath-psm { };
   libpsm2 = callPackage base/libpsm2 { };
@@ -45,18 +51,18 @@ let gccOpts = {
   openmpi1 = callPackage devel/openmpi/1.nix { };
   openmpi2 = callPackage devel/openmpi/2.nix { };
   openmpi3 = callPackage devel/openmpi/3.nix { };
+  openmpi4 = callPackage devel/openmpi/4.nix { };
   openmpi = self.openmpi2;
+  openmpis = with self; [openmpi1 openmpi2 openmpi3 openmpi4];
+
+  withMpis = pkg: map (mpi: pkg.override {
+    inherit mpi;
+  }) self.openmpis;
 
   mvapich2 = callPackage devel/mvapich { };
 
-  osu-micro-benchmarks-openmpi1 = callPackage test/osu-micro-benchmarks {
-    mpi = self.openmpi1;
-  };
-  osu-micro-benchmarks-openmpi2 = callPackage test/osu-micro-benchmarks {
-    mpi = self.openmpi2;
-  };
-  osu-micro-benchmarks-openmpi3 = callPackage test/osu-micro-benchmarks {
-    mpi = self.openmpi3;
+  osu-micro-benchmarks = callPackage test/osu-micro-benchmarks {
+    mpi = openmpi;
   };
 
   #openblas = callPackage base/openblas { };
@@ -77,15 +83,6 @@ let gccOpts = {
   fftw = callPackage base/fftw/precs.nix {
     mpi = null;
   };
-  fftw-openmpi1 = callPackage base/fftw/precs.nix {
-    mpi = self.openmpi1;
-  };
-  fftw-openmpi2 = callPackage base/fftw/precs.nix {
-    mpi = self.openmpi2;
-  };
-  fftw-openmpi3 = callPackage base/fftw/precs.nix {
-    mpi = self.openmpi3;
-  };
 
   fftwSinglePrec = self.fftw;
   fftwFloat = self.fftw;
@@ -95,40 +92,14 @@ let gccOpts = {
     fftw = self.fftw;
   };
 
-  hdf5 = import devel/hdf5/mpi.pp {
+  hdf5 = callPackage devel/hdf5/mpi.nix {
     hdf5 = <nixpkgs/pkgs/tools/misc/hdf5>;
-    inherit callPackage;
     mpi = null;
-  };
-  hdf5-openmpi1 = callPackage devel/hdf5/mpi.pp {
-    hdf5 = <nixpkgs/pkgs/tools/misc/hdf5>;
-    mpi = self.openmpi1;
-  };
-  hdf5-openmpi2 = callPackage devel/hdf5/mpi.pp {
-    hdf5 = <nixpkgs/pkgs/tools/misc/hdf5>;
-    mpi = self.openmpi2;
-  };
-  hdf5-openmpi3 = callPackage devel/hdf5/mpi.pp {
-    hdf5 = <nixpkgs/pkgs/tools/misc/hdf5>;
-    mpi = self.openmpi3;
   };
 
-  hdf5_18 = import devel/hdf5/mpi.pp {
+  hdf5_18 = callPackage devel/hdf5/mpi.nix {
     hdf5 = <nixpkgs/pkgs/tools/misc/hdf5/1_8.nix>;
-    inherit callPackage;
     mpi = null;
-  };
-  hdf5_18-openmpi1 = callPackage devel/hdf5/mpi.pp {
-    hdf5 = <nixpkgs/pkgs/tools/misc/hdf5/1_8.nix>;
-    mpi = self.openmpi1;
-  };
-  hdf5_18-openmpi2 = callPackage devel/hdf5/mpi.pp {
-    hdf5 = <nixpkgs/pkgs/tools/misc/hdf5/1_8.nix>;
-    mpi = self.openmpi2;
-  };
-  hdf5_18-openmpi3 = callPackage devel/hdf5/mpi.pp {
-    hdf5 = <nixpkgs/pkgs/tools/misc/hdf5/1_8.nix>;
-    mpi = self.openmpi3;
   };
 
   gsl = gsl.overrideAttrs (old: {
@@ -329,6 +300,14 @@ let gccOpts = {
     ];
   };
 
+  go = go.overrideAttrs (old: {
+    doCheck = false;
+  });
+
+  haskell = haskell // {
+    packageOverrides = import ./haskell.nix;
+  };
+
   haskell-all = haskellPackages.ghcWithPackages (hp: with hp; [
     cabal-install
     stack
@@ -415,9 +394,6 @@ let gccOpts = {
         feh
         ffmpeg
         fftw
-        fftw-openmpi1
-        fftw-openmpi2
-        fftw-openmpi3
         ghostscript
         gitFull
         gdb
@@ -425,13 +401,7 @@ let gccOpts = {
         go
         haskell-all
         hdf5
-        hdf5-openmpi1
-        hdf5-openmpi2
-        hdf5-openmpi3
         hdf5_18
-        hdf5_18-openmpi1
-        hdf5_18-openmpi2
-        hdf5_18-openmpi3
         hdfview
         hwloc
         imagemagick
@@ -448,13 +418,8 @@ let gccOpts = {
         nodejs-10_x
         nfft
         octave
-        openmpi1
-        openmpi2
-        openmpi3
+	openmpi
         openssl
-        osu-micro-benchmarks-openmpi1
-        osu-micro-benchmarks-openmpi2
-        osu-micro-benchmarks-openmpi3
         #petsc
         python2-all
         python3-all
@@ -472,7 +437,17 @@ let gccOpts = {
         vtk
         wecall
         xscreensaver
-      ]) ++ [
+      ] ++
+	openmpis
+      ++ lib.concatMap withMpis [
+	fftw
+	hdf5
+	#hdf5_18 # - broken on openmpi4
+	osu-micro-benchmarks
+      ] ++ map (mpi: hdf5_18.override {
+	inherit mpi;
+      }) [openmpi1 openmpi2 openmpi3]
+      ) ++ [
         (callPackage ./module {
           pkg = self.perl-all;
           addLocales = glibcLocales;

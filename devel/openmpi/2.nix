@@ -13,11 +13,11 @@
 let majorVersion = "2.1"; in
 
 stdenv.mkDerivation rec {
-  name = "openmpi-${majorVersion}.5";
+  name = "openmpi-${majorVersion}.6";
   passthru.tag = "openmpi2";
   src = fetchurl {
     url = "http://www.open-mpi.org/software/ompi/v${majorVersion}/downloads/${name}.tar.bz2";
-    sha256 = "153pgsc8xr6fqkwik2b4j8viscyk3h2jkpsyk8aw69qzh2mwq1xq";
+    sha256 = "0vm89i6r8h4civa09aj708cqhls09bazqyfsl23cbgkvb6wf3f4q";
   };
 
   nativeBuildInputs = [ perl flex ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   postInstall = ''
-    echo 'oob_tcp_if_exclude = idrac,lo' >> $out/etc/openmpi-mca-params.conf
-    echo 'btl_tcp_if_exclude = idrac,lo' >> $out/etc/openmpi-mca-params.conf
+    echo 'oob_tcp_if_exclude = idrac,lo,ib0' >> $out/etc/openmpi-mca-params.conf
+    echo 'btl_tcp_if_exclude = idrac,lo,ib0' >> $out/etc/openmpi-mca-params.conf
   '';
 }

@@ -1,13 +1,15 @@
 { stdenv, fetchFromGitHub, pkgconfig, libtool, curl
-, python, munge, perl, pam, openssl
+, python, munge, perl, pam, openssl, zlib
 , ncurses, mysql, gtk2, lua, hwloc, numactl
-, readline, freeipmi, libssh2, xorg
+, readline, freeipmi, libssh2, xorg, lz4
 , rdma-core, libibmad
+# enable internal X11 support via libssh2
+, enableX11 ? true
 }:
 
 stdenv.mkDerivation rec {
   name = "slurm-${version}";
-  version = "17.11.12-1";
+  version = "18.08.6.2";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -16,10 +18,15 @@ stdenv.mkDerivation rec {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "${builtins.replaceStrings ["."] ["-"] name}";
-    sha256 = "04dirnzl1x5r22bc8456rfk4c6rd7q8m8q7lxxd442sx0x2wbjx3";
+    sha256 = "0py1795jrgip00k46gr9f9y49gpv5478kc3v68d90nl158fngixc";
   };
 
   outputs = [ "out" "dev" ];
+
+  prePatch = stdenv.lib.optional enableX11 ''
+    substituteInPlace src/common/x11_util.c \
+        --replace '"/usr/bin/xauth"' '"${xorg.xauth}/bin/xauth"'
+  '';
 
   # nixos test fails to start slurmd with 'undefined symbol: slurm_job_preempt_mode'
   # https://groups.google.com/forum/#!topic/slurm-devel/QHOajQ84_Es
@@ -28,19 +35,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig libtool ];
   buildInputs = [
-    curl python munge perl pam openssl
-      mysql.connector-c ncurses gtk2
+    curl python munge perl pam openssl zlib
+      mysql.connector-c ncurses gtk2 lz4
       lua hwloc numactl readline freeipmi
       rdma-core libibmad
-  ];
+  ] ++ stdenv.lib.optionals enableX11 [ libssh2 xorg.xauth ];
 
   configureFlags = with stdenv.lib;
-    [ "--with-munge=${munge}"
-      "--with-ssl=${openssl.dev}"
+    [ "--with-freeipmi=${freeipmi}"
       "--with-hwloc=${hwloc.dev}"
-      "--with-freeipmi=${freeipmi}"
+      "--with-lz4=${lz4.dev}"
+      "--with-munge=${munge}"
+      "--with-ssl=${openssl.dev}"
+      "--with-zlib=${zlib}"
       "--sysconfdir=/etc/slurm"
-    ];
+    ] ++ (optional (gtk2 == null)  "--disable-gtktest")
+      ++ (optional enableX11 "--with-libssh2=${libssh2.dev}");
+
 
   preConfigure = ''
     patchShebangs ./doc/html/shtml2html.py

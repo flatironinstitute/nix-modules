@@ -16,7 +16,6 @@ import <nixpkgs> {
       stateDir = "/mnt/home/sw/nix/state";
     };
     cudaSupport = true;
-    haskellPackageOverrides = import ./haskell.nix;
   };
   overlays = [(import ./overlay.nix)];
 }

@@ -134,7 +134,7 @@ with pkgs;
   };
 
   jupyterlab = jupyterlab.overridePythonAttrs {
-    buildInputs = [world.nodejs];
+    propagatedBuildInputs = jupyterlab.propagatedBuildInputs ++ [world.nodejs];
     postFixup = ''
       PATH=$out/bin:$PATH JUPYTERLAB_DIR=$out/share/jupyter/lab HOME=$PWD jupyter-labextension install @jupyterlab/hub-extension@0.12.0
     '';
@@ -179,13 +179,13 @@ with pkgs;
 
   pyslurm = buildPythonPackage rec {
     pname = "pyslurm";
-    version = "17-11-12";
+    version = "18-08-6";
 
     src = world.fetchFromGitHub {
       repo = "pyslurm";
       owner = "PySlurm";
       rev = version;
-      sha256 = "01xdx2v3w8i3bilyfkk50f786fq60938ikqp2ls2kf3j218xyxmz";
+      sha256 = "1cf1sbzhi2cmdwdhm270nlf0wya3nvvsl8c6riwhqvb5iial1xar";
     };
 
     buildInputs = [ cython world.slurm ];
