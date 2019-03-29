@@ -172,7 +172,7 @@ let gccOpts = {
     intervaltree
     ipdb
     ipython #[all]
-    jupyter #-- qt5
+    jupyter
     leveldb
     locket
     Mako
@@ -198,7 +198,7 @@ let gccOpts = {
     py
     pycairo
     #pycuda
-    #pyfftw #-- pending 0.11 upgrade
+    pyfftw #-- pending 0.11 upgrade
     pygobject2
     #pymultinest
     pyparsing
@@ -285,9 +285,9 @@ let gccOpts = {
 
   R-all = rWrapper.override {
     packages = with rPackages; [
-      #AnnotationDbi
+      AnnotationDbi
       BH
-      #BiocInstaller
+      BiocInstaller
       bit64
       blob
       getopt
@@ -418,9 +418,9 @@ let gccOpts = {
         nodejs-10_x
         nfft
         octave
-	openmpi
+        openmpi
         openssl
-        #petsc
+        petsc
         python2-all
         python3-all
         (qt5.full // { name = builtins.replaceStrings ["-full"] [""] qt5.full.name; })
@@ -438,14 +438,14 @@ let gccOpts = {
         wecall
         xscreensaver
       ] ++
-	openmpis
+        openmpis
       ++ lib.concatMap withMpis [
-	fftw
-	hdf5
-	#hdf5_18 # - broken on openmpi4
-	osu-micro-benchmarks
+        fftw
+        hdf5
+        #hdf5_18 # - broken on openmpi4
+        osu-micro-benchmarks
       ] ++ map (mpi: hdf5_18.override {
-	inherit mpi;
+        inherit mpi;
       }) [openmpi1 openmpi2 openmpi3]
       ) ++ [
         (callPackage ./module {
