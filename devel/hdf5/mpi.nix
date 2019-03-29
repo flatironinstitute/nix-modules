@@ -1,11 +1,10 @@
 { stdenv
 , callPackage
-, hdf5 ? <nixpkg/pkgs/tools/misc/hdf5>
+, hdf5 ? nixpkg/pkgs/tools/misc/hdf5
 , fetchurl
 , removeReferencesTo
 , cpp ? false
 , gfortran ? null
-, fortran2003 ? false
 , zlib ? null
 , szip ? null
 , mpi ? null
