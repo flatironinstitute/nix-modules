@@ -52,12 +52,16 @@ let gccOpts = {
   openmpi2 = callPackage devel/openmpi/2.nix { };
   openmpi3 = callPackage devel/openmpi/3.nix { };
   openmpi4 = callPackage devel/openmpi/4.nix { };
-  openmpi = self.openmpi2;
+  openmpi = self.openmpi3;
   openmpis = with self; [openmpi1 openmpi2 openmpi3 openmpi4];
 
-  withMpis = pkg: map (mpi: pkg.override {
+  withMpi = pkg: mpi: pkg.override {
     inherit mpi;
-  }) self.openmpis;
+  } // {
+    inherit mpi;
+  };
+
+  withMpis = pkg: map (self.withMpi pkg) self.openmpis;
 
   mvapich2 = callPackage devel/mvapich { };
 
@@ -90,16 +94,6 @@ let gccOpts = {
 
   nfft = callPackage devel/nfft {
     fftw = self.fftw;
-  };
-
-  hdf5 = callPackage devel/hdf5/mpi.nix {
-    hdf5 = <nixpkgs/pkgs/tools/misc/hdf5>;
-    mpi = null;
-  };
-
-  hdf5_18 = callPackage devel/hdf5/mpi.nix {
-    hdf5 = <nixpkgs/pkgs/tools/misc/hdf5/1_8.nix>;
-    mpi = null;
   };
 
   gsl = gsl.overrideAttrs (old: {
@@ -401,7 +395,7 @@ let gccOpts = {
         go
         haskell-all
         hdf5
-        hdf5_18
+        hdf5_1_8
         hdfview
         hwloc
         imagemagick
@@ -442,11 +436,10 @@ let gccOpts = {
       ++ lib.concatMap withMpis [
         fftw
         hdf5
-        #hdf5_18 # - broken on openmpi4
+        #hdf5_1_8 # - broken on openmpi4
         osu-micro-benchmarks
-      ] ++ map (mpi: hdf5_18.override {
-        inherit mpi;
-      }) [openmpi1 openmpi2 openmpi3]
+        scalapack
+      ] ++ map (withMpi hdf5_1_8) [openmpi1 openmpi2 openmpi3]
       ) ++ [
         (callPackage ./module {
           pkg = self.perl-all;

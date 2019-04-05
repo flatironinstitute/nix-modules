@@ -4,10 +4,9 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "osu-micro-benchmarks-5.4";
-  name = "${pname}-${mpi.tag}";
+  name = "osu-micro-benchmarks-5.4";
   src = fetchurl {
-    url = "http://mvapich.cse.ohio-state.edu/download/mvapich/${pname}.tar.gz";
+    url = "http://mvapich.cse.ohio-state.edu/download/mvapich/${name}.tar.gz";
     sha256 = "0cwg58gzp3jnwmf5bzbn1yvjdy70bkl8bbarkfjhawm02cp7djp1";
   };
 

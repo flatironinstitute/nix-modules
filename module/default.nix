@@ -1,12 +1,16 @@
 { stdenv
 , buildEnv
 , pkg
-, pkgName ? builtins.replaceStrings ["-wrapper" "-all"] ["" ""] (builtins.parseDrvName pkg.name).name
-, pkgVersion ? builtins.replaceStrings ["_"] ["."] (builtins.parseDrvName pkg.name).version
+, pkgTag ? if pkg.mpi or null != null then pkg.mpi.tag else null
+, pkgName ? pkg.tag or (builtins.replaceStrings ["-wrapper" "-all"] ["" ""]
+    (builtins.parseDrvName pkg.name).name)
+  + (if pkgTag != null then "-${pkgTag}" else "")
+, pkgVersion ? builtins.replaceStrings ["_"] ["."]
+    (builtins.parseDrvName pkg.name).version
 , modPrefix ? "nix/"
 , modName ? "${modPrefix}${pkgName}/${pkgVersion}"
 , modLoad ? []
-, modPrereq ? []
+, modPrereq ? if pkgTag != null then [(modPrefix + pkgTag)] else []
 , modConflict ? [pkgName] ++ stdenv.lib.optional (modPrefix != "") (modPrefix + pkgName)
 , modEnv ? builtins.replaceStrings ["-"] ["_"] (stdenv.lib.toUpper pkgName)
 , addLDLibraryPath ? false
@@ -24,7 +28,7 @@ in
 stdenv.mkDerivation {
   builder = ./builder.sh;
 
-  name = "module-${pkg.name}";
+  name = "module-${pkgName}-${pkgVersion}";
 
   buildInputs = [monopkg];
 

@@ -8,11 +8,10 @@ assert stdenv.lib.elem precision [ "single" "double" "long-double" "quad-precisi
 
 let
   version = "3.3.8";
-  mpitag = stdenv.lib.optionalString (mpi != null) "-${mpi.tag}";
 in
 
 stdenv.mkDerivation rec {
-  name = "fftw${mpitag}-${precision}-${version}";
+  name = "fftw-${precision}-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.fftw.org/pub/fftw/fftw-${version}.tar.gz";
