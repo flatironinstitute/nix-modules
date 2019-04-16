@@ -421,6 +421,7 @@ let gccOpts = {
         R-all
         rclone
         sage
+        scribus
         singularity
         smartmontools
         subversion
