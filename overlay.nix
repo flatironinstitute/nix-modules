@@ -149,6 +149,7 @@ let gccOpts = {
     dask
     #DataSpyre
     #deepTools
+    dill
     distributed
     #einsum2
     emcee
@@ -159,6 +160,7 @@ let gccOpts = {
     gevent
     gflags
     ggplot
+    gmpy2
     h5py
     heapdict
     hglib
@@ -166,6 +168,7 @@ let gccOpts = {
     intervaltree
     ipdb
     ipython #[all]
+    joblib
     jupyter
     leveldb
     locket
@@ -407,7 +410,6 @@ let gccOpts = {
         mpv
         mupdf
         netcdf
-        nodejs-6_x
         nodejs-8_x
         nodejs-10_x
         nfft
