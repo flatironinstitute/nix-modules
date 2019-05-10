@@ -1,0 +1,5 @@
+library(IRkernel)
+src <- system.file('kernelspec', package = 'IRkernel')
+system2('chmod', c('-R','u+w',src))
+IRkernel::installspec(prefix=Sys.getenv('out'))
+system2('chmod', c('-R','u-w',src))
