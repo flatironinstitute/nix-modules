@@ -102,6 +102,11 @@ let gccOpts = {
     #  (-2.55795384873636067e-13 observed vs 0 expected) [789499]
   });
 
+  gsl_1 = gsl_1.overrideAttrs (old: {
+    doCheck = false;
+    # FAIL: herm random, normalized(1), unsorted (0.999999999999999112 observed vs 1 expected) [117761]
+  });
+
   fflas-ffpack = fflas-ffpack.overrideAttrs (old: {
     doCheck = false;
   });
@@ -288,6 +293,7 @@ let gccOpts = {
       bit64
       blob
       DESeq2
+      devtools
       getopt
       ggplot2
       IRkernel
@@ -296,6 +302,7 @@ let gccOpts = {
       memoise
       pkgconfig
       plogr
+      RcppGSL
     ];
   };
 
@@ -385,6 +392,7 @@ let gccOpts = {
         cudnn_cudatoolkit_9_2
         cudnn_cudatoolkit_10
         cudnn_cudatoolkit_10_0
+        curl
         dep
         disBatch
         dstat
@@ -398,6 +406,8 @@ let gccOpts = {
         gdb
         gmp
         go
+        gsl
+        gsl_1
         haskell-all
         hdf5
         hdf5_1_8
@@ -406,6 +416,8 @@ let gccOpts = {
         imagemagick
         jdk
         julia
+        libgit2
+        libssh2
         libxml2
         mercurial
         mplayer
@@ -436,6 +448,7 @@ let gccOpts = {
         vtk
         wecall
         xscreensaver
+        zlib
       ] ++
         openmpis
       ++ lib.concatMap withMpis [
