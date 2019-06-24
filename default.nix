@@ -6,7 +6,7 @@ import <nixpkgs> {
   # Use current platform, setting gcc.arch = "broadwell":
   localSystem = rec {
     system = builtins.currentSystem;
-    platform = lib.systems.platforms.selectBySystem system // { gcc = { arch = "broadwell"; }; };
+    platform = lib.systems.platforms.selectBySystem system // { gcc.arch = "broadwell"; };
   };
   config = {
     allowUnfree = true;
