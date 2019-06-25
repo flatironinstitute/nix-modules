@@ -422,6 +422,7 @@ let gccOpts = {
         octave
         openmpi
         openssl
+        paraview
         petsc
         python2-all
         python3-all
