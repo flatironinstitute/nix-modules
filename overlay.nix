@@ -101,23 +101,8 @@ let gccOpts = {
     fftw = self.fftw;
   };
 
-  gsl = gsl.overrideAttrs (old: {
-    doCheck = false;
-    # FAIL: mcholesky_invert unscaled hilbert (  4,  4)[0,2]: -2.55795384873636067e-13                        0
-    #  (-2.55795384873636067e-13 observed vs 0 expected) [789499]
-  });
-
-  gsl_1 = gsl_1.overrideAttrs (old: {
-    doCheck = false;
-    # FAIL: herm random, normalized(1), unsorted (0.999999999999999112 observed vs 1 expected) [117761]
-  });
-
-  fflas-ffpack = fflas-ffpack.overrideAttrs (old: {
-    doCheck = false;
-  });
-
   libuv = libuv.overrideAttrs (old: {
-    doCheck = false;
+    doCheck = false; # failure
   });
 
   # Switch to qt59 due to 5.11 issues
@@ -195,6 +180,7 @@ let gccOpts = {
     packaging
     paho-mqtt
     pandas
+    paramiko
     partd
     pims
     pip
@@ -294,7 +280,7 @@ let gccOpts = {
     packages = with rPackages; [
       AnnotationDbi
       BH
-      #BiocInstaller
+      #BiocInstaller # R version incompat?
       bit64
       blob
       DESeq2
@@ -350,11 +336,6 @@ let gccOpts = {
   gitFull = gitFull.overrideAttrs (old: {
     # gettext UTF-8 failures?
     doInstallCheck = false;
-  });
-
-  rcs = rcs.overrideAttrs (old: {
-    # unknown t999 failure
-    doCheck = false;
   });
 
   sage = sage.overrideAttrs (old: {

@@ -167,6 +167,10 @@ with pkgs;
     checkInputs = [ pytest ];
   };
 
+  paramiko = paramiko.overridePythonAttrs {
+    doCheck = false; # ipv6 EBUSY?
+  };
+
   primefac = buildPythonPackage rec {
     pname = "primefac";
     version = "1.1";
