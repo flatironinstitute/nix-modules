@@ -137,6 +137,7 @@ with pkgs;
     propagatedBuildInputs = jupyterlab.propagatedBuildInputs ++ [world.nodejs];
     postFixup = ''
       PATH=$out/bin:$PATH JUPYTERLAB_DIR=$out/share/jupyter/lab HOME=$PWD jupyter-labextension install @jupyterlab/hub-extension@0.12.0
+      PATH=$out/bin:$PATH JUPYTERLAB_DIR=$out/share/jupyter/lab HOME=$PWD jupyter-lab build
     '';
   };
 
