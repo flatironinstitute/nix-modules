@@ -2,3 +2,6 @@
 	path = nixpkgs
 	url = git://github.com/NixOS/nixpkgs
 	branch = master
+[submodule "IHaskell"]
+	path = IHaskell
+	url = https://github.com/gibiansky/IHaskell.git

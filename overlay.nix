@@ -316,6 +316,12 @@ let gccOpts = {
     #ihaskell
   ]);
 
+  ihaskell = import IHaskell/release.nix {
+    nixpkgs = self;
+    compiler = "ghc865";
+    packages = (hp: with hp; []);
+  };
+
   julia = julia.overrideAttrs (old: {
     doCheck = false;
   });
@@ -475,7 +481,7 @@ let gccOpts = {
       { env = self.python3-all; }
       { env = self.R-all; kernelSrc = (callPackage jupyter/kernel/juniper { env = self.R-all; }); }
       { env = self.R-all; kernelSrc = (callPackage jupyter/kernel/ir { env = self.R-all; }); }
-      #{ env = self.haskell-all; kernelSrc = (callPackage jupyter/kernel/ihaskell { env = self.haskell-all; }); }
+      #{ env = self.ihaskell; kernelSrc = (callPackage jupyter/kernel/ihaskell { env = self.haskell-all; }); }
       { env = "/cm/shared/sw/pkg-old/devel/python2/2.7.13"; ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python2-2.7.13"; note = " (python2/2.7.13)"; }
       { env = "/cm/shared/sw/pkg-old/devel/python3/3.6.2";  ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python3-3.6.2";  note = " (python3/3.6.2)"; }
       # TODO:
