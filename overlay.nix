@@ -347,6 +347,28 @@ let gccOpts = {
     texlive = self.texlive-all;
   };
 
+  jupyter = self.python3.withPackages (p: with p; [jupyterhub jupyterlab]);
+
+  jupyter-env = buildEnv {
+    name = "jupyter-env";
+    paths = [
+      self.jupyter
+    ] ++ map (callPackage jupyter/kernel) [
+      { env = self.python2-all; }
+      { env = self.python3-all; }
+      { env = self.R-all; kernelSrc = (callPackage jupyter/kernel/juniper { env = self.R-all; }); }
+      { env = self.R-all; kernelSrc = (callPackage jupyter/kernel/ir { env = self.R-all; }); }
+      #{ env = self.haskell-all; kernelSrc = (callPackage jupyter/kernel/ihaskell { env = self.haskell-all; }); }
+      { env = "/cm/shared/sw/pkg-old/devel/python2/2.7.13"; ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python2-2.7.13"; note = " (python2/2.7.13)"; }
+      { env = "/cm/shared/sw/pkg-old/devel/python3/3.6.2";  ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python3-3.6.2";  note = " (python3/3.6.2)"; }
+      # TODO:
+      #nodejs
+      #julia
+    ] ++ map (callPackage jupyter/kernel/spec.nix) [
+      { kernelspec = self.sage.kernelspec; }
+    ];
+  };
+
   modules =
     let
       module = pkg: callPackage ./module {
@@ -461,28 +483,13 @@ let gccOpts = {
           modConflict = ["nix/nix"];
           addCFlags = false;
         })
+        (callPackage ./module {
+          pkg = self.jupyter-env;
+          pkgName = "jupyter-env";
+          modName = "nix/python3/jupyter-env";
+          addCFlags = false;
+        })
       ];
     };
 
-  jupyter = self.python3.withPackages (p: with p; [jupyterhub jupyterlab]);
-
-  jupyter-env = buildEnv {
-    name = "jupyter-env";
-    paths = [
-      self.jupyter
-    ] ++ map (callPackage jupyter/kernel) [
-      { env = self.python2-all; }
-      { env = self.python3-all; }
-      { env = self.R-all; kernelSrc = (callPackage jupyter/kernel/juniper { env = self.R-all; }); }
-      { env = self.R-all; kernelSrc = (callPackage jupyter/kernel/ir { env = self.R-all; }); }
-      #{ env = self.haskell-all; kernelSrc = (callPackage jupyter/kernel/ihaskell { env = self.haskell-all; }); }
-      { env = "/cm/shared/sw/pkg-old/devel/python2/2.7.13"; ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python2-2.7.13"; note = " (python2/2.7.13)"; }
-      { env = "/cm/shared/sw/pkg-old/devel/python3/3.6.2";  ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python3-3.6.2";  note = " (python3/3.6.2)"; }
-      # TODO:
-      #nodejs 
-      #julia
-    ] ++ map (callPackage jupyter/kernel/spec.nix) [
-      { kernelspec = self.sage.kernelspec; }
-    ];
-  };
 }
