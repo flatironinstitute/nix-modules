@@ -307,13 +307,12 @@ let gccOpts = {
   });
 
   haskell = haskell // {
-    packageOverrides = import ./haskell.nix;
+    packageOverrides = import ./haskell.nix self;
   };
 
   haskell-all = haskellPackages.ghcWithPackages (hp: with hp; [
     cabal-install
     stack
-    #ihaskell
   ]);
 
   ihaskell = import IHaskell/release.nix {
@@ -481,7 +480,7 @@ let gccOpts = {
       { env = self.python3-all; }
       { env = self.R-all; kernelSrc = (callPackage jupyter/kernel/juniper { env = self.R-all; }); }
       { env = self.R-all; kernelSrc = (callPackage jupyter/kernel/ir { env = self.R-all; }); }
-      #{ env = self.ihaskell; kernelSrc = (callPackage jupyter/kernel/ihaskell { env = self.haskell-all; }); }
+      { env = self.ihaskell; kernelSrc = (callPackage jupyter/kernel/ihaskell { env = self.ihaskell; }); }
       { env = "/cm/shared/sw/pkg-old/devel/python2/2.7.13"; ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python2-2.7.13"; note = " (python2/2.7.13)"; }
       { env = "/cm/shared/sw/pkg-old/devel/python3/3.6.2";  ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python3-3.6.2";  note = " (python3/3.6.2)"; }
       # TODO:
