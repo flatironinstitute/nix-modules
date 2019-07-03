@@ -414,6 +414,7 @@ let gccOpts = {
         dep
         disBatch
         dstat
+        duplicity
         eigen
         elinks
         feh

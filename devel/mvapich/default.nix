@@ -10,11 +10,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mvapich2-2.2";
+  name = "mvapich2-2.3.1";
   passthru.tag = "mvapich2";
   src = fetchurl {
     url = "http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/${name}.tar.gz";
-    sha256 = "0cdi7cxmkfl1zhi0czmzm0mvh98vbgq8nn9y1d1kprixnb16y6kr";
+    sha256 = "1gz31q70iim79q13sfjlqsm8f5rdaxrajya7rn1yvwvmky114kii";
   };
 
   buildInputs = [ perl slurm infinipath-psm libpsm2 libibverbs libibmad rdma-core ];

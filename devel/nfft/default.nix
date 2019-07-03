@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nfft-3.4.0";
+  name = "nfft-3.5.0";
 
   src = fetchurl {
     url = "https://www-user.tu-chemnitz.de/~potts/nfft/download/${name}.tar.gz";
-    sha256 = "14cr9jn0mv67xliybmcbvaqz7pddslq08ciijfwjigklhra5haf6";
+    sha256 = "01vab2l0kimxaxvnjl6xl42rw12gnpqvv5jwwnnfgbkmlv9ajy2z";
   };
 
   propagatedBuildInputs = [ fftw ];
