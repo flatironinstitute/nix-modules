@@ -491,8 +491,8 @@ let gccOpts = {
         })
         (callPackage ./module {
           pkg = self.jupyter-env;
-          pkgName = "jupyter-env";
-          modName = "nix/python3/jupyter-env";
+          pkgName = "jupyterhub";
+          pkgVersion = self.jupyter.name;
           addCFlags = false;
         })
       ];
