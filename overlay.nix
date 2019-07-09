@@ -366,6 +366,8 @@ let gccOpts = {
       { env = self.ihaskell; kernelSrc = (callPackage jupyter/kernel/ihaskell { env = self.ihaskell; }); }
       { env = "/cm/shared/sw/pkg-old/devel/python2/2.7.13"; ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python2-2.7.13"; note = " (python2/2.7.13)"; }
       { env = "/cm/shared/sw/pkg-old/devel/python3/3.6.2";  ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python3-3.6.2";  note = " (python3/3.6.2)"; }
+      { env = "/cm/shared/sw/pkg/devel/python2/2.7.16";     ld_library_path = "/cm/shared/sw/pkg/devel/gcc/7.4.0/lib"; prefix = "module-python2-2.7.16"; note = " (python2/2.7.16)"; }
+      { env = "/cm/shared/sw/pkg/devel/python3/3.7.3";      ld_library_path = "/cm/shared/sw/pkg/devel/gcc/7.4.0/lib"; prefix = "module-python3-3.7.3";  note = " (python3/3.7.3)"; }
       # TODO:
       #nodejs 
       #julia

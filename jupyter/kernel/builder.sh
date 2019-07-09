@@ -2,6 +2,7 @@ source $stdenv/setup
 
 kernels=$out/share/jupyter/kernels
 mkdir -p $kernels
+
 for kernel in $kernelSrc/share/jupyter/kernels/* ; do
 	dir=`basename $kernel`
 	dst=$kernels/$prefix-$dir
