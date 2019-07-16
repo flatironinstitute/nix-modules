@@ -218,6 +218,7 @@ let gccOpts = {
     sqlalchemy
     statsmodels
     sympy
+    tensorflow
     #tess
     #Theano -- clblas
     twisted
@@ -242,7 +243,6 @@ let gccOpts = {
     #NucleoATAC
     pygtk
     statistics
-    tensorflow
     weave
   ]);
 
