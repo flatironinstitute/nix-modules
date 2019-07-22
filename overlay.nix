@@ -439,6 +439,7 @@ let gccOpts = {
         jdk
         julia
         libgit2
+        libseccomp
         libssh2
         libxml2
         mercurial
