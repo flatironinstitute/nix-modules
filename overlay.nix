@@ -473,6 +473,7 @@ let gccOpts = {
         wecall
         xscreensaver
         zlib
+        zsh
       ] ++
         openmpis
       ++ lib.concatMap withMpis [
