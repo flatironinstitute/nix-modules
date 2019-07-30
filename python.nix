@@ -133,6 +133,17 @@ with pkgs;
     doCheck = false;
   };
 
+  jp_proxy_widget = buildPythonPackage rec {
+    pname = "jp_proxy_widget";
+    version = "1.0.0";
+    name = "${pname}-${version}";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0y26dzblan9k1kn33g907s6s56hiakrx6ky76pm6m8nq0r7gi02j";
+    };
+    propagatedBuildInputs = [ requests ipywidgets ];
+  };
+
   jupyterlab = jupyterlab.overridePythonAttrs {
     propagatedBuildInputs = jupyterlab.propagatedBuildInputs ++ [world.nodejs];
     postFixup = ''

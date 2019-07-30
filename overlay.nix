@@ -352,7 +352,7 @@ let gccOpts = {
     texlive = self.texlive-all;
   };
 
-  jupyter = self.python3.withPackages (p: with p; [jupyterhub jupyterlab]);
+  jupyter = self.python3.withPackages (p: with p; [jupyterhub jupyterlab jp_proxy_widget]);
 
   jupyter-env = buildEnv {
     name = "jupyter-env";
