@@ -473,6 +473,7 @@ let gccOpts = {
         vtk
         wecall
         xscreensaver
+        xz
         zlib
         zsh
       ] ++
