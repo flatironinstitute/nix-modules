@@ -390,6 +390,7 @@ let gccOpts = {
         gcc8
         arpack
         boost
+        bzip2
         clang_4
         clang_5
         clang_6
