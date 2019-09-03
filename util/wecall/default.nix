@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses cmake lsb-release zlib boost
     texlive python ];
 
+  patches = [./cmake-rhel-regex.patch];
+
   postPatch = ''
     sed -i 's/-lcurses/-lncurses/' vendor/samtools/Makefile
     sed -i '/^set(CMAKE_INSTALL_PREFIX/d' cpp/CMakeLists.txt
