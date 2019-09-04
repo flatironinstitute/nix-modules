@@ -5,6 +5,10 @@ with pkgs;
 
 {
 
+  astropy = astropy.overridePythonAttrs {
+    doCheck = false; # numpy deprecation warnings?
+  };
+
   asyncio = null;
 
   bearcart = buildPythonPackage rec {
@@ -28,8 +32,16 @@ with pkgs;
     };
   };
 
+  cheroot = cheroot.overridePythonAttrs {
+    doCheck = false; # tls cert errors
+  };
+
   cherrypy = cherrypy.overridePythonAttrs {
     doCheck = false; # needs network :8080?
+  };
+
+  cryptography = cryptography.overridePythonAttrs {
+    doCheck = false; # hang
   };
 
   cvxopt = cvxopt.overridePythonAttrs {
@@ -95,7 +107,7 @@ with pkgs;
       inherit pname version;
       sha256 = "1sbpcqamsk8g1yn4f75hmkl9jj5azn0y5jrpzgpq2v1n32f3wkns";
     };
-    propagatedBuildInputs = [ numpy self.pandas astropy matplotlib qtpy setuptools ipython ipykernel qtconsole dill self.xlrd h5py self.mpl-scatter-density ];
+    propagatedBuildInputs = [ numpy self.pandas self.astropy matplotlib qtpy setuptools ipython ipykernel qtconsole dill self.xlrd h5py self.mpl-scatter-density ];
     doCheck = false;
   };
 
@@ -107,7 +119,7 @@ with pkgs;
       inherit pname version;
       sha256 = "0jia4yf100khqz41r4v8nf0z2a7icyrkgrjljynglziz1x3qnvp7";
     };
-    propagatedBuildInputs = [ numpy pyopengl self.glue-core qtpy scipy astropy ];
+    propagatedBuildInputs = [ numpy pyopengl self.glue-core qtpy scipy self.astropy ];
     doCheck = false;
   };
 
@@ -131,6 +143,10 @@ with pkgs;
       sha256 = "1fahd35yrpvdqzdd1r6r416d0csg4jbxwlkzm19sa750cljn47ca";
     };
     doCheck = false;
+  };
+
+  joblib = joblib.overridePythonAttrs {
+    doCheck = false; # long, often get stuck, timeouts
   };
 
   jp_proxy_widget = buildPythonPackage rec {

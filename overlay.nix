@@ -26,6 +26,9 @@ let gccOpts = {
   gcc8 = wrapCC (gcc8.cc.override gccOpts);
   gfortran8 = self.gcc8;
 
+  gcc9 = wrapCC (gcc8.cc.override gccOpts);
+  gfortran9 = self.gcc9;
+
   # Make gcc7 default world compiler
   gcc = self.gcc7;
 
@@ -34,11 +37,19 @@ let gccOpts = {
     doInstallCheck = false;
   });
 
-  openssl = openssl.overrideAttrs (old: {
+  openssl_1_0_2 = openssl_1_0_2.overrideAttrs (old: {
     postPatch = old.postPatch + ''
       sed -i 's:define\s\+X509_CERT_FILE\s\+.*$:define X509_CERT_FILE "/etc/pki/tls/certs/ca-bundle.crt":' crypto/cryptlib.h
     '';
   });
+
+  openssl_1_1 = openssl_1_1.overrideAttrs (old: {
+    postPatch = old.postPatch + ''
+      sed -i 's:define\s\+X509_CERT_FILE\s\+.*$:define X509_CERT_FILE "/etc/pki/tls/certs/ca-bundle.crt":' include/internal/cryptlib.h
+    '';
+  });
+
+  openssl = openssl_1_1;
 
   p11-kit = p11-kit.overrideAttrs (old: {
     doCheck = false;
@@ -141,11 +152,9 @@ let gccOpts = {
     bottleneck
     cherrypy
     cython
-    dask
     #DataSpyre
     #deepTools
     dill
-    distributed
     #einsum2
     emcee
     flask
@@ -182,7 +191,6 @@ let gccOpts = {
     pandas
     paramiko
     partd
-    pims
     pip
     primefac
     protobuf
@@ -191,7 +199,6 @@ let gccOpts = {
     py
     pycairo
     #pycuda
-    pyfftw #-- pending 0.11 upgrade
     pygobject2
     #pymultinest
     pyparsing
@@ -206,7 +213,6 @@ let gccOpts = {
     s3fs
     s3transfer
     #scikit-cuda
-    scikitimage
     scikitlearn
     scipy
     seaborn
@@ -230,11 +236,16 @@ let gccOpts = {
   ] ++ (if isPy3k then [
     astropy
     bash_kernel
+    dask
+    distributed #-- dask
     flask-socketio
     glueviz #-- qt
     jupyterhub
     jupyterlab
     llfuse #-- unicode problems on python2
+    pims #--dask
+    pyfftw #-- pending 0.11 upgrade, dask
+    scikitimage #-- dask
     ws4py
   ] else [
     biopython #-- build failure on python3
@@ -329,6 +340,11 @@ let gccOpts = {
     name = builtins.replaceStrings ["-combined-full"] [""] texlive.combined.scheme-full.name;
   };
 
+  biber = biber.overrideAttrs (old: {
+    # #67903
+    doCheck = false;
+  });
+
   disBatch = callPackage flatiron/disBatch { };
 
   module-wrap = callPackage module/wrap { };
@@ -385,16 +401,16 @@ let gccOpts = {
       name = "modules";
       paths = map module (with self; [
         gcc5
-        gcc6
         gcc7
         gcc8
+        gcc9
         arpack
         boost
         bzip2
-        clang_4
         clang_5
         clang_6
         clang_7
+        clang_8
         cmake
         #cudatoolkit_7_5
         #cudatoolkit_8
@@ -448,8 +464,8 @@ let gccOpts = {
         mpv
         mupdf
         netcdf
-        nodejs-8_x
         nodejs-10_x
+        nodejs-12_x
         nfft
         octave
         openmpi
