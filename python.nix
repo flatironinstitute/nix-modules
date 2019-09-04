@@ -195,13 +195,13 @@ with pkgs;
 
   pyslurm = buildPythonPackage rec {
     pname = "pyslurm";
-    version = "18-08-6";
+    version = "18-08-8";
 
     src = world.fetchFromGitHub {
       repo = "pyslurm";
       owner = "PySlurm";
       rev = version;
-      sha256 = "1cf1sbzhi2cmdwdhm270nlf0wya3nvvsl8c6riwhqvb5iial1xar";
+      sha256 = "114m39hn6s5i1xjz204py5k7ggljgg5z2zz74j3zdd0g89rjmf8z";
     };
 
     buildInputs = [ cython world.slurm ];
