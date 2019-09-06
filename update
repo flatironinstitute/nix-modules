@@ -1,4 +1,16 @@
-#!/bin/sh
+#!/bin/sh -e
 # This builds a full set of modules and updates the system modules profile with the result.
 nix-env -p $NIX_STATE_DIR/profiles/system/modules -i -f `dirname $0` -A modules
 nix-env -p $NIX_STATE_DIR/profiles/system/jupyter -i -f `dirname $0` -A jupyter-env
+nix-env -p $NIX_STATE_DIR/profiles/system/nix -i -f `dirname $0` -A nix
+
+moddir=/cm/shared/sw/modules/modules-nix
+rm $moddir/*
+for p in $NIX_STATE_DIR/profiles/system/modules-*-link ; do
+	b=${p#*/modules-}
+	cat <<EOF > $moddir/${b%-link}
+#%Module1.0#
+module-whatis "Show bleeding-edge modules based on nix"
+prepend-path MODULEPATH $p/modules
+EOF
+done
