@@ -12,8 +12,8 @@ import <nixpkgs> {
     allowUnfree = true;
     replaceStdenv = import ./stdenv.nix;
     nix = {
-      storeDir = "/mnt/home/sw/nix/store";
-      stateDir = "/mnt/home/sw/nix/state";
+      storeDir = "/cm/shared/sw/nix/store";
+      stateDir = "/cm/shared/sw/nix/state";
     };
     cudaSupport = true;
   };

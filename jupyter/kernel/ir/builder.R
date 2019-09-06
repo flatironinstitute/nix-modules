@@ -1,5 +1,11 @@
 library(IRkernel)
-src <- system.file('kernelspec', package = 'IRkernel')
-system2('chmod', c('-R','u+w',src))
-IRkernel::installspec(prefix=Sys.getenv('out'))
-system2('chmod', c('-R','u-w',src))
+installspec <- IRkernel::installspec
+env <- new.env(parent = environment(installspec))
+environment(installspec) <- env
+# overwrite write to fix permissions first
+write <- function(x, file) {
+  system2('chmod', c('+w',file))
+  cat(x, file = file, append = FALSE)
+}
+assign("write", write, env)
+installspec(prefix=Sys.getenv('out'))

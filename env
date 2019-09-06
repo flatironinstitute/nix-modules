@@ -1,6 +1,7 @@
 dir=$PWD
-nix=/mnt/home/sw/nix
+nix=/cm/shared/sw/nix
 
+export NIX_REMOTE=daemon
 export NIX_STORE_DIR=$nix/store
 export NIX_STATE_DIR=$nix/state
 export NIX_LINK=$HOME/.nix-profile
