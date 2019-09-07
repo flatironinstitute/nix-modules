@@ -49,7 +49,7 @@ let gccOpts = {
     '';
   });
 
-  openssl = openssl_1_1;
+  openssl = self.openssl_1_1;
 
   p11-kit = p11-kit.overrideAttrs (old: {
     doCheck = false;
