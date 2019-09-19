@@ -483,7 +483,6 @@ let gccOpts = {
         smartmontools
         subversion
         texlive-all
-        texmaker
         valgrind
         vim
         vscode
