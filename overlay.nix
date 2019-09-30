@@ -392,132 +392,133 @@ let gccOpts = {
     ];
   };
 
-  modules =
-    let
-      module = pkg: callPackage ./module {
-        inherit pkg;
-      };
-    in buildEnv {
-      name = "modules";
-      paths = map module (with self; [
-        gcc5
-        gcc7
-        gcc8
-        gcc9
-        arpack
-        boost
-        bzip2
-        clang_5
-        clang_6
-        clang_7
-        clang_8
-        cmake
-        #cudatoolkit_7_5
-        #cudatoolkit_8
-        cudatoolkit_9
-        cudatoolkit_9_0
-        cudatoolkit_9_1
-        cudatoolkit_9_2
-        cudatoolkit_10
-        cudatoolkit_10_0
-        #cudnn6_cudatoolkit_8
-        #cudnn_cudatoolkit_7_5
-        #cudnn_cudatoolkit_8
-        cudnn_cudatoolkit_9
-        cudnn_cudatoolkit_9_0
-        cudnn_cudatoolkit_9_1
-        cudnn_cudatoolkit_9_2
-        cudnn_cudatoolkit_10
-        cudnn_cudatoolkit_10_0
-        curl
-        dep
-        disBatch
-        dstat
-        duplicity
-        eigen
-        elinks
-        feh
-        ffmpeg
-        fftw
-        ghostscript
-        gitFull
-        git-lfs
-        gdb
-        gmp
-        go
-        gsl
-        gsl_1
-        haskell-all
-        hdf5
-        hdf5_1_8
-        hdfview
-        hwloc
-        imagemagick
-        jdk
-        julia
-        libgit2
-        libseccomp
-        libssh2
-        libxml2
-        mercurial
-        mplayer
-        mpv
-        mupdf
-        netcdf
-        nodejs-10_x
-        nodejs-12_x
-        nfft
-        octave
-        openmpi
-        openssl
-        paraview
-        petsc
-        python2-all
-        python3-all
-        (qt5.full // { name = builtins.replaceStrings ["-full"] [""] qt5.full.name; })
-        R-all
-        rclone
-        sage
-        scribus
-        singularity
-        smartmontools
-        subversion
-        texlive-all
-        valgrind
-        vim
-        vscode
-        vtk
-        wecall
-        xscreensaver
-        xz
-        zlib
-        zsh
-      ] ++
-        openmpis
-      ++ lib.concatMap withMpis [
-        fftw
-        hdf5
-        #hdf5_1_8 # - broken on openmpi4
-        osu-micro-benchmarks
-        scalapack
-      ] ++ map (withMpi hdf5_1_8) [openmpi1 openmpi2 openmpi3]
-      ) ++ [
-        (callPackage ./module {
-          pkg = self.perl-all;
-          addLocales = glibcLocales;
-        })
-        (callPackage ./module {
-          pkg = self.nix;
-          modConflict = ["nix/nix"];
-          addCFlags = false;
-        })
-        (callPackage ./module {
-          pkg = self.jupyter-env;
-          pkgName = "jupyterhub";
-          pkgVersion = self.jupyter.name;
-          addCFlags = false;
-        })
-      ];
-    };
+  modules = buildEnv {
+    name = "modules";
+    paths = map (pkg: callPackage ./module {
+      inherit pkg;
+    }) (with self; [
+      gcc5
+      gcc7
+      gcc8
+      gcc9
+      arpack
+      boost
+      bzip2
+      clang_5
+      clang_6
+      clang_7
+      clang_8
+      cmake
+      #cudatoolkit_7_5
+      #cudatoolkit_8
+      cudatoolkit_9
+      cudatoolkit_9_0
+      cudatoolkit_9_1
+      cudatoolkit_9_2
+      cudatoolkit_10
+      cudatoolkit_10_0
+      #cudnn6_cudatoolkit_8
+      #cudnn_cudatoolkit_7_5
+      #cudnn_cudatoolkit_8
+      cudnn_cudatoolkit_9
+      cudnn_cudatoolkit_9_0
+      cudnn_cudatoolkit_9_1
+      cudnn_cudatoolkit_9_2
+      cudnn_cudatoolkit_10
+      cudnn_cudatoolkit_10_0
+      curl
+      dep
+      disBatch
+      dstat
+      duplicity
+      eigen
+      elinks
+      feh
+      ffmpeg
+      fftw
+      ghostscript
+      gitFull
+      git-lfs
+      gdb
+      gmp
+      go
+      gsl
+      gsl_1
+      haskell-all
+      hdf5
+      hdf5_1_8
+      hdfview
+      hwloc
+      imagemagick
+      jdk
+      julia
+      libgit2
+      libseccomp
+      libssh2
+      libxml2
+      mercurial
+      mupdf
+      netcdf
+      nodejs-10_x
+      nodejs-12_x
+      nfft
+      octave
+      openmpi
+      openssl
+      paraview
+      petsc
+      python2-all
+      python3-all
+      (qt5.full // { name = builtins.replaceStrings ["-full"] [""] qt5.full.name; })
+      R-all
+      rclone
+      sage
+      scribus
+      singularity
+      smartmontools
+      subversion
+      texlive-all
+      valgrind
+      vim
+      vscode
+      vtk
+      wecall
+      xscreensaver
+      xz
+      zlib
+      zsh
+    ] ++
+      openmpis
+    ++ lib.concatMap withMpis [
+      fftw
+      hdf5
+      #hdf5_1_8 # - broken on openmpi4
+      osu-micro-benchmarks
+      scalapack
+    ] ++ map (withMpi hdf5_1_8) [openmpi1 openmpi2 openmpi3]
+    ) ++ map (pkg: callPackage ./module {
+      inherit pkg;
+      addOpenGLDrivers = true;
+    }) [
+      mplayer
+      mpv
+    ] ++ [
+      (callPackage ./module {
+        pkg = self.perl-all;
+        addLocales = glibcLocales;
+      })
+      (callPackage ./module {
+        pkg = self.nix;
+        modConflict = ["nix/nix"];
+        addCFlags = false;
+      })
+      (callPackage ./module {
+        pkg = self.jupyter-env;
+        pkgName = "jupyterhub";
+        pkgVersion = self.jupyter.name;
+        addCFlags = false;
+      })
+    ];
+  };
 
 }

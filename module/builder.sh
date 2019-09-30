@@ -71,6 +71,9 @@ addPaths () {
 	if [[ $addLDLibraryPath && -n $libs ]] ; then
 		echo "prepend-path LD_LIBRARY_PATH $1/lib" >> $modfile
 	fi
+	if [[ $addOpenGLDrivers ]] ; then
+		echo "append-path LD_LIBRARY_PATH /run/opengl-driver/lib" >> $modfile
+	fi
 	if [[ $addCFlags && ( -d $1/include || -n $libs ) ]] ; then
 		if [[ -z $gccPrereq ]] ; then
 			#echo "prereq ${modPrefix}gcc" >> $modfile

@@ -16,6 +16,7 @@
 , addLDLibraryPath ? false
 , addCFlags ? true
 , addLocales ? null
+, addOpenGLDrivers ? false
 }:
 
 let monopkg = if builtins.length pkg.outputs > 1
@@ -32,7 +33,7 @@ stdenv.mkDerivation {
 
   buildInputs = [monopkg];
 
-  inherit pkgName pkgVersion modPrefix modName modLoad modPrereq modConflict modEnv addLDLibraryPath addCFlags addLocales;
+  inherit pkgName pkgVersion modPrefix modName modLoad modPrereq modConflict modEnv addLDLibraryPath addCFlags addLocales addOpenGLDrivers;
 
   # sort of hacky, duplicating cc-wrapper:
   nixInfix = stdenv.lib.replaceStrings ["-"] ["_"] stdenv.targetPlatform.config;
