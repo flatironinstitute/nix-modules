@@ -466,6 +466,7 @@ let gccOpts = {
       openmpi
       openssl
       paraview
+      pdftk
       petsc
       python2-all
       python3-all
