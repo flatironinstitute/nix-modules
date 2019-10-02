@@ -479,6 +479,7 @@ let gccOpts = {
       smartmontools
       subversion
       texlive-all
+      tmux
       valgrind
       vim
       vscode
