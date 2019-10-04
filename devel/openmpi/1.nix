@@ -8,6 +8,7 @@
 , libpsm2
 , slurm
 , rdma-core
+, zlib
 }:
 
 let majorVersion = "1.10"; in
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ perl flex ];
-  buildInputs = stdenv.lib.optional java jdk ++ [ numactl rdma-core ];
+  buildInputs = stdenv.lib.optional java jdk ++ [ numactl rdma-core zlib ];
   propagatedBuildInputs = [ infinipath-psm libpsm2 stdenv.cc ];
 
   configureFlags = [
