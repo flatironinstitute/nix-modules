@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "01org";
     repo = "opa-psm2";
-    rev = "01d12825369bfc8d9d20729b2df828921e77c516";
-    sha256 = "0g3k4mi3c5v5gf731r4gb1w9avfk5wz42i4wrwycg28ac31hg7m7";
+    rev = "816c0dbdf911dba097dcbb09f023c5113713c33e";
+    sha256 = "0vkw5g1p3pfr58a2g7a4mk247jg07jawx9iwkikwyqgnrsrkcqg1";
   };
 
   buildInputs = [ numactl ];
