@@ -26,7 +26,7 @@ let gccOpts = {
   gcc8 = wrapCC (gcc8.cc.override gccOpts);
   gfortran8 = self.gcc8;
 
-  gcc9 = wrapCC (gcc8.cc.override gccOpts);
+  gcc9 = wrapCC (gcc9.cc.override gccOpts);
   gfortran9 = self.gcc9;
 
   gcc = self.gcc8;
@@ -407,6 +407,7 @@ let gccOpts = {
       clang_6
       clang_7
       clang_8
+      clang_9
       cmake
       #cudatoolkit_7_5
       #cudatoolkit_8
