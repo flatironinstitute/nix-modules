@@ -29,8 +29,7 @@ let gccOpts = {
   gcc9 = wrapCC (gcc8.cc.override gccOpts);
   gfortran9 = self.gcc9;
 
-  # Make gcc7 default world compiler
-  gcc = self.gcc7;
+  gcc = self.gcc8;
 
   nix = nix.overrideAttrs (old: {
     patches = [./nix.patch];
@@ -250,7 +249,7 @@ let gccOpts = {
   ] else [
     biopython #-- build failure on python3
     fwrap
-    MySQL_python
+    #MySQL_python
     #NucleoATAC
     pygtk
     statistics
@@ -294,7 +293,7 @@ let gccOpts = {
       #BiocInstaller # R version incompat?
       bit64
       blob
-      DESeq2
+      #DESeq2
       devtools
       getopt
       ggplot2
@@ -462,7 +461,7 @@ let gccOpts = {
       nodejs-10_x
       nodejs-12_x
       nfft
-      octave
+      (octave.override { qscintilla = null; })
       openmpi
       openssl
       paraview
