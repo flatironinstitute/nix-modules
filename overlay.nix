@@ -433,6 +433,7 @@ let gccOpts = {
       duplicity
       eigen
       elinks
+      emacs
       feh
       ffmpeg
       fftw
