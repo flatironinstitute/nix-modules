@@ -206,7 +206,6 @@ let gccOpts = {
     pystan
     pytest
     pytools
-    pytorch
     pyyaml
     pyzmq
     s3fs
@@ -244,6 +243,7 @@ let gccOpts = {
     llfuse #-- unicode problems on python2
     pims #--dask
     pyfftw #-- pending 0.11 upgrade, dask
+    pytorch
     scikitimage #-- dask
     ws4py
   ] else [
@@ -454,6 +454,7 @@ let gccOpts = {
       jdk
       julia
       libgit2
+      (libreoffice-unwrapped.overrideAttrs (old: { doCheck = false; }))
       libseccomp
       libssh2
       libxml2
