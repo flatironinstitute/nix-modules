@@ -457,8 +457,8 @@ let gccOpts = {
       jdk
       julia
       libgit2
-      (libreoffice-still-unwrapped.overrideAttrs (old: { doCheck = false; }))
-      (libreoffice-fresh-unwrapped.overrideAttrs (old: { doCheck = false; }))
+      (libreoffice-still.override { libreoffice = libreoffice-still-unwrapped.overrideAttrs (old: { doCheck = false; }); })
+      (libreoffice-fresh.override { libreoffice = libreoffice-fresh-unwrapped.overrideAttrs (old: { doCheck = false; }); })
       libseccomp
       libssh2
       libxml2
