@@ -403,6 +403,8 @@ let gccOpts = {
       arpack
       boost
       bzip2
+      cargo
+      chromium
       clang_5
       clang_6
       clang_7
@@ -437,6 +439,7 @@ let gccOpts = {
       feh
       ffmpeg
       fftw
+      firefox
       ghostscript
       gitFull
       git-lfs
@@ -454,7 +457,8 @@ let gccOpts = {
       jdk
       julia
       libgit2
-      (libreoffice-unwrapped.overrideAttrs (old: { doCheck = false; }))
+      (libreoffice-still-unwrapped.overrideAttrs (old: { doCheck = false; }))
+      (libreoffice-fresh-unwrapped.overrideAttrs (old: { doCheck = false; }))
       libseccomp
       libssh2
       libxml2
@@ -475,6 +479,7 @@ let gccOpts = {
       (qt5.full // { name = builtins.replaceStrings ["-full"] [""] qt5.full.name; })
       R-all
       rclone
+      rustc
       sage
       scribus
       singularity
