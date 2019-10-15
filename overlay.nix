@@ -440,6 +440,7 @@ let gccOpts = {
       ffmpeg
       fftw
       firefox
+      fio
       ghostscript
       gitFull
       git-lfs
@@ -454,8 +455,12 @@ let gccOpts = {
       hdfview
       hwloc
       imagemagick
+      ior
+      jabref
       jdk
       julia
+      keepassx2
+      keepassxc
       libgit2
       (libreoffice-still.override { libreoffice = libreoffice-still-unwrapped.overrideAttrs (old: { doCheck = false; }); })
       (libreoffice-fresh.override { libreoffice = libreoffice-fresh-unwrapped.overrideAttrs (old: { doCheck = false; }); })
@@ -468,6 +473,7 @@ let gccOpts = {
       nodejs-10_x
       nodejs-12_x
       nfft
+      ocaml
       (octave.override { qscintilla = null; })
       openmpi
       openssl
@@ -487,6 +493,7 @@ let gccOpts = {
       subversion
       texlive-all
       tmux
+      unison
       valgrind
       vim
       vscode
