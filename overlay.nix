@@ -436,6 +436,7 @@ let gccOpts = {
       eigen
       elinks
       emacs
+      evince
       feh
       ffmpeg
       fftw
@@ -456,7 +457,6 @@ let gccOpts = {
       hwloc
       imagemagick
       ior
-      jabref
       jdk
       julia
       keepassx2
