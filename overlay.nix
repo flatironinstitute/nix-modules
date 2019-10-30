@@ -358,6 +358,10 @@ let gccOpts = {
     doInstallCheck = false;
   });
 
+  newt = newt.overrideAttrs (old: {
+    configureFlags = "--without-tcl";
+  });
+
   sage = sage.overrideAttrs (old: {
     # disable tests:
     buildInputs = [makeWrapper];
@@ -479,6 +483,7 @@ let gccOpts = {
       openssl
       paraview
       pdftk
+      linuxPackages.perf
       petsc
       python2-all
       python3-all
@@ -488,7 +493,6 @@ let gccOpts = {
       rustc
       sage
       scribus
-      singularity
       smartmontools
       subversion
       texlive-all
