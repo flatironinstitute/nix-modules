@@ -48,6 +48,10 @@ with pkgs;
     doCheck = false;
   };
 
+  dulwich = dulwich.overridePythonAttrs {
+    doCheck = false; # uses wrong (/bin) git
+  };
+
   fast-histogram = buildPythonPackage rec {
     pname = "fast-histogram";
     version = "0.4";

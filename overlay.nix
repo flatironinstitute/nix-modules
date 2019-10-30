@@ -413,7 +413,7 @@ let gccOpts = {
       clang_6
       clang_7
       clang_8
-      clang_9
+      #clang_9
       cmake
       #cudatoolkit_7_5
       #cudatoolkit_8
