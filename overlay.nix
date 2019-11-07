@@ -452,6 +452,7 @@ let gccOpts = {
       gdb
       gmp
       go
+      gperftools
       gsl
       gsl_1
       haskell-all
