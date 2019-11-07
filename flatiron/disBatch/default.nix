@@ -3,7 +3,7 @@
 , python
 }:
 
-let version = "1.3"; in
+let version = "1.4"; in
 
 stdenv.mkDerivation rec {
   name = "disBatch-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     repo = "disBatch";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "1zvwq7b1vw96ra9mdgll6f6q32z0c8ck05ggy2r9kihyn30i1z3d";
+    sha256 = "05wd3nalxq6s5navcblh0vlyqlq853v70dgc8js779mncm7pwkkf";
   };
 
   buildInputs = [python];
