@@ -14,11 +14,11 @@
 let majorVersion = "4.0"; in
 
 stdenv.mkDerivation rec {
-  name = "openmpi-${majorVersion}.1";
+  name = "openmpi-${majorVersion}.2";
   passthru.tag = "openmpi4";
   src = fetchurl {
     url = "http://www.open-mpi.org/software/ompi/v${majorVersion}/downloads/${name}.tar.bz2";
-    sha256 = "02cpzcp113gj5hb0j2xc0cqma2fn04i2i0bzf80r71120p9bdryc";
+    sha256 = "0ms0zvyxyy3pnx9qwib6zaljyp2b3ixny64xvq3czv3jpr8zf2wh";
   };
 
   nativeBuildInputs = [ perl flex ];

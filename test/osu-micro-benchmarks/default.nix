@@ -4,10 +4,10 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "osu-micro-benchmarks-5.4";
+  name = "osu-micro-benchmarks-5.6.2";
   src = fetchurl {
     url = "http://mvapich.cse.ohio-state.edu/download/mvapich/${name}.tar.gz";
-    sha256 = "0cwg58gzp3jnwmf5bzbn1yvjdy70bkl8bbarkfjhawm02cp7djp1";
+    sha256 = "15bvzjdf7zvhs9jpq09zgmjr8w4d8j96swf04dl7i62kv2mr1jrf";
   };
 
   nativeBuildInputs = [ mpi ];

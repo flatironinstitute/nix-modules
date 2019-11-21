@@ -58,9 +58,7 @@ let gccOpts = {
   # intel infiniband/psm stuff
   infinipath-psm = callPackage base/infinipath-psm { };
   libpsm2 = callPackage base/libpsm2 { };
-  rdma-core = callPackage base/rdma-core { };
 
-  hwloc = callPackage base/hwloc { };
   slurm = callPackage base/slurm { };
 
   openmpi1 = callPackage devel/openmpi/1.nix { };
@@ -84,8 +82,6 @@ let gccOpts = {
     mpi = openmpi;
   };
 
-  #openblas = callPackage base/openblas { };
-  #openblasCompat = self.openblas;
   blas = self.openblas;
 
   linuxPackages = linuxPackages.extend (self: super: {
@@ -473,6 +469,7 @@ let gccOpts = {
       libssh2
       libxml2
       mercurial
+      mkl
       mupdf
       netcdf
       nodejs-10_x
@@ -504,6 +501,7 @@ let gccOpts = {
       vscode
       vtk
       wecall
+      x264
       xscreensaver
       xz
       zlib

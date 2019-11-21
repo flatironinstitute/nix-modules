@@ -7,15 +7,15 @@
 }:
 
 let
-  version = "1.15.3";
+  version = "1.16.4";
 in
 
 stdenv.mkDerivation rec {
   name = "sssd-nss-client-${version}";
 
   src = fetchurl {
-    urls = [ "https://releases.pagure.org/SSSD/sssd/sssd-${version}.tar.gz" "https://fedorahosted.org/released/sssd/sssd-${version}.tar.gz" ];
-    sha256 = "0d36dmzqdjfpspm9fw4zx0kh0qcx60p9vchxvcajn4qf3k3qsl3f";
+    url = "https://fedorahosted.org/released/sssd/sssd-${version}.tar.gz";
+    sha256 = "0ngr7cgimyjc6flqkm7psxagp1m4jlzpqkn28pliifbmdg6i5ckb";
   };
 
   # libnss_sss.so does not in fact use any of these -- they're just needed for configure
