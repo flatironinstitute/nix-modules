@@ -480,6 +480,7 @@ let gccOpts = {
       openmpi
       openssl
       paraview
+      pass
       pdftk
       linuxPackages.perf
       petsc
