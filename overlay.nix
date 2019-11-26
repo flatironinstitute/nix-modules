@@ -494,6 +494,7 @@ let gccOpts = {
       scribus
       smartmontools
       subversion
+      swig
       texlive-all
       tmux
       unison
