@@ -112,8 +112,8 @@ let gccOpts = {
   });
 
   # Switch to qt59 due to 5.11 issues
-  qt5 = qt59;
-  libsForQt5 = libsForQt59;
+  #qt5 = qt59;
+  #libsForQt5 = libsForQt59;
 
   poppler_min = poppler_min.overrideAttrs (old: {
     cmakeFlags = old.cmakeFlags ++ ["-DENABLE_QT4=off"];
@@ -282,25 +282,31 @@ let gccOpts = {
     paths = [perl] ++ self.perlPackageList perlPackages;
   };
 
+  rPackageList = with rPackages; [
+    AnnotationDbi
+    BH
+    #BiocInstaller # R version incompat?
+    bit64
+    blob
+    #DESeq2
+    devtools
+    getopt
+    ggplot2
+    IRkernel
+    JuniperKernel
+    lazyeval
+    memoise
+    pkgconfig
+    plogr
+    RcppGSL
+  ];
+
   R-all = rWrapper.override {
-    packages = with rPackages; [
-      AnnotationDbi
-      BH
-      #BiocInstaller # R version incompat?
-      bit64
-      blob
-      #DESeq2
-      devtools
-      getopt
-      ggplot2
-      IRkernel
-      JuniperKernel
-      lazyeval
-      memoise
-      pkgconfig
-      plogr
-      RcppGSL
-    ];
+    packages = self.rPackageList;
+  };
+
+  rstudio-all = rstudioWrapper.override {
+    packages = self.rPackageList;
   };
 
   go = go.overrideAttrs (old: {
@@ -488,6 +494,7 @@ let gccOpts = {
       python3-all
       (qt5.full // { name = builtins.replaceStrings ["-full"] [""] qt5.full.name; })
       R-all
+      rstudio-all
       rclone
       rustc
       sage
