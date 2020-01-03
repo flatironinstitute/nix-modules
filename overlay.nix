@@ -441,7 +441,7 @@ let gccOpts = {
       duplicity
       eigen
       elinks
-      emacs
+      (emacs.override { withGTK2 = false; withGTK3 = false; })
       evince
       feh
       ffmpeg
