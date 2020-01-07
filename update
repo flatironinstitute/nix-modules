@@ -5,7 +5,7 @@ nix-env -p $NIX_STATE_DIR/profiles/system/jupyter -i -f `dirname $0` -A jupyter-
 nix-env -p $NIX_STATE_DIR/profiles/system/nix -i -f `dirname $0` -A nix
 
 moddir=/cm/shared/sw/modules/modules-nix
-rm $moddir/*
+rm -f $moddir/*
 for p in $NIX_STATE_DIR/profiles/system/modules-*-link ; do
 	t=$(stat -c %Y $p)
 	b=${p#*/modules-}
