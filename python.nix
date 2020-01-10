@@ -213,6 +213,10 @@ with pkgs;
     };
   };
 
+  pyopenssl = pyopenssl.overridePythonAttrs {
+    doCheck = false; # cert verf failures
+  };
+
   pyslurm = buildPythonPackage rec {
     pname = "pyslurm";
     version = "18-08-8";
@@ -273,18 +277,6 @@ with pkgs;
     propagatedBuildInputs = [ numpy ];
     checkInputs = [ nose ];
     doCheck = false; # known failures? need user?
-  };
-
-  yt = buildPythonPackage rec {
-    pname = "yt";
-    version = "3.4.1";
-    name = "${pname}-${version}";
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "15aq0rjbzramayikjfbfvbzp9dszlbi5zh40nsiyg0qnw9zw9kx4";
-    };
-    propagatedBuildInputs = [ cython matplotlib setuptools sympy numpy ipython ];
-    doCheck = false; # unknown failure
   };
 
 }

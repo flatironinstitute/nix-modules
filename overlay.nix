@@ -226,7 +226,6 @@ let gccOpts = {
     virtualenv
     wheel
     #yep
-    yt
   ] ++ (if isPy3k then [
     astropy
     bash_kernel
@@ -250,6 +249,7 @@ let gccOpts = {
     pygtk
     statistics
     weave
+    yt
   ]);
 
   python2-all = (self.python2.withPackages self.pythonPackageList).override {
@@ -350,6 +350,12 @@ let gccOpts = {
 
   module-wrap = callPackage module/wrap { };
 
+  emacs = emacs.override {
+    withGTK2 = false;
+    withGTK3 = false;
+    imagemagick = imagemagick;
+  };
+
   git = git.overrideAttrs (old: {
     # gettext UTF-8 failures?
     doInstallCheck = false;
@@ -441,7 +447,7 @@ let gccOpts = {
       duplicity
       eigen
       elinks
-      (emacs.override { withGTK2 = false; withGTK3 = false; imagemagick = imagemagick; })
+      emacs
       evince
       feh
       ffmpeg
