@@ -443,6 +443,7 @@ let gccOpts = {
       curl
       dep
       disBatch
+      distcc
       dstat
       duplicity
       eigen
