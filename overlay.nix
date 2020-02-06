@@ -475,6 +475,7 @@ let gccOpts = {
       julia
       keepassx2
       keepassxc
+      lftp
       libgit2
       (libreoffice-still.override { libreoffice = libreoffice-still-unwrapped.overrideAttrs (old: { doCheck = false; }); })
       (libreoffice-fresh.override { libreoffice = libreoffice-fresh-unwrapped.overrideAttrs (old: { doCheck = false; }); })
