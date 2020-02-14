@@ -469,6 +469,7 @@ let gccOpts = {
       hdf5_1_8
       hdfview
       hwloc
+      i3
       imagemagick
       ior
       jdk
@@ -505,6 +506,7 @@ let gccOpts = {
       rstudio-all
       rclone
       rustc
+      rxvt_unicode
       sage
       scribus
       smartmontools
