@@ -4,12 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libpsm2-11.2.86";
+  name = "libpsm2-11.2.91";
   src = fetchFromGitHub {
     owner = "intel";
     repo = "opa-psm2";
-    rev = "4f0ad8cf4d6b44fcce5f745e946a056659ba54c0";
-    sha256 = "1hiqzcmc97lzhaqjva82vf8irgg038cciypsv2brw90ak09n6vwf";
+    rev = "5b61098334d8485b06cfe0c857f67210ed3c3b69";
+    sha256 = "1cx4n7rr1n79nfmf9rzv8rbxf80z26b25lx68ckbchm17splax1g";
   };
 
   buildInputs = [ numactl ];

@@ -379,6 +379,13 @@ let gccOpts = {
     texlive = self.texlive-all;
   };
 
+  i3-env = buildEnv {
+    name = "${i3.name}-env";
+    paths = [i3
+      i3lock
+      i3status];
+  };
+
   jupyter = self.python3.withPackages (p: with p; [jupyterhub jupyterlab jp_proxy_widget]);
 
   jupyter-env = buildEnv {
@@ -469,7 +476,7 @@ let gccOpts = {
       hdf5_1_8
       hdfview
       hwloc
-      i3
+      i3-env
       imagemagick
       ior
       jdk

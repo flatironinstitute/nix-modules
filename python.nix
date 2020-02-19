@@ -32,9 +32,9 @@ with pkgs;
     };
   };
 
-  cheroot = cheroot.overridePythonAttrs {
-    doCheck = false; # tls cert errors
-  };
+  #cheroot = cheroot.overridePythonAttrs {
+  #  doCheck = false; # tls cert errors
+  #};
 
   cherrypy = cherrypy.overridePythonAttrs {
     doCheck = false; # needs network :8080?
