@@ -15,7 +15,8 @@
 , modEnv ? builtins.replaceStrings ["-"] ["_"] (stdenv.lib.toUpper pkgName)
 , addLDLibraryPath ? false
 , addCFlags ? true
-, addLocales ? null
+, glibcLocales
+, addLocales ? glibcLocales
 , addOpenGLDrivers ? false
 }:
 

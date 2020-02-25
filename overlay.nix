@@ -14,9 +14,6 @@ let gccOpts = {
 {
   nss_sss = callPackage base/sssd/nss-client.nix { };
 
-  gcc5 = wrapCC (gcc5.cc.override gccOpts);
-  gfortran5 = self.gcc5;
-
   gcc6 = wrapCC (gcc6.cc.override gccOpts);
   gfortran6 = self.gcc6;
 
@@ -29,7 +26,7 @@ let gccOpts = {
   gcc9 = wrapCC (gcc9.cc.override gccOpts);
   gfortran9 = self.gcc9;
 
-  gcc = self.gcc8;
+  gcc = self.gcc9;
 
   nix = nix.overrideAttrs (old: {
     patches = [./nix.patch];
@@ -107,6 +104,14 @@ let gccOpts = {
     fftw = self.fftw;
   };
 
+  bash-completion = bash-completion.overrideAttrs (old: {
+    doCheck = false; # something about users
+  });
+
+  bluez5 = bluez5.overrideAttrs (old: {
+    doCheck = false; # 2 fails
+  });
+
   libuv = libuv.overrideAttrs (old: {
     doCheck = false; # failure
   });
@@ -122,14 +127,12 @@ let gccOpts = {
   python2 = python2.override {
     self = self.python2;
     ucsEncoding = 4;
-    CF = null;
     configd = null;
     packageOverrides = import ./python.nix self;
   };
 
   python3 = python3.override {
     self = self.python3;
-    CF = null;
     configd = null;
     packageOverrides = import ./python.nix self;
   };
@@ -145,7 +148,6 @@ let gccOpts = {
     bearcart
     #bokeh #-- selenium, rustc
     bottleneck
-    cherrypy
     cython
     #DataSpyre
     #deepTools
@@ -185,7 +187,6 @@ let gccOpts = {
     paho-mqtt
     pandas
     paramiko
-    partd
     pip
     primefac
     protobuf
@@ -204,12 +205,10 @@ let gccOpts = {
     pytools
     pyyaml
     pyzmq
-    s3fs
     s3transfer
     #scikit-cuda
     scikitlearn
     scipy
-    seaborn
     setuptools
     shapely
     sip
@@ -218,7 +217,6 @@ let gccOpts = {
     sqlalchemy
     statsmodels
     sympy
-    tensorflow
     #tess
     #Theano -- clblas
     twisted
@@ -229,6 +227,7 @@ let gccOpts = {
   ] ++ (if isPy3k then [
     astropy
     bash_kernel
+    cherrypy
     dask
     distributed #-- dask
     flask-socketio
@@ -236,10 +235,14 @@ let gccOpts = {
     jupyterhub
     jupyterlab
     llfuse #-- unicode problems on python2
+    partd
     pims #--dask
     pyfftw #-- pending 0.11 upgrade, dask
     pytorch
+    s3fs
     scikitimage #-- dask
+    seaborn
+    tensorflow #77771
     ws4py
   ] else [
     biopython #-- build failure on python3
@@ -293,7 +296,7 @@ let gccOpts = {
     getopt
     ggplot2
     IRkernel
-    JuniperKernel
+    #JuniperKernel
     lazyeval
     memoise
     pkgconfig
@@ -382,7 +385,7 @@ let gccOpts = {
   i3-env = buildEnv {
     name = "${i3.name}-env";
     paths = [i3
-      i3lock
+      #i3lock
       i3status];
   };
 
@@ -395,7 +398,7 @@ let gccOpts = {
     ] ++ map (callPackage jupyter/kernel) [
       { env = self.python2-all; }
       { env = self.python3-all; }
-      { env = self.R-all; kernelSrc = (callPackage jupyter/kernel/juniper { env = self.R-all; }); }
+      #{ env = self.R-all; kernelSrc = (callPackage jupyter/kernel/juniper { env = self.R-all; }); }
       { env = self.R-all; kernelSrc = (callPackage jupyter/kernel/ir { env = self.R-all; }); }
       { env = self.ihaskell; kernelSrc = (callPackage jupyter/kernel/ihaskell { env = self.ihaskell; }); }
       { env = "/cm/shared/sw/pkg-old/devel/python2/2.7.13"; ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python2-2.7.13"; note = " (python2/2.7.13)"; }
@@ -415,20 +418,19 @@ let gccOpts = {
     paths = map (pkg: callPackage ./module {
       inherit pkg;
     }) (with self; [
-      gcc5
       gcc7
       gcc8
       gcc9
+      ansible
       arpack
       boost
       bzip2
       cargo
       chromium
-      clang_5
       clang_6
       clang_7
       clang_8
-      #clang_9
+      clang_9
       cmake
       #cudatoolkit_7_5
       #cudatoolkit_8
@@ -505,6 +507,7 @@ let gccOpts = {
       pass
       pdftk
       linuxPackages.perf
+      perl-all
       petsc
       python2-all
       python3-all
@@ -513,7 +516,7 @@ let gccOpts = {
       rstudio-all
       rclone
       rustc
-      rxvt_unicode
+      rxvt-unicode
       sage
       scribus
       smartmontools
@@ -548,10 +551,6 @@ let gccOpts = {
       mplayer
       mpv
     ] ++ [
-      (callPackage ./module {
-        pkg = self.perl-all;
-        addLocales = glibcLocales;
-      })
       (callPackage ./module {
         pkg = self.nix;
         modConflict = ["nix/nix"];

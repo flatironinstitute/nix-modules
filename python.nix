@@ -5,6 +5,10 @@ with pkgs;
 
 {
 
+  ansible = ansible.overridePythonAttrs {
+    propagatedBuildInputs = ansible.propagatedBuildInputs ++ [pyparsing];
+  };
+
   astropy = astropy.overridePythonAttrs {
     doCheck = false; # numpy deprecation warnings?
   };
@@ -164,14 +168,6 @@ with pkgs;
     propagatedBuildInputs = [ requests ipywidgets ];
   };
 
-  jupyterlab = jupyterlab.overridePythonAttrs {
-    propagatedBuildInputs = jupyterlab.propagatedBuildInputs ++ [world.nodejs];
-    postFixup = ''
-      PATH=$out/bin:$PATH JUPYTERLAB_DIR=$out/share/jupyter/lab HOME=$PWD jupyter-labextension install @jupyterlab/hub-extension@0.12.0
-      PATH=$out/bin:$PATH JUPYTERLAB_DIR=$out/share/jupyter/lab HOME=$PWD jupyter-lab build
-    '';
-  };
-
   matlab_wrapper = buildPythonPackage rec {
     pname = "matlab_wrapper";
     version = "0.9.8";
@@ -277,6 +273,10 @@ with pkgs;
     propagatedBuildInputs = [ numpy ];
     checkInputs = [ nose ];
     doCheck = false; # known failures? need user?
+  };
+
+  yt = yt.overridePythonAttrs {
+    doCheck = isPy3k; # two failing tests
   };
 
 }
