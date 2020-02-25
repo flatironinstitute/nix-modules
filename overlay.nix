@@ -71,6 +71,13 @@ let gccOpts = {
     inherit mpi;
   };
 
+  gromacsWithMpi = mpi: gromacsDouble.override {
+    mpiEnabled = if mpi == null then false else true;
+    openmpi = mpi;
+  } // {
+    inherit mpi;
+  };
+
   withMpis = pkg: map (self.withMpi pkg) self.openmpis;
 
   mvapich2 = callPackage devel/mvapich { };
@@ -544,6 +551,7 @@ let gccOpts = {
       osu-micro-benchmarks
       scalapack
     ] ++ map (withMpi hdf5_1_8) [openmpi1 openmpi2 openmpi3]
+      ++ map gromacsWithMpi ([null] ++ self.openmpis)
     ) ++ map (pkg: callPackage ./module {
       inherit pkg;
       addOpenGLDrivers = true;
