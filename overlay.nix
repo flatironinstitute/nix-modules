@@ -488,6 +488,7 @@ let gccOpts = {
       i3-env
       imagemagick
       ior
+      jabref
       jdk
       julia
       keepassx2
