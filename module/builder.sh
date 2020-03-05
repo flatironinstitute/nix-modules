@@ -64,6 +64,9 @@ addPaths () {
 	if [[ -d $1/share/pkgconfig ]] ; then
 		echo "prepend-path PKG_CONFIG_PATH $1/share/pkgconfig" >> $modfile
 	fi
+	if [[ -d $1/lib/cmake ]] ; then
+		echo "prepend-path CMAKE_SYSTEM_PREFIX_PATH $1/lib/cmake" >> $modfile
+	fi
 	if [[ -d $1/lib/perl5/site_perl ]] ; then
 		echo "prepend-path PERL5LIB $1/lib/perl5/site_perl" >> $modfile
 	fi

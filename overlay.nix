@@ -500,6 +500,10 @@ let gccOpts = {
       libseccomp
       libssh2
       libxml2
+      llvm_6
+      llvm_7
+      llvm_8
+      llvm_9
       mercurial
       mkl
       mupdf
