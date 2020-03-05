@@ -526,7 +526,6 @@ let gccOpts = {
       (qt5.full // { name = builtins.replaceStrings ["-full"] [""] qt5.full.name; })
       R-all
       rstudio-all
-      rclone
       rustc
       rxvt-unicode
       sage
@@ -564,6 +563,10 @@ let gccOpts = {
       mplayer
       mpv
     ] ++ [
+      (callPackage ./module {
+        pkg = self.rclone;
+        modEnv = "NIX_RCLONE";
+      })
       (callPackage ./module {
         pkg = self.nix;
         modConflict = ["nix/nix"];
