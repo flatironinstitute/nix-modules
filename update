@@ -3,6 +3,7 @@
 nix-env -p $NIX_STATE_DIR/profiles/system/modules -i -f `dirname $0` -A modules
 nix-env -p $NIX_STATE_DIR/profiles/system/jupyter -i -f `dirname $0` -A jupyter-env
 nix-env -p $NIX_STATE_DIR/profiles/system/nix -i -f `dirname $0` -A nix
+nix-env -p $NIX_STATE_DIR/profiles/per-user/wentzell/base -i -f `dirname $0` -A zsh -A tmux
 
 moddir=/cm/shared/sw/modules/modules-nix
 rm -f $moddir/*
