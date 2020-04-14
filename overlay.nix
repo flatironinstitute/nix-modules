@@ -493,6 +493,7 @@ let gccOpts = {
       jabref
       jdk
       julia
+      julia_11
       keepassx2
       keepassxc
       lftp
