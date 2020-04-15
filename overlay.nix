@@ -295,20 +295,132 @@ let gccOpts = {
   rPackageList = with rPackages; [
     AnnotationDbi
     BH
+    BSgenome
+    BiasedUrn
     #BiocInstaller # R version incompat?
-    bit64
-    blob
-    #DESeq2
-    devtools
-    getopt
-    ggplot2
+    BiocManager
+    DESeq2
+    DT
+    #DiffBind # zlib dep
+    Formula
+    GOstats
+    GSEABase
+    GenomicAlignments
+    GenomicFeatures
+    GenomicRanges
+    IRanges
     IRkernel
     #JuniperKernel
-    lazyeval
-    memoise
-    pkgconfig
-    plogr
+    KEGGREST
+    RBGL
+    RCurl
+    R_methodsS3
+    R_oo
+    R_utils
+    RcppArmadillo
+    RcppEigen
     RcppGSL
+    Rsamtools
+    Rtsne
+    TFMPvalue
+    VGAM
+    VennDiagram
+    acepack
+    ade4
+    askpass
+    assertthat
+    backports
+    biomaRt
+    bit64
+    bitops
+    blob
+    caTools
+    callr
+    checkmate
+    cli
+    clipr
+    clisymbols
+    crosstalk
+    desc
+    devtools
+    dplyr
+    evaluate
+    formatR
+    fs
+    futile_logger
+    futile_options
+    gdata
+    genefilter
+    getopt
+    ggplot2
+    glue
+    gplots
+    grImport
+    gridExtra
+    gtools
+    hexbin
+    highr
+    hms
+    htmlTable
+    httpuv
+    idr
+    ini
+    jpeg
+    knitr
+    lambda_r
+    later
+    lattice
+    latticeExtra
+    lazyeval
+    limma
+    markdown
+    matrixStats
+    memoise
+    mime
+    miniUI
+    multtest
+    nabor
+    pheatmap
+    pkgbuild
+    pkgconfig
+    pkgload
+    plogr
+    plotly
+    png
+    polynom
+    poweRlaw
+    preprocessCore
+    preseqR
+    processx
+    progress
+    promises
+    ps
+    purrr
+    randomForest
+    rcmdcheck
+    readr
+    remotes
+    rlang
+    rprojroot
+    rstudioapi
+    rtracklayer
+    segmented
+    seqinr
+    sessioninfo
+    shiny
+    snow
+    sourcetools
+    sys
+    tibble
+    tidyr
+    tidyselect
+    viridis
+    whisker
+    xfun
+    xopen
+    xtable
+    yaml
+    zlibbioc
   ];
 
   R-all = rWrapper.override {
@@ -415,7 +527,7 @@ let gccOpts = {
       { env = "/cm/shared/sw/pkg/devel/python2/2.7.16";     ld_library_path = "/cm/shared/sw/pkg/devel/gcc/7.4.0/lib"; prefix = "module-python2-2.7.16"; note = " (python2/2.7.16)"; }
       { env = "/cm/shared/sw/pkg/devel/python3/3.7.3";      ld_library_path = "/cm/shared/sw/pkg/devel/gcc/7.4.0/lib"; prefix = "module-python3-3.7.3";  note = " (python3/3.7.3)"; }
       # TODO:
-      #nodejs 
+      #nodejs
       #julia
     ] ++ map (callPackage jupyter/kernel/spec.nix) [
       { kernelspec = self.sage.kernelspec; }
