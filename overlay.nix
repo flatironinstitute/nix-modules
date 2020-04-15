@@ -499,6 +499,7 @@ let gccOpts = {
       lftp
       libgit2
       libjpeg
+      libpng
       (libreoffice-still.override { libreoffice = libreoffice-still-unwrapped.overrideAttrs (old: { doCheck = false; }); })
       (libreoffice-fresh.override { libreoffice = libreoffice-fresh-unwrapped.overrideAttrs (old: { doCheck = false; }); })
       libseccomp
