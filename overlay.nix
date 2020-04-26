@@ -455,9 +455,15 @@ let gccOpts = {
     packages = (hp: with hp; []);
   };
 
-  julia-all = callPackage ./julia.nix { };
+  julia_13 = callPackage ./julia/1.3.nix {
+    gmp = gmp6;
+    openblas = openblasCompat;
+    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+  };
 
-  julia_11-all = callPackage ./julia.nix { julia = julia_11; };
+  julia-all = callPackage ./julia.nix { };
+  julia_11-all = callPackage ./julia.nix { julia = self.julia_11; };
+  julia_13-all = callPackage ./julia.nix { julia = self.julia_13; };
 
   texlive-all = texlive.combined.scheme-full // {
     name = builtins.replaceStrings ["-combined-full"] [""] texlive.combined.scheme-full.name;
@@ -522,13 +528,13 @@ let gccOpts = {
       { env = self.ihaskell; kernelSrc = (callPackage jupyter/kernel/ihaskell { env = self.ihaskell; }); }
       { env = self.julia-all; }
       { env = self.julia_11-all; }
+      { env = self.julia_13-all; }
       { env = "/cm/shared/sw/pkg-old/devel/python2/2.7.13"; ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python2-2.7.13"; note = " (python2/2.7.13)"; }
       { env = "/cm/shared/sw/pkg-old/devel/python3/3.6.2";  ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python3-3.6.2";  note = " (python3/3.6.2)"; }
       { env = "/cm/shared/sw/pkg/devel/python2/2.7.16";     ld_library_path = "/cm/shared/sw/pkg/devel/gcc/7.4.0/lib"; prefix = "module-python2-2.7.16"; note = " (python2/2.7.16)"; }
       { env = "/cm/shared/sw/pkg/devel/python3/3.7.3";      ld_library_path = "/cm/shared/sw/pkg/devel/gcc/7.4.0/lib"; prefix = "module-python3-3.7.3";  note = " (python3/3.7.3)"; }
       # TODO:
       #nodejs
-      #julia
     ] ++ map (callPackage jupyter/kernel/spec.nix) [
       { kernelspec = self.sage.kernelspec; }
     ];
@@ -552,6 +558,7 @@ let gccOpts = {
       clang_7
       clang_8
       clang_9
+      clang_10
       cmake
       #cudatoolkit_7_5
       #cudatoolkit_8
@@ -561,6 +568,7 @@ let gccOpts = {
       cudatoolkit_9_2
       cudatoolkit_10
       cudatoolkit_10_0
+      cudatoolkit_10_1
       #cudnn6_cudatoolkit_8
       #cudnn_cudatoolkit_7_5
       #cudnn_cudatoolkit_8
@@ -569,7 +577,7 @@ let gccOpts = {
       cudnn_cudatoolkit_9_1
       cudnn_cudatoolkit_9_2
       cudnn_cudatoolkit_10
-      cudnn_cudatoolkit_10_0
+      cudnn_cudatoolkit_10_1
       curl
       dep
       disBatch
@@ -606,6 +614,7 @@ let gccOpts = {
       jdk
       julia
       julia_11
+      julia_13
       keepassx2
       keepassxc
       lftp
@@ -621,12 +630,14 @@ let gccOpts = {
       llvm_7
       llvm_8
       llvm_9
+      llvm_10
       mercurial
       mkl
       mupdf
       netcdf
       nodejs-10_x
       nodejs-12_x
+      nodejs-13_x
       nfft
       ocaml
       (octave.override { qscintilla = null; })
