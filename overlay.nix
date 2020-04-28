@@ -461,7 +461,7 @@ let gccOpts = {
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
 
-  julia-all = callPackage ./julia.nix { };
+  julia_10-all = callPackage ./julia.nix { julia = self.julia_10; };
   julia_11-all = callPackage ./julia.nix { julia = self.julia_11; };
   julia_13-all = callPackage ./julia.nix { julia = self.julia_13; };
 
@@ -526,7 +526,7 @@ let gccOpts = {
       #{ env = self.R-all; kernelSrc = (callPackage jupyter/kernel/juniper { env = self.R-all; }); }
       { env = self.R-all; kernelSrc = (callPackage jupyter/kernel/ir { env = self.R-all; }); }
       { env = self.ihaskell; kernelSrc = (callPackage jupyter/kernel/ihaskell { env = self.ihaskell; }); }
-      { env = self.julia-all; }
+      { env = self.julia_10-all; }
       { env = self.julia_11-all; }
       { env = self.julia_13-all; }
       { env = "/cm/shared/sw/pkg-old/devel/python2/2.7.13"; ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python2-2.7.13"; note = " (python2/2.7.13)"; }
@@ -612,7 +612,7 @@ let gccOpts = {
       ior
       jabref
       jdk
-      julia
+      julia_10
       julia_11
       julia_13
       keepassx2
@@ -667,6 +667,7 @@ let gccOpts = {
       unison
       valgrind
       vim
+      (vim_configurable // { name = builtins.replaceStrings ["_configurable"] ["-custom"] vim_configurable.name; })
       vscode
       vtk
       wecall
