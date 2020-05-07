@@ -190,6 +190,7 @@ let gccOpts = {
     numexpr
     numpy
     olefile
+    openpyxl
     packaging
     paho-mqtt
     pandas
@@ -516,6 +517,15 @@ let gccOpts = {
 
   jupyter = self.python3.withPackages (p: with p; [jupyterhub jupyterlab jp_proxy_widget]);
 
+  ijulia-threads-wrapper = callPackage jupyter/kernel/julia {};
+
+  threadedIJulia = julia: {
+    env = julia;
+    prefix = julia.name + "-threads";
+    note = " threads (nix/${julia.name})";
+    kernelWrapper = "${self.ijulia-threads-wrapper}/bin/ijulia-threads";
+  };
+
   jupyter-env = buildEnv {
     name = "jupyter-env";
     paths = [
@@ -529,6 +539,9 @@ let gccOpts = {
       { env = self.julia_10-all; }
       { env = self.julia_11-all; }
       { env = self.julia_13-all; }
+      (self.threadedIJulia self.julia_10-all)
+      (self.threadedIJulia self.julia_11-all)
+      (self.threadedIJulia self.julia_13-all)
       { env = "/cm/shared/sw/pkg-old/devel/python2/2.7.13"; ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python2-2.7.13"; note = " (python2/2.7.13)"; }
       { env = "/cm/shared/sw/pkg-old/devel/python3/3.6.2";  ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python3-3.6.2";  note = " (python3/3.6.2)"; }
       { env = "/cm/shared/sw/pkg/devel/python2/2.7.16";     ld_library_path = "/cm/shared/sw/pkg/devel/gcc/7.4.0/lib"; prefix = "module-python2-2.7.16"; note = " (python2/2.7.16)"; }
