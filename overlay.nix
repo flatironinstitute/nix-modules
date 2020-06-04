@@ -26,6 +26,9 @@ let gccOpts = {
   gcc9 = wrapCC (gcc9.cc.override gccOpts);
   gfortran9 = self.gcc9;
 
+  gcc10 = wrapCC (gcc10.cc.override gccOpts);
+  gfortran10 = self.gcc10;
+
   gcc = self.gcc9;
 
   nix = nix.overrideAttrs (old: {
@@ -561,6 +564,7 @@ let gccOpts = {
       gcc7
       gcc8
       gcc9
+      gcc10
       ansible
       arpack
       boost
