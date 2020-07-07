@@ -568,6 +568,7 @@ let gccOpts = {
       ansible
       arpack
       boost
+      blas
       bzip2
       cargo
       chromium
@@ -658,6 +659,7 @@ let gccOpts = {
       nfft
       ocaml
       (octave.override { qscintilla = null; })
+      openblas
       openmpi
       openssl
       paraview
