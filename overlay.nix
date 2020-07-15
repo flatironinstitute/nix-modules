@@ -459,6 +459,12 @@ let gccOpts = {
     packages = (hp: with hp; []);
   };
 
+  julia_14 = callPackage ./julia/1.4.nix {
+    gmp = gmp6;
+    openblas = openblasCompat;
+    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
+  };
+
   julia_13 = callPackage ./julia/1.3.nix {
     gmp = gmp6;
     openblas = openblasCompat;
@@ -468,6 +474,7 @@ let gccOpts = {
   julia_10-all = callPackage ./julia.nix { julia = self.julia_10; };
   julia_11-all = callPackage ./julia.nix { julia = self.julia_11; };
   julia_13-all = callPackage ./julia.nix { julia = self.julia_13; };
+  julia_14-all = callPackage ./julia.nix { julia = self.julia_14; };
 
   texlive-all = texlive.combined.scheme-full // {
     name = builtins.replaceStrings ["-combined-full"] [""] texlive.combined.scheme-full.name;
@@ -542,9 +549,11 @@ let gccOpts = {
       { env = self.julia_10-all; }
       { env = self.julia_11-all; }
       { env = self.julia_13-all; }
+      { env = self.julia_14-all; }
       (self.threadedIJulia self.julia_10-all)
       (self.threadedIJulia self.julia_11-all)
       (self.threadedIJulia self.julia_13-all)
+      (self.threadedIJulia self.julia_14-all)
       { env = "/cm/shared/sw/pkg-old/devel/python2/2.7.13"; ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python2-2.7.13"; note = " (python2/2.7.13)"; }
       { env = "/cm/shared/sw/pkg-old/devel/python3/3.6.2";  ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python3-3.6.2";  note = " (python3/3.6.2)"; }
       { env = "/cm/shared/sw/pkg/devel/python2/2.7.16";     ld_library_path = "/cm/shared/sw/pkg/devel/gcc/7.4.0/lib"; prefix = "module-python2-2.7.16"; note = " (python2/2.7.16)"; }
@@ -633,6 +642,7 @@ let gccOpts = {
       julia_10
       julia_11
       julia_13
+      julia_14
       keepassx2
       keepassxc
       lftp
