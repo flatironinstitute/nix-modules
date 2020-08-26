@@ -621,6 +621,7 @@ let gccOpts = {
       firefox
       fio
       ghostscript
+      gimp
       gitFull
       git-lfs
       gdb
@@ -636,6 +637,7 @@ let gccOpts = {
       hwloc
       i3-env
       imagemagick
+      inkscape
       ior
       jabref
       jdk
@@ -683,6 +685,7 @@ let gccOpts = {
       python3-all
       (qt5.full // { name = builtins.replaceStrings ["-full"] [""] qt5.full.name; })
       R-all
+      readline
       rstudio-all
       rustc
       rxvt-unicode
