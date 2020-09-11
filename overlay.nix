@@ -585,8 +585,9 @@ let gccOpts = {
       gcc10
       ansible
       arpack
-      boost
+      binutils
       blas
+      boost
       bzip2
       cargo
       chromium
@@ -596,6 +597,7 @@ let gccOpts = {
       clang_9
       clang_10
       cmake
+      coreutils
       #cudatoolkit_7_5
       #cudatoolkit_8
       cudatoolkit_9
@@ -620,6 +622,7 @@ let gccOpts = {
       distcc
       dstat
       duplicity
+      e2fsprogs
       eigen
       elinks
       emacs
@@ -634,6 +637,7 @@ let gccOpts = {
       gitFull
       git-lfs
       gdb
+      glibc
       gmp
       go
       gperftools
