@@ -65,8 +65,8 @@ let gccOpts = {
   openmpi2 = callPackage devel/openmpi/2.nix { };
   openmpi3 = callPackage devel/openmpi/3.nix { };
   openmpi4 = callPackage devel/openmpi/4.nix { };
-  openmpi = self.openmpi3;
-  openmpis = with self; [openmpi1 openmpi2 openmpi3 openmpi4];
+  openmpi = self.openmpi4;
+  openmpis = with self; [openmpi2 openmpi3 openmpi4];
 
   withMpi = pkg: mpi: pkg.override {
     inherit mpi;
@@ -89,14 +89,12 @@ let gccOpts = {
     mpi = openmpi;
   };
 
-  blas = self.openblas;
-
   linuxPackages = linuxPackages.extend (self: super: {
     nvidia_x11 = callPackage (import nixpkgs/pkgs/os-specific/linux/nvidia-x11/generic.nix {
-      version = "418.56";
-      sha256_64bit = "1cg7927g5ml1rwgpydlrjzr55gza5dfkqkch29bbarpzd7dh0mf4";
-      settingsSha256 = "150c64wbijwyq032ircl1b78q0gwdvfq35gxaqw00d3ac2hjwpsg";
-      persistencedSha256 = "07wh6v8c2si0zwy9j60yzrdn1b1pm0vr9kfvql3jkyjqfn4np44z";
+      version = "440.64";
+      sha256_64bit = "0000927g5ml1rwgpydlrjzr55gza5dfkqkch29bbarpzd7dh0mf4";
+      settingsSha256 = "000064wbijwyq032ircl1b78q0gwdvfq35gxaqw00d3ac2hjwpsg";
+      persistencedSha256 = "00006v8c2si0zwy9j60yzrdn1b1pm0vr9kfvql3jkyjqfn4np44z";
     }) {
       libsOnly = true;
     };
@@ -126,13 +124,11 @@ let gccOpts = {
     doCheck = false; # failure
   });
 
-  # Switch to qt59 due to 5.11 issues
-  #qt5 = qt59;
-  #libsForQt5 = libsForQt59;
-
   poppler_min = poppler_min.overrideAttrs (old: {
     cmakeFlags = old.cmakeFlags ++ ["-DENABLE_QT4=off"];
   });
+
+  qt5 = qt514;
 
   python2 = python2.override {
     self = self.python2;
@@ -170,16 +166,13 @@ let gccOpts = {
     fuzzysearch
     gevent
     gflags
-    ggplot
     gmpy2
     h5py
     heapdict
-    hglib
     husl
     intervaltree
     ipdb
     ipython #[all]
-    joblib
     jupyter
     leveldb
     locket
@@ -189,15 +182,12 @@ let gccOpts = {
     #metaseq
     mpi4py
     #nbodykit#[extras]
-    netcdf4
     numexpr
     numpy
     olefile
     openpyxl
     packaging
     paho-mqtt
-    pandas
-    paramiko
     pip
     primefac
     protobuf
@@ -213,7 +203,6 @@ let gccOpts = {
     pyslurm
     pystan
     pytest
-    pytools
     pyyaml
     pyzmq
     s3transfer
@@ -226,7 +215,6 @@ let gccOpts = {
     six
     sphinx
     sqlalchemy
-    statsmodels
     sympy
     #tess
     #Theano -- clblas
@@ -238,25 +226,33 @@ let gccOpts = {
   ] ++ (if isPy3k then [
     astropy
     bash_kernel
+    biopython #-- build failure on python3
     cherrypy
     dask
     distributed #-- dask
     flask-socketio
+    ggplot
     glueviz #-- qt
+    hglib
+    joblib
     jupyterhub
     jupyterlab
     llfuse #-- unicode problems on python2
+    netcdf4
+    pandas
+    paramiko
     partd
     pims #--dask
     pyfftw #-- pending 0.11 upgrade, dask
+    pytools
     pytorch
     s3fs
     scikitimage #-- dask
     seaborn
-    tensorflow #77771
+    statsmodels
+    #tensorflow #77771 #python3.8
     ws4py
   ] else [
-    biopython #-- build failure on python3
     fwrap
     #MySQL_python
     #NucleoATAC
@@ -440,10 +436,6 @@ let gccOpts = {
     # user.Current not defined?
   });
 
-  go_1_12 = go_1_12.overrideAttrs (old: {
-    doCheck = false;
-  });
-
   haskell = haskell // {
     packageOverrides = import ./haskell.nix self;
   };
@@ -455,8 +447,16 @@ let gccOpts = {
 
   ihaskell = import IHaskell/release.nix {
     nixpkgs = self;
-    compiler = "ghc865";
+    compiler = "ghc884";
     packages = (hp: with hp; []);
+  };
+
+  julia = callPackage ./julia { };
+
+  julia_14 = callPackage ./julia/1.4.nix {
+    gmp = gmp6;
+    openblas = openblasCompat;
+    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
 
   julia_15 = callPackage ./julia/1.5.nix {
@@ -465,20 +465,7 @@ let gccOpts = {
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
 
-  julia_14 = callPackage ./julia/1.4.nix {
-    gmp = gmp6;
-    openblas = openblasCompat;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-  };
-
-  julia_13 = callPackage ./julia/1.3.nix {
-    gmp = gmp6;
-    openblas = openblasCompat;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
-  };
-
-  julia_10-all = callPackage ./julia.nix { julia = self.julia_10; };
-  julia_11-all = callPackage ./julia.nix { julia = self.julia_11; };
+  julia-all = callPackage ./julia.nix { julia = self.julia; };
   julia_13-all = callPackage ./julia.nix { julia = self.julia_13; };
   julia_14-all = callPackage ./julia.nix { julia = self.julia_14; };
   julia_15-all = callPackage ./julia.nix { julia = self.julia_15; };
@@ -553,14 +540,12 @@ let gccOpts = {
       #{ env = self.R-all; kernelSrc = (callPackage jupyter/kernel/juniper { env = self.R-all; }); }
       { env = self.R-all; kernelSrc = (callPackage jupyter/kernel/ir { env = self.R-all; }); }
       { env = self.ihaskell; kernelSrc = (callPackage jupyter/kernel/ihaskell { env = self.ihaskell; }); }
-      { env = self.julia_10-all; }
-      { env = self.julia_11-all; }
-      { env = self.julia_13-all; }
+      #{ env = self.julia-all; }
+      #{ env = self.julia_13-all; }
       { env = self.julia_14-all; }
       { env = self.julia_15-all; }
-      (self.threadedIJulia self.julia_10-all)
-      (self.threadedIJulia self.julia_11-all)
-      (self.threadedIJulia self.julia_13-all)
+      #(self.threadedIJulia self.julia-all)
+      #(self.threadedIJulia self.julia_13-all)
       (self.threadedIJulia self.julia_14-all)
       (self.threadedIJulia self.julia_15-all)
       { env = "/cm/shared/sw/pkg-old/devel/python2/2.7.13"; ld_library_path = "/cm/shared/sw/pkg/devel/gcc/5.4.0/lib"; prefix = "module-python2-2.7.13"; note = " (python2/2.7.13)"; }
@@ -591,31 +576,19 @@ let gccOpts = {
       bzip2
       cargo
       chromium
-      clang_6
       clang_7
       clang_8
       clang_9
       clang_10
+      clang_11
       cmake
       coreutils
-      #cudatoolkit_7_5
-      #cudatoolkit_8
       cudatoolkit_9
-      cudatoolkit_9_0
-      cudatoolkit_9_1
-      cudatoolkit_9_2
       cudatoolkit_10
-      cudatoolkit_10_0
-      cudatoolkit_10_1
-      #cudnn6_cudatoolkit_8
-      #cudnn_cudatoolkit_7_5
-      #cudnn_cudatoolkit_8
+      cudatoolkit_11
       cudnn_cudatoolkit_9
-      cudnn_cudatoolkit_9_0
-      cudnn_cudatoolkit_9_1
-      cudnn_cudatoolkit_9_2
       cudnn_cudatoolkit_10
-      cudnn_cudatoolkit_10_1
+      cudnn_cudatoolkit_11
       curl
       dep
       disBatch
@@ -654,9 +627,8 @@ let gccOpts = {
       ior
       jabref
       jdk
-      julia_10
-      julia_11
-      julia_13
+      #julia
+      #julia_13
       julia_14
       julia_15
       keepassx2
@@ -670,18 +642,17 @@ let gccOpts = {
       libseccomp
       libssh2
       libxml2
-      llvm_6
       llvm_7
       llvm_8
       llvm_9
       llvm_10
+      llvm_11
       mercurial
       mkl
       mupdf
       netcdf
-      nodejs-10_x
       nodejs-12_x
-      nodejs-13_x
+      nodejs-14_x
       nfft
       ocaml
       (octave.override { qscintilla = null; })
@@ -730,7 +701,7 @@ let gccOpts = {
       #hdf5_1_8 # - broken on openmpi4
       osu-micro-benchmarks
       scalapack
-    ] ++ map (withMpi hdf5_1_8) [openmpi1 openmpi2 openmpi3]
+    ] ++ map (withMpi hdf5_1_8) [openmpi2 openmpi3]
       ++ map gromacsWithMpi ([null] ++ self.openmpis)
     ) ++ map (pkg: callPackage ./module {
       inherit pkg;

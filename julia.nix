@@ -15,9 +15,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ julia ];
   phases = [ "installPhase" ];
   installPhase = ''
-    JULIA_DEPOT_PATH=$out/depot XDG_DATA_HOME=$out/share julia -e 'using Pkg; Pkg.add("IJulia")'
+    JULIA_PKG_SERVER=pkg.julialang.org JULIA_DEPOT_PATH=$out/depot XDG_DATA_HOME=$out/share julia -e 'using Pkg; Pkg.add("IJulia")'
     makeWrapper ${julia}/bin/julia $out/bin/julia \
-        --suffix JULIA_DEPOT_PATH "" ":$out/depot"
+        --suffix JULIA_DEPOT_PATH "" ":$out/depot" \
+        --set-default JULIA_PKG_SERVER pkg.julialang.org
     sed -i "s!${julia}/bin/julia!$out/bin/julia!" $out/share/jupyter/kernels/*/kernel.json
   '';
 }

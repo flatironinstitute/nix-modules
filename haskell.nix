@@ -2,6 +2,9 @@ world:
 self: pkgs:
 with pkgs;
 {
+  cryptonite = cryptonite.overrideAttrs (old: {
+    doCheck = false; # too many pending signals
+  });
   network = network.overrideAttrs (old: {
     doCheck = false; # no expected exception?
   });

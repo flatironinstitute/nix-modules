@@ -58,14 +58,14 @@ with pkgs;
 
   fast-histogram = buildPythonPackage rec {
     pname = "fast-histogram";
-    version = "0.4";
+    version = "0.9";
     name = "${pname}-${version}";
     src = fetchPypi {
       inherit pname version;
-      sha256 = "068l53nway4778aavjf4hdg4ha216z2lajihrrsdx7hcjdbymz4a";
+      sha256 = "17vskyj3mqijc5qnkkjqph83ipavqk5gzvrsgacd3f8b0r1cw9b3";
     };
     propagatedBuildInputs = [ numpy ];
-    checkInputs = [ hypothesis ];
+    checkInputs = [ hypothesis pytest ];
   };
 
   flit = flit.overridePythonAttrs {
@@ -74,13 +74,13 @@ with pkgs;
 
   fuzzysearch = buildPythonPackage rec {
     pname = "fuzzysearch";
-    version = "0.5.0";
+    version = "0.7.3";
     name = "${pname}-${version}";
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0qh62w1fsww41x7f5jnl86a38kqzxp3mj3klkrmfpp0sij0h3nsj";
+      sha256 = "0k6a6yyfqjgdiyj709qljbdwh6ipnk0imzmjh7hsal7frqab38fm";
     };
-    propagatedBuildInputs = [ six ];
+    propagatedBuildInputs = [ attrs six ];
   };
 
   fwrap = buildPythonPackage rec {
@@ -103,17 +103,17 @@ with pkgs;
       inherit pname version;
       sha256 = "17s6aspq4i9jrqkg15pn7wazxnq66mbpcvc54nniby47b7mckfs8";
     };
-    propagatedBuildInputs = [ six self.statsmodels self.brewer2mpl matplotlib scipy self.patsy self.pandas cycler numpy ];
+    propagatedBuildInputs = [ six self.statsmodels self.brewer2mpl matplotlib self.scipy self.patsy self.pandas cycler numpy ];
     doCheck = false; # broken package
   };
 
   glue-core = buildPythonPackage rec {
     pname = "glue-core";
-    version = "0.13.3";
+    version = "0.15.6";
     name = "${pname}-${version}";
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1sbpcqamsk8g1yn4f75hmkl9jj5azn0y5jrpzgpq2v1n32f3wkns";
+      sha256 = "0rn2ksrfhyfjwi474p78qlry3clh8d081dna1wf6f6797pqm7izr";
     };
     propagatedBuildInputs = [ numpy self.pandas self.astropy matplotlib qtpy setuptools ipython ipykernel qtconsole dill self.xlrd h5py self.mpl-scatter-density ];
     doCheck = false;
@@ -121,25 +121,29 @@ with pkgs;
 
   glue-vispy-viewers = buildPythonPackage rec {
     pname = "glue-vispy-viewers";
-    version = "0.10";
+    version = "0.12.2";
     name = "${pname}-${version}";
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0jia4yf100khqz41r4v8nf0z2a7icyrkgrjljynglziz1x3qnvp7";
+      sha256 = "1kz8db3n5ajd0j442sarcipjxnxc5777n3dmxkaw4lsfc9r09h1v";
     };
-    propagatedBuildInputs = [ numpy pyopengl self.glue-core qtpy scipy self.astropy ];
+    propagatedBuildInputs = [ numpy pyopengl self.glue-core qtpy self.scipy self.astropy ];
     doCheck = false;
   };
 
   glueviz = buildPythonPackage rec {
     pname = "glueviz";
-    version = "0.13.3";
+    version = "0.15.2";
     name = "${pname}-${version}";
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0avmdpbzfcwp5ilv7wdz9n1fiviqyf2m5sgzhyd40dsrirh1grl0";
+      sha256 = "0ffrjx99mmyjivawr6cyl3ysrcjrcd3r0giyf5n2d1h2gx6v273n";
     };
     propagatedBuildInputs = [ self.glue-core self.glue-vispy-viewers ];
+  };
+
+  google-auth-httplib2 = google-auth-httplib2.overridePythonAttrs {
+    doCheck = false; # EBUSY?
   };
 
   husl = buildPythonPackage rec {
@@ -153,9 +157,9 @@ with pkgs;
     doCheck = false;
   };
 
-  joblib = joblib.overridePythonAttrs {
-    doCheck = false; # long, often get stuck, timeouts
-  };
+  #joblib = joblib.overridePythonAttrs {
+  #  doCheck = false; # long, often get stuck, timeouts
+  #};
 
   jp_proxy_widget = buildPythonPackage rec {
     pname = "jp_proxy_widget";
@@ -170,11 +174,11 @@ with pkgs;
 
   matlab_wrapper = buildPythonPackage rec {
     pname = "matlab_wrapper";
-    version = "0.9.8";
+    version = "1";
     name = "${pname}-${version}";
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0zcx78y61cpk08akniz9wpdc09s5bchis736h31l5kvss8s8qg50";
+      sha256 = "15v8qmvcgm75gszvsifppdzp9v7warphsszb1bvnw71s74svlpqi";
     };
     propagatedBuildInputs = [ numpy ];
   };
@@ -185,11 +189,11 @@ with pkgs;
 
   mpl-scatter-density = buildPythonPackage rec {
     pname = "mpl-scatter-density";
-    version = "0.3";
+    version = "0.7";
     name = "${pname}-${version}";
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0lc6cl5q33n0g534sng9dagbdbr0rny3hqnc1mbm5im8mrr335cq";
+      sha256 = "083n4xkwjmxvij9i1xhfnxz8vk39ay0baam4nf0khvcihw47bkna";
     };
     propagatedBuildInputs = [ numpy matplotlib self.fast-histogram ];
     checkInputs = [ pytest ];
@@ -232,11 +236,11 @@ with pkgs;
 
   pystan = buildPythonPackage rec {
     pname = "pystan";
-    version = "2.17.1.0";
+    version = "2.19.1.1";
     name = "${pname}-${version}";
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0y4vaa1yybgxpnfjpdsgxpzrz4jg4q3bias1866480n0019ipyfl";
+      sha256 = "0f5hbv9dhsx3b5yn5kpq5pwi1kxzmg4mdbrndyz2p8hdpj6sv2zs";
     };
     propagatedBuildInputs = [ cython numpy matplotlib ];
     doCheck = false; # long, slow tests
@@ -258,17 +262,21 @@ with pkgs;
     doCheck = false; # whitespace doctest failures and others
   };
 
+  #scipy = scipy.overridePythonAttrs {
+  #  doCheck = false; # segfault!
+  #};
+
   subprocess32 = subprocess32.overridePythonAttrs {
     doCheck = false; # slow, needs user
   };
 
   weave = buildPythonPackage rec {
     pname = "weave";
-    version = "0.16.0";
+    version = "0.17.0";
     name = "${pname}-${version}";
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0jnm3584mfichgwgrd1gk5i42ll9c08nkw9716n947n4338f6ghs";
+      sha256 = "164rf3g29vs0pvkp7jd041qmiyyhzxxcnswvy2slgb93dnpg60r7";
     };
     propagatedBuildInputs = [ numpy ];
     checkInputs = [ nose ];
