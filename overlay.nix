@@ -534,6 +534,7 @@ let gccOpts = {
     name = "jupyter-env";
     paths = [
       self.jupyter
+      self.nodejs
     ] ++ map (callPackage jupyter/kernel) [
       { env = self.python2-all; }
       { env = self.python3-all; }
