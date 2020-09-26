@@ -519,7 +519,7 @@ let gccOpts = {
       i3status];
   };
 
-  jupyter = self.python3.withPackages (p: with p; [jupyterhub jupyterlab jp_proxy_widget]);
+  jupyter = self.python3.withPackages (p: with p; [jupyterhub jupyterlab jp_proxy_widget batchspawner]);
 
   ijulia-threads-wrapper = callPackage jupyter/kernel/julia {};
 
