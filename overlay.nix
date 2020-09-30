@@ -66,7 +66,7 @@ let gccOpts = {
   openmpi3 = callPackage devel/openmpi/3.nix { };
   openmpi4 = callPackage devel/openmpi/4.nix { };
   openmpi = self.openmpi4;
-  openmpis = with self; [openmpi2 openmpi3 openmpi4];
+  openmpis = with self; [openmpi2 openmpi4];
 
   withMpi = pkg: mpi: pkg.override {
     inherit mpi;
@@ -702,7 +702,7 @@ let gccOpts = {
       #hdf5_1_8 # - broken on openmpi4
       osu-micro-benchmarks
       scalapack
-    ] ++ map (withMpi hdf5_1_8) [openmpi2 openmpi3]
+    ] ++ map (withMpi hdf5_1_8) [openmpi2]
       ++ map gromacsWithMpi ([null] ++ self.openmpis)
     ) ++ map (pkg: callPackage ./module {
       inherit pkg;

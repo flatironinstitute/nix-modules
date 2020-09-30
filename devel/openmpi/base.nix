@@ -14,6 +14,7 @@
 , slurm
 , rdma-core
 , zlib
+, ucx
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ perl flex ];
-  buildInputs = stdenv.lib.optional java jdk ++ [ numactl rdma-core slurm zlib ];
+  buildInputs = stdenv.lib.optional java jdk ++ [ numactl rdma-core slurm zlib ucx ];
   propagatedBuildInputs = [ libpsm2 stdenv.cc ];
 
   configureFlags = [
@@ -39,8 +40,21 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     rm -f $out/lib/*.la
-    echo 'oob_tcp_if_exclude = idrac,lo,ib0' >> $out/etc/openmpi-mca-params.conf
-    echo 'btl_tcp_if_exclude = idrac,lo,ib0' >> $out/etc/openmpi-mca-params.conf
+    cat >> $out/etc/openmpi-mca-params.conf <<EOF
+oob_tcp_if_exclude = idrac,lo,ib0
+btl_tcp_if_exclude = idrac,lo,ib0
+
+btl_openib_if_exclude = i40iw0,i40iw1,mlx5_1
+btl_openib_warn_nonexistent_if = 0
+
+'' + (if stdenv.lib.versionAtLeast majorVersion "3" then ''
+btl=^openib,usnix
+mtl=^psm,ofi
+#pml=ucx
+'' else ''
+btl_openib_receive_queues=P,128,2048,1024,32:S,2048,2048,1024,64:S,12288,2048,1024,64:S,65536,2048,1024,64
+'') + ''
+EOF
   '';
 }
 

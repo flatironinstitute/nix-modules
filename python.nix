@@ -72,6 +72,10 @@ with pkgs;
     doCheck = false; # uses $HOME
   };
 
+  fsspec = fsspec.overridePythonAttrs {
+    doCheck = false; # broken open directory
+  };
+
   fuzzysearch = buildPythonPackage rec {
     pname = "fuzzysearch";
     version = "0.7.3";
