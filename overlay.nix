@@ -167,7 +167,6 @@ let gccOpts = {
     gevent
     gflags
     gmpy2
-    h5py
     heapdict
     husl
     intervaltree
@@ -233,6 +232,7 @@ let gccOpts = {
     flask-socketio
     ggplot
     glueviz #-- qt
+    h5py
     hglib
     joblib
     jupyterhub
@@ -605,6 +605,7 @@ let gccOpts = {
       ffmpeg
       fftw
       firefox
+      firefox-esr
       fio
       ghostscript
       gimp
