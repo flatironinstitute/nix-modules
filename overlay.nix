@@ -234,6 +234,7 @@ let gccOpts = {
     glueviz #-- qt
     h5py
     hglib
+    #jax
     joblib
     jupyterhub
     jupyterlab
@@ -251,6 +252,7 @@ let gccOpts = {
     seaborn
     statsmodels
     #tensorflow #77771 #python3.8
+    (tensorflow_2.override { cudaCapabilities = ["3.5" "3.7" "5.2" "6.0" "6.1" "7.0"]; })
     ws4py
   ] else [
     fwrap
