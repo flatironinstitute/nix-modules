@@ -8,11 +8,14 @@
 , pkgVersion ? builtins.replaceStrings ["_"] ["."]
     (builtins.parseDrvName pkg.name).version
 , modPrefix ? "nix/"
-, modName ? "${modPrefix}${pkgName}/${pkgVersion}"
+, modSuffix ? ""
+, modName ? "${modPrefix}${pkgName}/${pkgVersion}${modSuffix}"
 , modLoad ? []
 , modPrereq ? if pkgTag != null then [(modPrefix + pkgTag)] else []
-, modConflict ? [pkgName] ++ stdenv.lib.optional (modPrefix != "") (modPrefix + pkgName)
-, modEnv ? builtins.replaceStrings ["-"] ["_"] (stdenv.lib.toUpper pkgName)
+, modConflict ? [pkgName ("lib/" + pkgName)] ++ stdenv.lib.optional (modPrefix != "") (modPrefix + pkgName)
+, modEnvPrefix ? builtins.replaceStrings ["-"] ["_"] (stdenv.lib.toUpper pkgName)
+, modDescr ? ""
+, setEnv ? []
 , addLDLibraryPath ? false
 , addCFlags ? true
 , glibcLocales
@@ -32,9 +35,9 @@ stdenv.mkDerivation {
 
   name = "module-${pkgName}-${pkgVersion}";
 
-  buildInputs = [monopkg];
+  buildInputs = if pkg != null then [monopkg] else [];
 
-  inherit pkgName pkgVersion modPrefix modName modLoad modPrereq modConflict modEnv addLDLibraryPath addCFlags addLocales addOpenGLDrivers;
+  inherit pkgName pkgVersion modPrefix modName modLoad modPrereq modConflict modEnvPrefix addLDLibraryPath addCFlags addLocales addOpenGLDrivers setEnv modDescr;
 
   # sort of hacky, duplicating cc-wrapper:
   nixInfix = stdenv.lib.replaceStrings ["-"] ["_"] stdenv.targetPlatform.config;

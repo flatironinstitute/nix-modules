@@ -50,7 +50,7 @@ btl_openib_warn_nonexistent_if = 0
 '' + (if stdenv.lib.versionAtLeast majorVersion "3" then ''
 btl=^openib,usnix
 mtl=^psm,ofi
-#pml=ucx
+#pml=(ucx|cm)
 '' else ''
 btl_openib_receive_queues=P,128,2048,1024,32:S,2048,2048,1024,64:S,12288,2048,1024,64:S,65536,2048,1024,64
 '') + ''

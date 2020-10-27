@@ -12,7 +12,7 @@ let gccOpts = {
 }; in
 
 {
-  nss_sss = callPackage base/sssd/nss-client.nix { };
+  nss_sss = callPackage sssd/nss-client.nix { };
 
   gcc6 = wrapCC (gcc6.cc.override gccOpts);
   gfortran6 = self.gcc6;
@@ -56,15 +56,15 @@ let gccOpts = {
   });
 
   # intel infiniband/psm stuff
-  infinipath-psm = callPackage base/infinipath-psm { };
-  libpsm2 = callPackage base/libpsm2 { };
+  infinipath-psm = callPackage mpi/infinipath-psm { };
+  libpsm2 = callPackage mpi/libpsm2 { };
 
-  slurm = callPackage base/slurm { };
+  slurm = callPackage ./slurm { };
 
-  openmpi1 = callPackage devel/openmpi/1.nix { };
-  openmpi2 = callPackage devel/openmpi/2.nix { };
-  openmpi3 = callPackage devel/openmpi/3.nix { };
-  openmpi4 = callPackage devel/openmpi/4.nix { };
+  openmpi1 = callPackage mpi/openmpi/1.nix { };
+  openmpi2 = callPackage mpi/openmpi/2.nix { };
+  openmpi3 = callPackage mpi/openmpi/3.nix { };
+  openmpi4 = callPackage mpi/openmpi/4.nix { };
   openmpi = self.openmpi4;
   openmpis = with self; [openmpi2 openmpi4];
 
@@ -83,9 +83,9 @@ let gccOpts = {
 
   withMpis = pkg: map (self.withMpi pkg) self.openmpis;
 
-  mvapich2 = callPackage devel/mvapich { };
+  mvapich2 = callPackage mpi/mvapich { };
 
-  osu-micro-benchmarks = callPackage test/osu-micro-benchmarks {
+  osu-micro-benchmarks = callPackage mpi/osu-micro-benchmarks {
     mpi = openmpi;
   };
 
@@ -100,7 +100,7 @@ let gccOpts = {
     };
   });
 
-  fftw = callPackage base/fftw/precs.nix {
+  fftw = callPackage ./fftw/precs.nix {
     mpi = null;
   };
 
@@ -108,7 +108,7 @@ let gccOpts = {
   fftwFloat = self.fftw;
   fftwLongDouble = self.fftw;
 
-  nfft = callPackage devel/nfft {
+  nfft = callPackage ./nfft {
     fftw = self.fftw;
   };
 
@@ -481,7 +481,7 @@ let gccOpts = {
     doCheck = false;
   });
 
-  disBatch = callPackage flatiron/disBatch { };
+  disBatch = callPackage ./disBatch { };
 
   module-wrap = callPackage module/wrap { };
 
@@ -510,7 +510,7 @@ let gccOpts = {
     buildInputs = [makeWrapper];
   });
 
-  wecall = callPackage util/wecall {
+  wecall = callPackage ./wecall {
     texlive = self.texlive-all;
   };
 
@@ -697,6 +697,8 @@ let gccOpts = {
       xz
       zlib
       zsh
+      openmpi2
+      openmpi4
     ] ++
       openmpis
     ++ lib.concatMap withMpis [
@@ -716,7 +718,7 @@ let gccOpts = {
     ] ++ [
       (callPackage ./module {
         pkg = self.rclone;
-        modEnv = "NIX_RCLONE";
+        modEnvPrefix = "NIX_RCLONE";
       })
       (callPackage ./module {
         pkg = self.nix;
@@ -728,6 +730,28 @@ let gccOpts = {
         pkgName = "jupyterhub";
         pkgVersion = self.jupyter.name;
         addCFlags = false;
+      })
+      (callPackage ./module {
+        pkg = null;
+        pkgName = "openmpi4-ib";
+        pkgVersion = "";
+        modName = "nix/openmpi4-ib";
+        modLoad = "nix/openmpi4";
+        modConflict = "nix/openmpi4-opa";
+        modDescr = "to set openmpi environment for opa fabrics";
+        addLocales = null;
+        setEnv = ["OMPI_MCA_pml=ucx"];
+      })
+      (callPackage ./module {
+        pkg = null;
+        pkgName = "openmpi4-opa";
+        pkgVersion = "";
+        modName = "nix/openmpi4-opa";
+        modLoad = "nix/openmpi4";
+        modConflict = "nix/openmpi4-ib";
+        modDescr = "to set openmpi environment for ib fabrics";
+        addLocales = null;
+        setEnv = ["OMPI_MCA_pml=cm"];
       })
     ];
   };
