@@ -199,7 +199,7 @@ let gccOpts = {
     #pymultinest
     pyparsing
     pyqt5 #-- qt5
-    pyslurm
+    #pyslurm #not updated for 20.02
     pystan
     pytest
     pyyaml
