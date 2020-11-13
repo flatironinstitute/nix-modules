@@ -89,17 +89,6 @@ let gccOpts = {
     mpi = openmpi;
   };
 
-  linuxPackages = linuxPackages.extend (self: super: {
-    nvidia_x11 = callPackage (import nixpkgs/pkgs/os-specific/linux/nvidia-x11/generic.nix {
-      version = "440.64";
-      sha256_64bit = "0000927g5ml1rwgpydlrjzr55gza5dfkqkch29bbarpzd7dh0mf4";
-      settingsSha256 = "000064wbijwyq032ircl1b78q0gwdvfq35gxaqw00d3ac2hjwpsg";
-      persistencedSha256 = "00006v8c2si0zwy9j60yzrdn1b1pm0vr9kfvql3jkyjqfn4np44z";
-    }) {
-      libsOnly = true;
-    };
-  });
-
   fftw = callPackage ./fftw/precs.nix {
     mpi = null;
   };
