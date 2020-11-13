@@ -382,6 +382,7 @@ let gccOpts = {
     miniUI
     multtest
     nabor
+    pdsh
     pheatmap
     pkgbuild
     pkgconfig
@@ -504,6 +505,10 @@ let gccOpts = {
   newt = newt.overrideAttrs (old: {
     configureFlags = "--without-tcl";
   });
+
+  pdsh = pdsh.override {
+    slurmSupport = true;
+  };
 
   sage = sage.overrideAttrs (old: {
     # disable tests:
