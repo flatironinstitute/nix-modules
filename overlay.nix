@@ -738,7 +738,7 @@ let gccOpts = {
         modName = "nix/openmpi4-ib";
         modLoad = "nix/openmpi4";
         modConflict = "nix/openmpi4-opa";
-        modDescr = "to set openmpi environment for opa fabrics";
+        modDescr = "to set openmpi environment for ib fabrics";
         addLocales = null;
         setEnv = ["OMPI_MCA_pml=ucx"];
       })
@@ -749,7 +749,7 @@ let gccOpts = {
         modName = "nix/openmpi4-opa";
         modLoad = "nix/openmpi4";
         modConflict = "nix/openmpi4-ib";
-        modDescr = "to set openmpi environment for ib fabrics";
+        modDescr = "to set openmpi environment for opa fabrics";
         addLocales = null;
         setEnv = ["OMPI_MCA_pml=cm"];
       })
