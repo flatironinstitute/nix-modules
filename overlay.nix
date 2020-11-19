@@ -118,6 +118,7 @@ let gccOpts = {
   });
 
   qt5 = qt514;
+  libsForQt5 = libsForQt514;
 
   python2 = python2.override {
     self = self.python2;
@@ -216,6 +217,7 @@ let gccOpts = {
     bash_kernel
     biopython #-- build failure on python3
     cherrypy
+    cupy
     dask
     distributed #-- dask
     flask-socketio
@@ -229,6 +231,7 @@ let gccOpts = {
     jupyterlab
     llfuse #-- unicode problems on python2
     netcdf4
+    numba
     pandas
     paramiko
     partd
@@ -657,7 +660,7 @@ let gccOpts = {
       openblas
       openmpi
       openssl
-      paraview
+      #paraview # git-lfs?
       pass
       pdftk
       linuxPackages.perf

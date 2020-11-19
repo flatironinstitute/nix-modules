@@ -36,9 +36,10 @@ with pkgs;
     };
   };
 
-  #cheroot = cheroot.overridePythonAttrs {
-  #  doCheck = false; # tls cert errors
-  #};
+  cheroot = cheroot.overridePythonAttrs {
+    doCheck = false; # ipv6
+    propagatedBuildInputs = [ more-itertools six jaraco_functools ];
+  };
 
   cherrypy = cherrypy.overridePythonAttrs {
     doCheck = false; # needs network :8080?
@@ -205,6 +206,10 @@ with pkgs;
 
   paramiko = paramiko.overridePythonAttrs {
     doCheck = false; # ipv6 EBUSY?
+  };
+
+  portend = portend.overridePythonAttrs {
+    doCheck = false; # ipv6
   };
 
   primefac = buildPythonPackage rec {
