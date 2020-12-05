@@ -349,6 +349,7 @@ let gccOpts = {
     genefilter
     getopt
     ggplot2
+    glmnet
     glue
     gplots
     grImport
@@ -356,6 +357,7 @@ let gccOpts = {
     gtools
     hexbin
     highr
+    huge
     hms
     htmlTable
     httpuv
@@ -394,6 +396,7 @@ let gccOpts = {
     progress
     promises
     ps
+    pulsar
     purrr
     randomForest
     rcmdcheck
@@ -406,6 +409,7 @@ let gccOpts = {
     segmented
     seqinr
     sessioninfo
+    shape
     shiny
     snow
     sourcetools
@@ -421,6 +425,10 @@ let gccOpts = {
     yaml
     zlibbioc
   ];
+
+  R = R.overrideAttrs (old: {
+    patches = old.patches ++ [ ./R-envlen.patch ];
+  });
 
   R-all = rWrapper.override {
     packages = self.rPackageList;

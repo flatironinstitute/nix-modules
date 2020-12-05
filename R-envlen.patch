@@ -1,0 +1,21 @@
+diff -ru R-4.0.2.orig/src/main/Renviron.c R-4.0.2/src/main/Renviron.c
+--- R-4.0.2.orig/src/main/Renviron.c	2020-03-26 19:02:21.000000000 -0400
++++ R-4.0.2/src/main/Renviron.c	2020-12-05 16:59:06.286842051 -0500
+@@ -95,7 +95,7 @@
+     return pr;
+ }
+ 
+-#define BUF_SIZE 10000
++#define BUF_SIZE 30000
+ static char *findterm(char *s)
+ {
+     char *p, *q, *r2, *ss=s;
+@@ -178,7 +178,7 @@
+ }
+ 
+ 
+-#define MSG_SIZE 2000
++#define MSG_SIZE 30000
+ static int process_Renviron(const char *filename)
+ {
+     FILE *fp;
