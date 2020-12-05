@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   inherit pkgName pkgVersion modPrefix modName modLoad modPrereq modConflict modEnvPrefix addLDLibraryPath addCFlags addLocales addOpenGLDrivers setEnv modDescr;
 
   # sort of hacky, duplicating cc-wrapper:
-  nixInfix = stdenv.lib.replaceStrings ["-"] ["_"] stdenv.targetPlatform.config;
+  nixSuffix = stdenv.lib.replaceStrings ["-"] ["_"] stdenv.targetPlatform.config;
 
   passthru = {
     inherit pkg modName;

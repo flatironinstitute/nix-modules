@@ -81,10 +81,10 @@ addPaths () {
 		fi
 		if [[ -d $1/include ]] ; then
 			# nix uses -isystem but we'll just use -I
-			echo "prepend-path -d \" \" NIX_${nixInfix}_CFLAGS_COMPILE -I$1/include" >> $modfile
+			echo "prepend-path -d \" \" NIX_CFLAGS_COMPILE_${nixSuffix} -I$1/include" >> $modfile
 		fi
 		if [[ -n $libs ]] ; then
-			echo "prepend-path -d \" \" NIX_${nixInfix}_LDFLAGS -L$1/lib" >> $modfile
+			echo "prepend-path -d \" \" NIX_LDFLAGS_${nixSuffix} -L$1/lib" >> $modfile
 		fi
 	fi
 }

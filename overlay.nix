@@ -314,6 +314,7 @@ let gccOpts = {
     RcppArmadillo
     RcppEigen
     RcppGSL
+    Rhdf5lib
     Rsamtools
     Rtsne
     TFMPvalue
@@ -325,6 +326,7 @@ let gccOpts = {
     assertthat
     backports
     biomaRt
+    biomformat
     bit64
     bitops
     blob
@@ -358,6 +360,7 @@ let gccOpts = {
     htmlTable
     httpuv
     idr
+    igraph
     ini
     jpeg
     knitr
@@ -376,6 +379,7 @@ let gccOpts = {
     nabor
     pdsh
     pheatmap
+    phyloseq
     pkgbuild
     pkgconfig
     pkgload
