@@ -17,8 +17,8 @@ with stdenv.lib;
 let
   majorVersion = "1";
   minorVersion = "5";
-  maintenanceVersion = "1";
-  src_sha256 = "1xdz0mn00b5wk7hlq99d3l43hgkjyb86xkychj1xjimng376bb5r";
+  maintenanceVersion = "3";
+  src_sha256 = "0jds8lrhk4hfdv7dg5p2ibzin9ivga7wrx7zwcmz6dqp3x792n1i";
   version = "${majorVersion}.${minorVersion}.${maintenanceVersion}";
 in
 

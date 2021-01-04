@@ -694,6 +694,7 @@ let gccOpts = {
       swig
       texlive-all
       tmux
+      udunits
       unison
       valgrind
       vim
