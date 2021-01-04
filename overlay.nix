@@ -409,6 +409,7 @@ let gccOpts = {
     segmented
     seqinr
     sessioninfo
+    sf
     shape
     shiny
     snow
@@ -417,6 +418,7 @@ let gccOpts = {
     tibble
     tidyr
     tidyselect
+    units
     viridis
     whisker
     xfun
@@ -618,6 +620,7 @@ let gccOpts = {
       firefox
       firefox-esr
       fio
+      gdal
       ghostscript
       gimp
       gitFull
