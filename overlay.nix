@@ -692,6 +692,7 @@ let gccOpts = {
       rxvt-unicode
       sage
       scribus
+      slack
       smartmontools
       subversion
       swig
