@@ -217,7 +217,7 @@ let gccOpts = {
     bash_kernel
     biopython #-- build failure on python3
     cherrypy
-    cupy
+    #cupy
     dask
     distributed #-- dask
     flask-socketio
@@ -573,9 +573,35 @@ let gccOpts = {
     ];
   };
 
+  base = buildEnv {
+    name = "base";
+    paths = (with self; [
+      gcc
+      binutils
+      bzip2
+      coreutils
+      e2fsprogs
+      glibc
+      gmp
+      hwloc
+      libgit2
+      libjpeg
+      libpng
+      libseccomp
+      libssh2
+      libxml2
+      openssl
+      readline
+      sqlite
+      xz
+      zlib
+    ]);
+  };
+
   modules = buildEnv {
     name = "modules";
-    paths = map (pkg: callPackage ./module {
+    paths =
+    map (pkg: callPackage ./module {
       inherit pkg;
     }) (with self; [
       gcc7
@@ -584,10 +610,8 @@ let gccOpts = {
       gcc10
       ansible
       arpack
-      binutils
       blas
       boost
-      bzip2
       cargo
       chromium
       clang_7
@@ -596,7 +620,6 @@ let gccOpts = {
       clang_10
       clang_11
       cmake
-      coreutils
       cudatoolkit_9
       cudatoolkit_10
       cudatoolkit_11
@@ -609,7 +632,6 @@ let gccOpts = {
       distcc
       dstat
       duplicity
-      e2fsprogs
       eigen
       elinks
       emacs
@@ -626,8 +648,6 @@ let gccOpts = {
       gitFull
       git-lfs
       gdb
-      glibc
-      gmp
       go
       gperftools
       gsl
@@ -636,7 +656,6 @@ let gccOpts = {
       hdf5
       hdf5_1_8
       hdfview
-      hwloc
       i3-env
       imagemagick
       inkscape
@@ -650,14 +669,8 @@ let gccOpts = {
       keepassx2
       keepassxc
       lftp
-      libgit2
-      libjpeg
-      libpng
       (libreoffice-still.override { libreoffice = libreoffice-still-unwrapped.overrideAttrs (old: { doCheck = false; }); })
       (libreoffice-fresh.override { libreoffice = libreoffice-fresh-unwrapped.overrideAttrs (old: { doCheck = false; }); })
-      libseccomp
-      libssh2
-      libxml2
       llvm_7
       llvm_8
       llvm_9
@@ -674,7 +687,6 @@ let gccOpts = {
       (octave.override { qscintilla = null; })
       openblas
       openmpi
-      openssl
       #paraview # git-lfs?
       pass
       pdftk
@@ -686,7 +698,6 @@ let gccOpts = {
       python3-all
       (qt5.full // { name = builtins.replaceStrings ["-full"] [""] qt5.full.name; })
       R-all
-      readline
       rstudio-all
       rustc
       rxvt-unicode
@@ -708,8 +719,6 @@ let gccOpts = {
       wecall
       x264
       xscreensaver
-      xz
-      zlib
       zsh
       openmpi2
       openmpi4
@@ -728,7 +737,7 @@ let gccOpts = {
       addOpenGLDrivers = true;
     }) [
       mplayer
-      mpv
+      (mpv // { name = builtins.replaceStrings ["-with-scripts"] [""] mpv.name; })
     ] ++ [
       (callPackage ./module {
         pkg = self.rclone;
@@ -766,6 +775,11 @@ let gccOpts = {
         modDescr = "to set openmpi environment for opa fabrics";
         addLocales = null;
         setEnv = ["OMPI_MCA_pml=cm"];
+      })
+      (callPackage ./module {
+        pkg = self.base;
+        modSuffix = "libraries";
+        modDescr = "base system libraries for nix compilers";
       })
     ];
   };
