@@ -677,6 +677,7 @@ let gccOpts = {
       llvm_10
       llvm_11
       mercurial
+      meshlab
       mkl
       mupdf
       netcdf
